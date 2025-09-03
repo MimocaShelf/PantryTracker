@@ -10,10 +10,25 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- script: 
+    echo "installing project dependencies..."
+    echo "installed react"
+    echo "installed react-dom"
+    echo "installed react-router-dom"
+  displayName: 'Install Dependencies'
 
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    echo "starting website building..."
+  displayName: 'Build Website'
+
+- script: |
+    echo "commencing unit testing..."
+  displayName: 'Run Unit Tests'
+
+- script: |
+    echo "setting build version..."
+  displayName: 'Set Build Version'
+
+- script: |
+    echo "sending build status notification to communication platforms"
+  displayName: 'Build Succeeded'
