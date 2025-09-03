@@ -32,7 +32,7 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  /*place-items: center;*/
   min-width: 320px;
   min-height: 100vh;
 }
@@ -101,3 +101,50 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.input-field {
+  padding-bottom: 20px;
+  text-align: left;
+}
+
+.input-field > button {
+  margin-left: 20px;
+}
+
+#search-bar {
+  padding: 10px 50px 10px 10px;
+}
+
+#purple-text {
+  color: #783572;
+}
+
+#pink-text {
+  color: #C799D4;
+}
+
+#lavender-text {
+  color: #B9C7F2;
+}
+
+.nutritionBox {
+  border: 3px solid #111344;
+  border-radius: 10px;
+  width: 1200px;
+  padding: 30px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: left;
+  text-align: left;
+  font-weight: bold;
+}
+
+.nutritionBox > .left-container, .nutritionBox > .right-container {
+  flex: 1;
+}
+
+.nutritionBox > .right-container {
+  display: flex;
+  gap: 3rem;
+}
+

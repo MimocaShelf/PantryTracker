@@ -1,8 +1,31 @@
-import './style.css'
+/*import './style.css'
 import javascriptLogo from './javascript.svg'
 import viteLogo from '/vite.svg'
 import { setupCounter } from './counter.js'
+import { createRoot } from 'react-dom/client';
+//import App from './app.jsx';
 
+function App(){
+  return <h1>Testing</h1>;
+}
+
+const root = createRoot(document.getElementById('app'));
+root.render(<App />);*/
+
+import './style.css';
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './app.jsx';
+
+const root = createRoot(document.getElementById('app'));
+root.render(<App />);
+
+/*
+const container = document.getElementById('app');
+const root = createRoot(container);
+root.render(<App />);*/
+
+/*
 document.querySelector('#app').innerHTML = `
   <div>
     <a href="https://vite.dev" target="_blank">
@@ -19,6 +42,6 @@ document.querySelector('#app').innerHTML = `
       Click on the Vite logo to learn more
     </p>
   </div>
-`
+`*/
 
-setupCounter(document.querySelector('#counter'))
+//setupCounter(document.querySelector('#counter'))
