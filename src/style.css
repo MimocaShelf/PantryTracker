@@ -133,18 +133,69 @@ button:focus-visible {
   width: 1200px;
   padding: 30px;
   margin-bottom: 20px;
+  position: relative;
+}
+
+.row {
   display: flex;
   justify-content: left;
   text-align: left;
   font-weight: bold;
 }
 
-.nutritionBox > .left-container, .nutritionBox > .right-container {
+.right-aligned {
+  display: flex;
+  justify-content: right;
+}
+
+.nutritionBox > button, .nutritionBox > select {
+  position: absolute;
+  right: 30px;
+  transform: translateY(-50%);
+}
+
+.left-container,  .right-container {
   flex: 1;
 }
 
-.nutritionBox > .right-container {
+.right-container {
   display: flex;
   gap: 3rem;
 }
 
+.mealTimes {
+  border: 3px solid #111344;
+  border-radius: 10px;
+  width: 1200px;
+  padding: 30px;
+  margin-bottom: 20px;
+  position: relative;
+  justify-content: left;
+  text-align: left;
+  font-weight: bold;
+}
+
+.mealTimes > .row {
+  border: 3px solid #111344;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.section {
+  padding-bottom: 100px;
+}
+
+.warning {
+  font-style: italic;
+  font-weight: normal;
+}
+
+.total {
+  border: none;
+  display: flex;
+  justify-content: center;
+}
+
+.total > h3 {
+  padding-right: 30px;
+}
