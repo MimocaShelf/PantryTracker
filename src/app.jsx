@@ -3,6 +3,7 @@ import Home from './home.jsx';
 import Nutrition from './nutrition.jsx';
 import MealPrep from './mealPrep.jsx';
 import Pantry from './pantry.jsx';
+import AddToPantry from './addToPantry.jsx';
 import React from 'react';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
             <Route path="/nutrition" element={<Nutrition />} />
             <Route path="/mealPrep" element={<MealPrep />} />
             <Route path="/pantry" element={<Pantry />} />
+            <Route path="/addToPantry" element={<AddToPantry />} />
         </Routes>
         </BrowserRouter>
     );

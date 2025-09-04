@@ -14,8 +14,10 @@ const sql_array = [
 
     //CREATE TABLES
     `CREATE TABLE pantry_items (
-        pantry_id INTEGER PRIMARY KEY,
+        pantry_item_id INTEGER AUTOINCREMENT PRIMARY KEY,
+        pantry_id INTEGER,
         item_name VARCHAR(100),
+        extra_info VARCHAR(65535),
         quantity DECIMAL(20, 5),
         unit VARCHAR(50)
     )`,
