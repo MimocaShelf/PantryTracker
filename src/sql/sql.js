@@ -29,7 +29,8 @@ const sql_array = [
     `CREATE TABLE pantry (
         pantry_id INTEGER PRIMARY KEY,
         pantry_ownder VARCHAR(100),
-        pantry_name VARCHAR(100)
+        pantry_name VARCHAR(100),
+        pantry_itemAmount INTEGER
 
     )`,
 
@@ -73,10 +74,10 @@ const sql_array = [
 
 
     //INSERT PANTRY DATA
-    'INSERT INTO pantry VALUES (1, "Jane Doe", "Pantry1")',
-    'INSERT INTO pantry VALUES (2, "Michael Wazowski","SinkPantry")',
-    'INSERT INTO pantry VALUES (3, "Sam Smith", "BathroomCloset")',
-    'INSERT INTO pantry VALUES (4, "Diva Diva","Fridge")',
+    'INSERT INTO pantry VALUES (1, "Jane Doe", "Pantry1", 54)',
+    'INSERT INTO pantry VALUES (2, "Michael Wazowski","SinkPantry", 19)',
+    'INSERT INTO pantry VALUES (3, "Sam Smith", "BathroomCloset", 6)',
+    'INSERT INTO pantry VALUES (4, "Diva Diva","Fridge", 78)',
 
     // INSERT USER DATA
     `INSERT INTO users (name, email, password_hash, profile_picture) 
