@@ -248,3 +248,11 @@ button:focus-visible {
 #pantrySortButton{
   margin-left: 720px;
 }
+
+.genericContentBox{
+  padding: 40px;
+  border-radius: 10px;
+  background-color: var(--lavender);
+  color: var(--blue);
+  line-height: 200%;
+}
