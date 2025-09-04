@@ -88,6 +88,9 @@ const sql_array = [
     'INSERT INTO pantry VALUES (11, "Wednesday Adams", "Party Items", 18)',
     'INSERT INTO pantry VALUES (12, "Miguel Xavier","Cleaning Products", 7)',
 
+    'SELECT * FROM pantry',
+
+
     // INSERT USER DATA
     `INSERT INTO users (name, email, password_hash, profile_picture) 
      VALUES ('Jane Doe', 'jane.doe@example.com', 'hashed_password_here', 'https://via.placeholder.com/150')`,
