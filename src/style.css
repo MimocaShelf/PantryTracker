@@ -206,6 +206,8 @@ button:focus-visible {
   flex-wrap: wrap;
   justify-content: flex-start;
   padding: 16px;
+  width: 100%;
+  box-sizing: border-box;
 }
 .pantryCard{
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 2);
@@ -223,5 +225,21 @@ button:focus-visible {
 
 .container{
   padding: 2px 16px;
+  width: 100%;
   text-align: left;
+}
+
+.pantrySearch{
+  position: absolute;
+  top: 250px;
+  left: 50px;
+}
+
+#pantryButton{
+  margin-left: 15px;
+}
+
+#pantrySortButton{
+  margin-left: 720px;
+  padding-right: 20px;
 }
