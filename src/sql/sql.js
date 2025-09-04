@@ -79,6 +79,14 @@ const sql_array = [
     'INSERT INTO pantry VALUES (2, "Michael Wazowski","SinkPantry", 19)',
     'INSERT INTO pantry VALUES (3, "Sam Smith", "BathroomCloset", 6)',
     'INSERT INTO pantry VALUES (4, "Diva Diva","Fridge", 78)',
+    'INSERT INTO pantry VALUES (5, "John Doe", "Pantryyyy", 34)',
+    'INSERT INTO pantry VALUES (6, "Maia Papaya","My Pantry", 21)',
+    'INSERT INTO pantry VALUES (7, "Nina Recio", "Sweet Treats", 12)',
+    'INSERT INTO pantry VALUES (8, "Natasha Vithana","Laundry Stuff", 5)',
+    'INSERT INTO pantry VALUES (9, "Mary Magdalene", "Food", 32)',
+    'INSERT INTO pantry VALUES (10, "Matthew Roberts","Spice Cabinet", 21)',
+    'INSERT INTO pantry VALUES (11, "Wednesday Adams", "Party Items", 18)',
+    'INSERT INTO pantry VALUES (12, "Miguel Xavier","Cleaning Products", 7)',
 
     // INSERT USER DATA
     `INSERT INTO users (name, email, password_hash, profile_picture) 
