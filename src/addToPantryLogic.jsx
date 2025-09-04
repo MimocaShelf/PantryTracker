@@ -37,9 +37,9 @@ function addItemToPantry(pantry, item_name, extra_info, quantity, unit) {
 
 
     let sql_string = 'INSERT INTO pantry_items(pantry_id, item_name, extra_info, quantity, unit) VALUES (?, ?, ?, ?, ?)';
-     // need to import sql database or something?
-
+    
     let addToDatabase = () => {
+        // need to import sql database or something?
         maindb.run(sql_string, [pantry_id, item_name, extra_info, quantity, unit], (err) => {
             if (err) return console.error(err.message);
         })
