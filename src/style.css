@@ -80,6 +80,7 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  margin-left: 5px;
 }
 button:hover {
   border-color: #646cff;
@@ -223,6 +224,11 @@ button:focus-visible {
   background-color:#97aef3;
 }
 
+#cardText{
+  margin-bottom: 5px;
+  margin-top:0px;
+}
+
 .container{
   padding: 2px 16px;
   width: 100%;
@@ -241,15 +247,4 @@ button:focus-visible {
 
 #pantrySortButton{
   margin-left: 720px;
-  padding-right: 20px;
-}
-
-.genericContentBox{
-  text-align: center;
-  background-color: var(--lavender);
-  border-radius: 10px;
-  color: var(--blue);
-  padding: 20px;
-  font-size: large;
-  line-height: 200%;
 }
