@@ -22,16 +22,24 @@ function AddToPantry() {
                     <option value="sink">Sink</option>
                 </select>
                 <br></br>
+
+
                 <label for="item_name">Item Name: </label>
                 <input type="text" name="item_name"></input>
                 <br></br>
+
+
                 <label for="extra_info">Extra Information: </label>
                 <input type="text" name="extra_info"></input>
                 <br></br>
                 <br></br>
+
+                
                 <label for="quantity">Quantity: </label>
                 <input type="text" name="quantity"></input>
                 <br></br>
+
+
                 <label for="unit">Units: </label>
                 <select name="unit" id="unit">
                     <option value="units">Units</option>
@@ -45,6 +53,11 @@ function AddToPantry() {
                     <option value="tsps">Teaspoons</option>
                     <option value="tbsps">Tablespoons</option>
                 </select>
+                <br></br>
+                <br></br>
+
+                <input type="submit" name="submit" value="Save"></input>
+                <input type="submit" name="submit" value="Add Item"></input>
             </form>
         </div>
     );
