@@ -65,16 +65,17 @@ const sql_array = [
 //For loop so it runs in order
 maindb.serialize (() => {
     for (let i = 0; i < sql_array.length; i++) {
-        if(sql_array[i].trim().split(/\s+/)[0] === 'SELECT'){
-            maindb.all(sql_array[i], [], (err, row) => {
+        let sql_string = sql_array[i]
+        if(sql_string.trim().split(/\s+/)[0] === 'SELECT'){
+            maindb.all(sql_string, [], (err, row) => {
                 if(err) return console.error(err.message);
                 row.forEach(row => {
                     console.log(row);
                 })
             });
         } else {
-            let sql = sql_array[i];
-            maindb.run(sql_array[i]);
+            // let sql = sql_string;
+            maindb.run(sql_string);
         }
         
     }

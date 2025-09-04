@@ -18,12 +18,21 @@ steps:
   displayName: 'Install Dependencies'
 
 - script: |
+    echo "initalising dummy database..."
+    echo "adding dummy data..."
+  displayName: 'Create Test Database'
+
+- script: |
     echo "starting website building..."
   displayName: 'Build Website'
 
 - script: |
     echo "commencing unit testing..."
   displayName: 'Run Unit Tests'
+
+- script: |
+    echo "clearing dummy database..."
+  displayName: 'Remove Test Database'
 
 - script: |
     echo "setting build version..."
