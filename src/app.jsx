@@ -6,6 +6,7 @@ import Pantry from './pantry.jsx';
 import AddToPantry from './addToPantry.jsx';
 import User from './user.jsx';
 import Household from './household.jsx';
+import ShoppingList from './shoppingList.jsx';
 import React from 'react';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <Route path="/addToPantry" element={<AddToPantry />} />
             <Route path="/user" element={<User />} />
             <Route path="/household" element={<Household />} />
+            <Route path="/shoppingList" element={<ShoppingList />} /> 
         </Routes>
         </BrowserRouter>
     );

@@ -12,6 +12,7 @@ function Home() {
                 <li><Link to="/nutrition">Go to Nutrition</Link></li>
                 <li><Link to="/mealPrep">Go to Meal Prep</Link></li>
                 <li><Link to="/user">Go to User</Link></li>
+                <li><Link to="/shoppingList">Go to Shopping List</Link></li>
             </ul>
         </nav>
 

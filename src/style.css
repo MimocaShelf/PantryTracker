@@ -243,3 +243,13 @@ button:focus-visible {
   margin-left: 720px;
   padding-right: 20px;
 }
+
+.genericContentBox{
+  text-align: center;
+  background-color: var(--lavender);
+  border-radius: 10px;
+  color: var(--blue);
+  padding: 20px;
+  font-size: large;
+  line-height: 200%;
+}
