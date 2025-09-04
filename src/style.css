@@ -403,3 +403,7 @@ button:focus-visible {
 .terms-checkbox a:hover {
   text-decoration: underline;
 }
+
+#homeList{
+  list-style-type: none;
+}
