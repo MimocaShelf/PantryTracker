@@ -10,6 +10,8 @@ const sql_array = [
     'DROP TABLE IF EXISTS pantry_items',
     'DROP TABLE IF EXISTS nutrition',
     'DROP TABLE IF EXISTS pantry',
+    'DROP TABLE IF EXISTS users',
+    'DROP TABLE IF EXISTS households',
 
 
     //CREATE TABLES
@@ -29,6 +31,23 @@ const sql_array = [
         pantry_ownder VARCHAR(100),
         pantry_name VARCHAR(100)
 
+    )`,
+
+     `CREATE TABLE users (
+        user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name VARCHAR(100) NOT NULL,
+        email VARCHAR(100) UNIQUE NOT NULL,
+        password_hash VARCHAR(255) NOT NULL,
+        profile_picture VARCHAR(255),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )`,
+
+    `CREATE TABLE households (
+        household_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        household_name VARCHAR(100) NOT NULL,
+        created_by INTEGER NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY(created_by) REFERENCES users(user_id)
     )`,
 
 
@@ -58,6 +77,22 @@ const sql_array = [
     'INSERT INTO pantry VALUES (2, "Michael Wazowski","SinkPantry")',
     'INSERT INTO pantry VALUES (3, "Sam Smith", "BathroomCloset")',
     'INSERT INTO pantry VALUES (4, "Diva Diva","Fridge")',
+
+    // INSERT USER DATA
+    `INSERT INTO users (name, email, password_hash, profile_picture) 
+     VALUES ('Jane Doe', 'jane.doe@example.com', 'hashed_password_here', 'https://via.placeholder.com/150')`,
+    `INSERT INTO users (name, email, password_hash, profile_picture) 
+     VALUES ('John Doe', 'john.doe@example.com', 'hashed_password_here', 'https://via.placeholder.com/150')`,
+    `INSERT INTO users (name, email, password_hash, profile_picture) 
+     VALUES ('Jimmy Doe', 'jimmy.doe@example.com', 'hashed_password_here', 'https://via.placeholder.com/150')`,
+    `INSERT INTO users (name, email, password_hash) 
+     VALUES ('Michael Wazowski', 'mike@monsters.inc', 'hashed_password_here')`,
+    `INSERT INTO users (name, email, password_hash) 
+     VALUES ('Sam Smith', 'sam.smith@example.com', 'hashed_password_here')`,
+
+    // INSERT HOUSEHOLD DATA
+    `INSERT INTO households (household_name, created_by) 
+     VALUES ('Doe Family', 1)`,
 
 
 ]
