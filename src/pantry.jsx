@@ -3,20 +3,33 @@ import React from 'react';
 function Pantry() {
     return (
         <div>
-            <h1>Welcome To Pantry Page</h1>
-            <div className='input-field'>
+            <div class="section">
+            <h1>Pantry Page</h1>
+            <p>See your created pantry/pantries below</p>
             </div>
-            <div class="pantry-cards">
-                <div class="left-container">
-                    <h2>Pantry</h2>
+            <div class="pantryCards">
+                <div className="pantryCard">
+                     <div class="container">
+                        <h2><b>Main Pantry</b></h2>
+                        <p>Owner: Jane Doe</p>
+                    </div>
+                </div>  
+
+                <div className="pantryCard">
+                     <div class="container">
+                        <h2><b>Fridge</b></h2>
+                        <p>Owner: Jane Doe</p>
+                    </div>
                 </div>
-                <div class="right-container">
-                    <h3>Test</h3>
+
+                <div className="pantryCard">
+                     <div class="container">
+                        <h2><b>Sink</b></h2>
+                        <p>Owner: Jane Doe</p>
+                    </div>
                 </div>
             </div>
-           
         </div>
-       
 
     );
 }
