@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Import Link for navigation
+import { Link } from 'react-router-dom';
 
 function ShoppingList() {
     const [items, setItems] = useState([
@@ -25,14 +25,43 @@ function ShoppingList() {
         setItems(newItems);
     };
 
+    // Function to increase the quantity of an item
+    const increaseQuantity = (index) => {
+        const updatedItems = items.map((item, i) =>
+            i === index ? { ...item, quantity: item.quantity + 1 } : item
+        );
+        setItems(updatedItems);
+    };
+
+    // Function to decrease the quantity of an item
+    const decreaseQuantity = (index) => {
+        const updatedItems = items.map((item, i) =>
+            i === index && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
+        );
+        setItems(updatedItems);
+    };
+
     return (
         <div>
             {/* Back Button */}
-            <Link to="/" style={{ display: 'inline-block', marginBottom: '20px', textDecoration: 'none' }}>
+            <Link
+                to="/"
+                style={{
+                    position: 'absolute',
+                    top: '10px',
+                    left: '10px',
+                    textDecoration: 'none',
+                    padding: '5px 10px',
+                    backgroundColor: '#f0f0f0',
+                    border: '1px solid #ccc',
+                    borderRadius: '5px',
+                    color: '#333',
+                }}
+            >
                 &larr; Back to Home
             </Link>
 
-            <h1>Shopping List</h1>
+            <h1 style={{ marginTop: '50px' }}>Shopping List</h1>
             <div>
                 <input
                     type="text"
@@ -53,9 +82,45 @@ function ShoppingList() {
             </div>
             <ul>
                 {items.map((item, index) => (
-                    <li key={index}>
+                    <li key={index} style={{ marginBottom: '10px' }}>
                         {item.name} (x{item.quantity})
-                        <button onClick={() => removeItem(index)} style={{ marginLeft: '10px' }}>
+                        <button
+                            onClick={() => decreaseQuantity(index)}
+                            style={{
+                                marginLeft: '10px',
+                                padding: '5px 10px',
+                                backgroundColor: '#f8d7da',
+                                border: '1px solid #f5c6cb',
+                                borderRadius: '5px',
+                                color: '#721c24',
+                            }}
+                        >
+                            -
+                        </button>
+                        <button
+                            onClick={() => increaseQuantity(index)}
+                            style={{
+                                marginLeft: '5px',
+                                padding: '5px 10px',
+                                backgroundColor: '#d4edda',
+                                border: '1px solid #c3e6cb',
+                                borderRadius: '5px',
+                                color: '#155724',
+                            }}
+                        >
+                            +
+                        </button>
+                        <button
+                            onClick={() => removeItem(index)}
+                            style={{
+                                marginLeft: '10px',
+                                padding: '5px 10px',
+                                backgroundColor: '#f0f0f0',
+                                border: '1px solid #ccc',
+                                borderRadius: '5px',
+                                color: '#333',
+                            }}
+                        >
                             Remove
                         </button>
                     </li>

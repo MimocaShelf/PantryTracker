@@ -114,6 +114,7 @@ button:focus-visible {
 
 #search-bar {
   padding: 10px 50px 10px 10px;
+  width: 50%;
 }
 
 #purple-text {
