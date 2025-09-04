@@ -57,6 +57,8 @@ function User() {
                 <p>Manage your profile information and pantries</p>
             </div>
 
+            <Link to="/household">Manage Household</Link>
+
             <div className="section">
                 <h2>Profile Information</h2>
                 {isEditing ? (
@@ -114,7 +116,7 @@ function User() {
                     </div>
                 )}
             </div>
-
+            
             <div className="section">
                 <h2>Your Pantries</h2>
                 <button onClick={() => setIsAddingPantry(true)}>+ Create New Pantry</button>
@@ -150,6 +152,8 @@ function User() {
                     ))}
                 </div>
             </div>
+
+
         </div>
     );
 }
