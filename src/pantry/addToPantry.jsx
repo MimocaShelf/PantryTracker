@@ -8,7 +8,6 @@ FEATURES:
     - quantity
     - unit of measurement
 */
-addItemToPantry()
 
 function AddToPantry() {
     return (

@@ -3,7 +3,8 @@ import Home from './home.jsx';
 import Nutrition from './nutrition.jsx';
 import MealPrep from './mealPrep.jsx';
 import Pantry from './pantry.jsx';
-import AddToPantry from './addToPantry.jsx';
+import AddToPantry from './pantry/addToPantry.jsx';
+import PantryView from './pantry/pantryView.jsx';
 import User from './user.jsx';
 import Household from './household.jsx';
 import ShoppingList from './shoppingList.jsx';
@@ -25,6 +26,7 @@ function App() {
             <Route path="/shoppingList" element={<ShoppingList />} /> 
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/pantryView" element={<PantryView />} /> 
         </Routes>
         </BrowserRouter>
     );

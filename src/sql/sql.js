@@ -29,7 +29,8 @@ const sql_array = [
     `CREATE TABLE pantry (
         pantry_id INTEGER PRIMARY KEY,
         pantry_ownder VARCHAR(100),
-        pantry_name VARCHAR(100)
+        pantry_name VARCHAR(100),
+        pantry_itemAmount INTEGER
 
     )`,
 
@@ -61,6 +62,7 @@ const sql_array = [
     'INSERT INTO pantry_items(pantry_id, item_name, quantity, unit) VALUES (2, "Bananas", 5, "kilograms")',
     'INSERT INTO pantry_items(pantry_id, item_name, quantity, unit) VALUES (2, "Chicken Breast", 500, "grams")',
     'INSERT INTO pantry_items(pantry_id, item_name, quantity, unit) VALUES (2, "Rib Eye Steak", 200, "grams")',
+    'INSERT INTO pantry_items(pantry_id, item_name, quantity, unit) VALUES (1, "Carrots", 5, "grams")',
 
     'INSERT INTO nutrition(pantry_item_id, calories, protein, carbs, fats) VALUES (3, 155, 8.5, 11.0, 8.5)',
     'INSERT INTO nutrition(pantry_item_id, calories, protein, carbs, fats) VALUES (4, 231, 6.2, 31.8, 1.4)',
@@ -73,10 +75,18 @@ const sql_array = [
 
 
     //INSERT PANTRY DATA
-    'INSERT INTO pantry VALUES (1, "Jane Doe", "Pantry1")',
-    'INSERT INTO pantry VALUES (2, "Michael Wazowski","SinkPantry")',
-    'INSERT INTO pantry VALUES (3, "Sam Smith", "BathroomCloset")',
-    'INSERT INTO pantry VALUES (4, "Diva Diva","Fridge")',
+    'INSERT INTO pantry VALUES (1, "Jane Doe", "Pantry1", 54)',
+    'INSERT INTO pantry VALUES (2, "Michael Wazowski","SinkPantry", 19)',
+    'INSERT INTO pantry VALUES (3, "Sam Smith", "BathroomCloset", 6)',
+    'INSERT INTO pantry VALUES (4, "Diva Diva","Fridge", 78)',
+    'INSERT INTO pantry VALUES (5, "John Doe", "Pantryyyy", 34)',
+    'INSERT INTO pantry VALUES (6, "Maia Papaya","My Pantry", 21)',
+    'INSERT INTO pantry VALUES (7, "Nina Recio", "Sweet Treats", 12)',
+    'INSERT INTO pantry VALUES (8, "Natasha Vithana","Laundry Stuff", 5)',
+    'INSERT INTO pantry VALUES (9, "Mary Magdalene", "Food", 32)',
+    'INSERT INTO pantry VALUES (10, "Matthew Roberts","Spice Cabinet", 21)',
+    'INSERT INTO pantry VALUES (11, "Wednesday Adams", "Party Items", 18)',
+    'INSERT INTO pantry VALUES (12, "Miguel Xavier","Cleaning Products", 7)',
 
     // INSERT USER DATA
     `INSERT INTO users (name, email, password_hash, profile_picture) 
