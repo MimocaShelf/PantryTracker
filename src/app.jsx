@@ -5,6 +5,7 @@ import MealPrep from './mealPrep.jsx';
 import Pantry from './pantry.jsx';
 import AddToPantry from './addToPantry.jsx';
 import User from './user.jsx';
+import ShoppingList from './shoppingList.jsx';
 import React from 'react';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
             <Route path="/pantry" element={<Pantry />} />
             <Route path="/addToPantry" element={<AddToPantry />} />
             <Route path="/user" element={<User />} />
+            <Route path="/shoppingList" element={<ShoppingList />} /> 
         </Routes>
         </BrowserRouter>
     );
