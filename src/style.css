@@ -114,6 +114,7 @@ button:focus-visible {
 
 #search-bar {
   padding: 10px 50px 10px 10px;
+  width: 30%;
 }
 
 #purple-text {
@@ -401,4 +402,8 @@ button:focus-visible {
 
 .terms-checkbox a:hover {
   text-decoration: underline;
+}
+
+#homeList{
+  list-style-type: none;
 }
