@@ -62,6 +62,7 @@ const sql_array = [
     'INSERT INTO pantry_items(pantry_id, item_name, quantity, unit) VALUES (2, "Bananas", 5, "kilograms")',
     'INSERT INTO pantry_items(pantry_id, item_name, quantity, unit) VALUES (2, "Chicken Breast", 500, "grams")',
     'INSERT INTO pantry_items(pantry_id, item_name, quantity, unit) VALUES (2, "Rib Eye Steak", 200, "grams")',
+    'INSERT INTO pantry_items(pantry_id, item_name, quantity, unit) VALUES (1, "Carrots", 5, "grams")',
 
     'INSERT INTO nutrition(pantry_item_id, calories, protein, carbs, fats) VALUES (3, 155, 8.5, 11.0, 8.5)',
     'INSERT INTO nutrition(pantry_item_id, calories, protein, carbs, fats) VALUES (4, 231, 6.2, 31.8, 1.4)',
