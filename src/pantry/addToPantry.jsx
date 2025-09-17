@@ -1,5 +1,6 @@
 import React from 'react';
 import addItemToPantry from './addToPantryLogic.jsx';
+
 /*
 FEATURES:
 - Add an item to the pantry
