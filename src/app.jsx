@@ -11,6 +11,8 @@ import ShoppingList from './shoppingList.jsx';
 import Login from './login.jsx';
 import Signup from './signup.jsx';
 import React from 'react';
+// import './sql/app.js';
+// import './nutritionLogic.js';
 
 function App() {
     return (
