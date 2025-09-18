@@ -12,6 +12,7 @@ pool:
 steps:
 - script: 
     echo "installing project dependencies..."
+    npm install
     echo "installed react"
     echo "installed react-dom"
     echo "installed react-router-dom"
