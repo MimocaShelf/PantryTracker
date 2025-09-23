@@ -11,6 +11,7 @@ import ShoppingList from './shoppingList.jsx';
 import Login from './login.jsx';
 import Signup from './signup.jsx';
 import React from 'react';
+import NutritionLogic from "./pantry/nutritionLogic.jsx";
 // import './sql/app.js';
 // import './nutritionLogic.js';
 
@@ -19,7 +20,7 @@ function App() {
         <BrowserRouter>
         <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/nutrition" element={<Nutrition />} />
+            <Route path="/nutrition" element={<NutritionLogic />} />
             <Route path="/mealPrep" element={<MealPrep />} />
             <Route path="/pantry" element={<Pantry />} />
             <Route path="/addToPantry" element={<AddToPantry />} />

@@ -12,6 +12,8 @@ const sql_array = [
     'DROP TABLE IF EXISTS pantry',
     'DROP TABLE IF EXISTS users',
     'DROP TABLE IF EXISTS households',
+    'DROP TABLE IF EXISTS meal_slots',
+    'DROP TABLE IF EXISTS meal_prep',
 
 
     //CREATE TABLES
@@ -25,6 +27,15 @@ const sql_array = [
     )`,
 
     `CREATE TABLE IF NOT EXISTS nutrition(nutrition_id INTEGER PRIMARY KEY, pantry_item_id INTEGER, calories , protein , carbs , fats , FOREIGN KEY(pantry_item_id) REFERENCES pantry_items(pantry_item_id))`,
+
+    `CREATE TABLE IF NOT EXISTS meal_slots(meal_slots_id INTEGER PRIMARY KEY AUTOINCREMENT, time)`,
+    `CREATE TABLE IF NOT EXISTS meal_prep(
+        meal_prep_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        meal_slots_id INTEGER, 
+        pantry_item_id INTEGER, 
+        FOREIGN KEY(meal_slots_id) REFERENCES meal_slots(meal_slots_id), 
+        FOREIGN KEY(pantry_item_id) REFERENCES pantry_items(pantry_item_id)
+    )`,
 
     `CREATE TABLE pantry (
         pantry_id INTEGER PRIMARY KEY,
@@ -70,6 +81,13 @@ const sql_array = [
     'INSERT INTO nutrition(pantry_item_id, calories, protein, carbs, fats) VALUES (6, 210, 1.4, 19.6, 1)',
     'INSERT INTO nutrition(pantry_item_id, calories, protein, carbs, fats) VALUES (7, 189, 31, 0, 3.6)',
     'INSERT INTO nutrition(pantry_item_id, calories, protein, carbs, fats) VALUES (8, 414, 24.3, 1, 35.2)',
+
+    'INSERT INTO meal_slots(time) VALUES ("Breakfast")',
+    'INSERT INTO meal_slots(time) VALUES ("Lunch")',
+    'INSERT INTO meal_slots(time) VALUES ("Dinner")',
+
+    'INSERT INTO meal_prep(meal_slots_id, pantry_item_id) VALUES (1, 3)',
+    'SELECT * FROM meal_prep',
 
     'SELECT * FROM nutrition JOIN pantry_items ON nutrition.pantry_item_id = pantry_items.pantry_item_id',
 
