@@ -185,37 +185,72 @@ app.get('/getMealPrep', (req, res) => {
             })
         })
 
-        /*readBreakfastIngredients(async (err, rows) => {
-            if(err){
-                res.status(500).send(err.message)
-            }  
-
-            breakfastItems = rows
-        })
-
-        readLunchIngredients(async (err, rows) => {
-            if(err){
-                res.status(500).send(err.message)
-            }  
-
-            lunchItems = rows
-        })
-
-        readDinnerIngredients(async (err, rows) => {
-            if(err){
-                res.status(500).send(err.message)
-            }  
-
-            dinnerItems = rows
-        })*/
-
-
-
-
     } catch (outerError){
         res.status(500).send('Unexpected Error');
     }
 })
+
+async function getRecipe(rows) {
+    
+     const queryString = rows.map(row => row.item_name).join(' ');
+     const encodedQuery = encodeURIComponent(queryString);
+     console.log(queryString);
+                try {
+                    const response = await fetch(`https://api.api-ninjas.com/v1/recipe?query=${encodedQuery}`, {
+                        headers: {
+                            'X-Api-Key': '56pVmwMXIBB6/OsFU9yBjw==2WphEiN4FEbAQk6E'
+                        }
+                    });
+
+                    if(!response.ok){
+                        const errorText = await response.text();
+                        console.log('inside', errorText);
+                        throw new Error('API failed');
+                    }
+
+                    const data = await response.json();
+                    console.log(data);
+                    
+                    return data.map(entry => ({
+                        title: entry.title,
+                        ingredients: entry.ingredients,
+                        servings: entry.servings,
+                        instructions: entry.instructions,
+                    }))
+
+                } catch (outerError){
+                    console.error('Fetch Failed', outerError)
+                }
+}
+
+app.get('/getRecipe', (req, res) => {
+     try{
+        readBreakfastIngredients(async (err, breakfastRows) => {
+            if(err){ res.status(500).send(err.message) }  
+
+            readLunchIngredients(async (err, lunchRows) => {
+                if(err){ res.status(500).send(err.message) }  
+
+                readDinnerIngredients(async (err, dinnerRows) => {
+                    if(err){ res.status(500).send(err.message) }  
+
+                    const breakfastRecipe = await getRecipe(breakfastRows);
+                    const lunchRecipe = await getRecipe(lunchRows);
+                    const dinnerRecipe = await getRecipe(dinnerRows);
+
+                    res.send({
+                        breakfastRecipe : breakfastRecipe,
+                        lunchRecipe: lunchRecipe,
+                        dinnerRecipe: dinnerRecipe
+                    })
+                })
+            })
+        })
+    } catch (outerError){
+        
+    }
+}) 
+
 
 app.post('/removeMealPrepItem', (req, res) => {
     const itemName = req.body.itemName;

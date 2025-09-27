@@ -5,6 +5,10 @@ function MealPrep() {
     const [lunchItems, setLunchItems] = useState([]);
     const [dinnerItems, setDinnerItems] = useState([]);
 
+    const [breakfastRecipe, setBreakfastRecipe] = useState([]);
+    const [lunchRecipe, setLunchRecipe] = useState([]);
+    const [dinnerRecipe, setDinnerRecipe] = useState([]);
+
     function removePantryItem(itemName, time){
 
         if(time === 1){
@@ -47,6 +51,20 @@ function MealPrep() {
         .catch(err => console.error('Error: ', err))
       }, [])
 
+      useEffect(() => {
+        fetch('http://localhost:3001/getRecipe')
+        .then(res => res.json())
+        .then(data => {
+          console.log('Breakfast Item: ', data.breakfastRecipe);
+          console.log('Lunch Item: ', data.lunchRecipe);
+          console.log('Dinner Item: ', data.dinnerRecipe);
+          setBreakfastRecipe(data.breakfastRecipe);
+          setLunchRecipe(data.lunchRecipe);
+          setDinnerRecipe(data.dinnerRecipe);
+        })
+        .catch(err => console.error('Error: ', err))
+      }, [])
+
 
     return (
         <div>
@@ -64,6 +82,7 @@ function MealPrep() {
                     <h3 id="pink-text">Total Carbs: 11.0</h3>
                     <h3 id="lavender-text">Total Fats: 8.5</h3>
                 </div>
+
                 {breakfastItems.map((item, index) => (
                 <div key={index} class="row">
                 <div class="left-container">
@@ -113,27 +132,30 @@ function MealPrep() {
             </div>
 
             <h1>Recipes</h1>
-            <div class="mealTimes">
-                <h2>Pancakes</h2>
-                <p>Fluffy, round cakes made from a milk-based batter, cooked on a griddle and often served with syrup, butter, or fruit.</p>
+            
+            {breakfastRecipe.map((item, index) => (
+            <div key={index} class="mealTimes">
+                <h2>{item.title}</h2>
+                <p>Serving: {item.servings}</p>
+                <p>{item.ingredients}</p>
                 <div class="right-aligned">
                 <button>Start Cooking &gt;</button>
                 </div>
             </div>
-            <div class="mealTimes">
-                <h2>Oatmeal</h2>
-                <p>Warm, creamy porridge made by simmering oats in milk, commonly topped with fruits, nuts, or sweeteners like honey.</p>
+            ))}
+
+             {lunchRecipe.map((item, index) => (
+            <div key={index} class="mealTimes">
+                <h2>{item.title}</h2>
+                <p>Serving: {item.servings}</p>
+                <p>{item.ingredients}</p>
                 <div class="right-aligned">
                 <button>Start Cooking &gt;</button>
                 </div>
             </div>
-            <div class="mealTimes">
-                <h2>French Toast</h2>
-                <p>Slices of bread dipped in a milk and egg mixture, then fried until golden brown; usually served with syrup, powdered sugar, or fruit.</p>
-                <div class="right-aligned">
-                <button>Start Cooking &gt;</button>
-                </div>
-            </div>
+            ))}
+            
+            
         </div>
     );
 }

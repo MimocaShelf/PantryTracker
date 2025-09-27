@@ -9,6 +9,8 @@ function NutritionLogic() {
   const [nutritionValues, setNutritionValues] = useState([]);
   const navigate = useNavigate();
   const [selectedTime, setSelectedTime] = useState({});
+  const [sortBy, setSortBy] = useState('calories');
+  const [orderBy, setOrderBy] = useState('ascending');
 
   function submitUserFilter() {
     const userInput = document.getElementById('search-bar').value;
@@ -52,6 +54,17 @@ function NutritionLogic() {
         .catch(err => console.error('Error sending data: ', err))
   }
 
+  function sortIngredientOrder(sortBy, orderBy) {
+    const sortedList = [...nutritionValues].sort((a, b) => {
+      if(orderBy === 'ascending'){
+        return a[sortBy] - b[sortBy];
+      } else {
+        return b[sortBy] - a[sortBy];
+      }
+    });
+    setNutritionValues(sortedList);
+  }
+
   useEffect(() => {
     fetch('http://localhost:3001/getAllItemsAndNutritionValues')
     .then(res => res.json())
@@ -61,6 +74,10 @@ function NutritionLogic() {
     })
     .catch(err => console.error('Error: ', err))
   }, [])
+
+  useEffect(() => { 
+    sortIngredientOrder(sortBy, orderBy)
+  }, [sortBy, orderBy])
 
   return (
     <div>
@@ -72,9 +89,21 @@ function NutritionLogic() {
             <div class='input-field'>
                 <input id="search-bar" placeholder='Search...' type="text"/>
                 <button onClick={submitUserFilter}>Submit</button>
-                <button>Ingredient List</button>
                 <button onClick={() => navigate('/mealPrep')}>Weekly Meal Plan</button>
+                
             </div>
+             <div class='input-field'>
+            <select class="selector" name="sortBy" onClick={(e) => setSortBy(e.target.value)}>
+                    <option value="calories">Calories</option>
+                    <option value="protein">Protein</option>
+                    <option value="carbohydrate">Carbs</option>
+                    <option value="fats">Fats</option>
+                </select>
+                <select class="selector" name="orderBy" onClick={(e) => setOrderBy(e.target.value)}>
+                    <option value="ascending">Ascending</option>
+                    <option value="descending">Descending</option>
+                </select>
+                </div>
             {nutritionValues.map((item, index) => (
               <div key={index} class="nutritionBox">
                 <div class="row">
@@ -90,7 +119,7 @@ function NutritionLogic() {
                 </div>
                 <div class="right-aligned">
                 <button onClick={() => addItemToMealPrep(item, selectedTime[index] || 'Breakfast')}>Add To Meal Prep</button>
-                <select name="times" value={selectedTime[index] || 'Breakfast'} onChange={(e) => handleTimeChange(index, e.target.value)}>
+                <select class="selector" name="times" value={selectedTime[index] || 'Breakfast'} onChange={(e) => handleTimeChange(index, e.target.value)}>
                     <option>Breakfast</option>
                     <option>Lunch</option>
                     <option>Dinner</option>

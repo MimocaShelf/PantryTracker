@@ -108,13 +108,14 @@ button:focus-visible {
   text-align: left;
 }
 
-.input-field > button {
-  margin-left: 20px;
+.input-field > button, .input-field > .selector {
+  margin-right: 20px;
 }
 
 #search-bar {
   padding: 10px 50px 10px 10px;
   width: 50%;
+  margin-right: 20px;
 }
 
 #purple-text {
@@ -148,6 +149,7 @@ button:focus-visible {
 .right-aligned {
   display: flex;
   justify-content: right;
+  gap: 20px;
 }
 
 .nutritionBox > button, .nutritionBox > select {
@@ -163,6 +165,17 @@ button:focus-visible {
 .right-container {
   display: flex;
   gap: 3rem;
+}
+
+.selector {
+  background-color: #f9f9f9;
+  padding: 0.6em 1.2em;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
 }
 
 .mealTimes {
