@@ -43,4 +43,9 @@ const insertPantryItemToMealPrep = (time, itemName, callback) => {
     }) 
 }
 
-export {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem}
+const checkIfItemRecordExistInMealPrep = (time, itemName, callback) => {
+    const sql = 'SELECT * FROM meal_prep WHERE meal_slots_id = ? AND pantry_item_id = ?'
+    db.all(sql, [time, itemName], callback)
+}
+
+export {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep}

@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
 function MealPrep() {
+    const navigate = useNavigate();
     const [breakfastItems, setBreakfastItems] = useState([]);
     const [lunchItems, setLunchItems] = useState([]);
     const [dinnerItems, setDinnerItems] = useState([]);
@@ -9,8 +11,10 @@ function MealPrep() {
     const [lunchRecipe, setLunchRecipe] = useState([]);
     const [dinnerRecipe, setDinnerRecipe] = useState([]);
 
+    //Function that removes the record of the pantry item with the specific meal time in the meal prep table 
     function removePantryItem(itemName, time){
 
+        //Removes the pantry item from its corresponding meal list
         if(time === 1){
             setBreakfastItems(prev => prev.filter(item => item.itemName !== itemName));
         } else if (time === 2){
@@ -19,142 +23,145 @@ function MealPrep() {
             setDinnerItems(prev => prev.filter(item => item.itemName !== itemName));
         }
 
+        console.log(lunchItems);
+
+        //Request the backend server to remove the meal record that corresponds to the item name and meal time from the database
         fetch('http://localhost:3001/removeMealPrepItem', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            itemName: itemName,
-            time: time
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                itemName: itemName,
+                time: time
+            })
         })
-      })
         .then(res => res.json())
         .then(data => {
-          console.log('Response from backend:', data);
-          
+            console.log(data.message)
+          getRecipe() //Updates the recommended recipe to match the current ingredients in the meal plan 
         })
         .catch(err => console.error('Error sending data: ', err))
+        
     }
 
+    //Function that request the backend database to call the recipe API for each meal time based on list of pantry item
+    function getRecipe() {
+        fetch('http://localhost:3001/getRecipe')
+        .then(res => res.json())
+        .then(data => {
+            setBreakfastRecipe(data.breakfastRecipe);
+            setLunchRecipe(data.lunchRecipe);
+            setDinnerRecipe(data.dinnerRecipe);
+        })
+        .catch(err => console.error('Error: ', err))
+    }
+
+    //Fetches lists of pantry items for each meal time
      useEffect(() => {
         fetch('http://localhost:3001/getMealPrep')
         .then(res => res.json())
         .then(data => {
-          console.log('Breakfast Item: ', data.breakfastItems);
-          console.log('Lunch Item: ', data.lunchItems);
-          console.log('Dinner Item: ', data.dinnerItems);
-          setBreakfastItems(data.breakfastItems);
-          setLunchItems(data.lunchItems);
-          setDinnerItems(data.dinnerItems);
+          setBreakfastItems(data.breakfastItems); //Update the state with the list of pantry items set for breakfast as it meal time
+          setLunchItems(data.lunchItems); //Update the state with the list of pantry items set for lunch as it meal time
+          setDinnerItems(data.dinnerItems); //Update the state with the list of pantry items set for dinner as it meal time
         })
         .catch(err => console.error('Error: ', err))
       }, [])
 
-      useEffect(() => {
+    //Fetches recommended recipe for each meal plan
+    useEffect(() => {
         fetch('http://localhost:3001/getRecipe')
         .then(res => res.json())
-        .then(data => {
-          console.log('Breakfast Item: ', data.breakfastRecipe);
-          console.log('Lunch Item: ', data.lunchRecipe);
-          console.log('Dinner Item: ', data.dinnerRecipe);
-          setBreakfastRecipe(data.breakfastRecipe);
-          setLunchRecipe(data.lunchRecipe);
-          setDinnerRecipe(data.dinnerRecipe);
+        .then(data => { //Updates the state with a recipe object
+            setBreakfastRecipe(data.breakfastRecipe);
+            setLunchRecipe(data.lunchRecipe);
+            setDinnerRecipe(data.dinnerRecipe);
         })
         .catch(err => console.error('Error: ', err))
-      }, [])
+    }, [])
 
+    //Function that renders the list of pantry items with its nutrition values for each meal time
+    function renderMealTimeItems(mealTime, mealItems) {
+
+        //Checks if the list of pantry items is empty
+        if(mealItems.length === 0){
+            return <p>You have no ingredients set.</p>
+        }
+
+        //Else return the formatted list of pantry items
+        //Goes through each item in the list of pantry items
+        return mealItems.map((item, index) => (
+            <div key={index} class="row">
+                <div class="left-container">
+                    <h2>{item.itemName}</h2>
+                </div>
+                <div class="right-container">
+                    <h3>Calories: {item.calories}</h3>
+                    <h3 id="purple-text">Protein: {item.protein}</h3>
+                    <h3 id="pink-text">Carbs: {item.carbohydrate}</h3>
+                    <h3 id="lavender-text">Fats: {item.fats}</h3>
+                    <button onClick={() => removePantryItem(item.itemName, mealTime)}>Remove</button>
+                </div>
+            </div>
+        ))
+    }
+
+    //Function that renders the recipe
+    function renderRecipes(mealName, recipeList) {
+
+        //Checks if the recipe object is undefined, indicating there is no pantry items set for that meal time
+        if(recipeList === undefined){
+            return <div class="mealTimes">
+                        <h2>For {mealName}: No items in meal prep...</h2>
+                    </div>
+        
+        //Check if the recipe object has no items inside, indicating there was no suitable recipe generated by the Recipe API
+        } else if(recipeList.length === 0) {
+            return <div class="mealTimes">
+                        <h2>For {mealName}: No suitable recipes found...</h2>
+                    </div>
+        }
+
+        //Else return the formatted recipe object
+        return recipeList.map((item, index) => (
+            <div key={index} class="mealTimes">
+                <h2>For {mealName}: {item.title}</h2>
+                <p>Serving: {item.servings}</p>
+                <p>{item.ingredients}</p>
+                <div class="right-aligned">
+                <button>Start Cooking &gt;</button>
+                </div>
+            </div>
+        ))
+    }
 
     return (
         <div>
             <div class="section">
-            <h1>Meal Prep</h1>
-            <p>Check which ingredients you set to your meal plan and generate recipes to help you cook easy but nutritious meals</p>
+                <h1>Meal Prep</h1>
+                <p>Check which ingredients you set to your meal plan and generate recipes to help you cook easy but nutritious meals</p>
+                <button onClick={() => navigate('/nutrition')}>Nutrition Tracker</button>  
             </div>
             <div class="section">
-            
-            <div class="mealTimes">
-                <h2>Breakfast</h2>
-                <div class="total">
-                    <h3>Total Calories: 155</h3>
-                    <h3 id="purple-text">Total Protein: 8.5</h3>
-                    <h3 id="pink-text">Total Carbs: 11.0</h3>
-                    <h3 id="lavender-text">Total Fats: 8.5</h3>
+                <div class="mealTimes">
+                    <h2>Breakfast</h2>
+                    {renderMealTimeItems(1, breakfastItems)}
                 </div>
-
-                {breakfastItems.map((item, index) => (
-                <div key={index} class="row">
-                <div class="left-container">
-                    <h2>{item.itemName}</h2>
+                <div class="mealTimes">
+                    <h2>Lunch</h2>
+                    {renderMealTimeItems(2, lunchItems)}
                 </div>
-                <div class="right-container">
-                    <h3>Calories: {item.calories}</h3>
-                    <h3 id="purple-text">Protein: {item.protein}</h3>
-                    <h3 id="pink-text">Carbs: {item.carbohydrate}</h3>
-                    <h3 id="lavender-text">Fats: {item.fats}</h3>
-                    <button onClick={() => removePantryItem(item.itemName, 1)}>Remove</button>
-                    <button>Generate Recipes</button>
+                <div class="mealTimes">
+                    <h2>Dinner</h2>
+                    {renderMealTimeItems(3, dinnerItems)}
                 </div>
-                </div>
-                ))}
-            </div>
-            
-
-            <div class="mealTimes">
-                <h2>Lunch</h2>
-                <div class="total">
-                    <h3>Total Calories: 155</h3>
-                    <h3 id="purple-text">Total Protein: 8.5</h3>
-                    <h3 id="pink-text">Total Carbs: 11.0</h3>
-                    <h3 id="lavender-text">Total Fats: 8.5</h3>
-                </div>
-                {lunchItems.map((item, index) => (
-                <div key={index} class="row">
-                <div class="left-container">
-                    <h2>{item.itemName}</h2>
-                </div>
-                <div class="right-container">
-                    <h3>Calories: {item.calories}</h3>
-                    <h3 id="purple-text">Protein: {item.protein}</h3>
-                    <h3 id="pink-text">Carbs: {item.carbohydrate}</h3>
-                    <h3 id="lavender-text">Fats: {item.fats}</h3>
-                    <button>Remove</button>
-                    <button>Generate Recipes</button>
-                </div>
-                </div>
-                ))}
-            </div>
-            <div class="mealTimes">
-                <h2>Dinner</h2>
-                <p class="warning">You have no set recipes for lunch</p>
-            </div>
             </div>
 
             <h1>Recipes</h1>
-            
-            {breakfastRecipe.map((item, index) => (
-            <div key={index} class="mealTimes">
-                <h2>{item.title}</h2>
-                <p>Serving: {item.servings}</p>
-                <p>{item.ingredients}</p>
-                <div class="right-aligned">
-                <button>Start Cooking &gt;</button>
-                </div>
-            </div>
-            ))}
-
-             {lunchRecipe.map((item, index) => (
-            <div key={index} class="mealTimes">
-                <h2>{item.title}</h2>
-                <p>Serving: {item.servings}</p>
-                <p>{item.ingredients}</p>
-                <div class="right-aligned">
-                <button>Start Cooking &gt;</button>
-                </div>
-            </div>
-            ))}
-            
+            {renderRecipes("Breakfast",breakfastRecipe)}
+            {renderRecipes("Lunch", lunchRecipe)}            
+            {renderRecipes("Dinner", dinnerRecipe)}
             
         </div>
     );
