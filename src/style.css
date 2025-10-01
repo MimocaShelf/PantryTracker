@@ -123,6 +123,12 @@ button:focus-visible {
   background-color: #B9C7F2;
 }
 
+.warning-message {
+  font-style: italic;
+  padding-top: 10px;
+  font-size: 15px;
+}
+
 .input-field > button, .input-field > .selector {
   margin-right: 20px;
 }
