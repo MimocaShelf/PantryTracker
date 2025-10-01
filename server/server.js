@@ -2,6 +2,9 @@ import express from 'express'
 import cors from 'cors'
 import {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep} from './crud.js'
 import {addItemToPantry, getLatestAddedItem} from './addToPantryLogic.js'
+
+import { createUser, readUserByEmail, readUserById, updateUser, deleteUser } from './userServices.js';
+
 const app = express();
 
 app.use(cors({origin: 'http://localhost:5173'}))
@@ -485,6 +488,45 @@ app.post('/updateShoppingListItem', (req, res) => {
         );
     });
 });
+
+// --- User Endpoints ---
+
+// Create user
+app.post('/user', (req, res) => {
+    const { name, email, password } = req.body;
+    createUser(name, email, password, (err, result) => {
+        if (err) return res.status(500).send(err.message);
+        res.json(result);
+    });
+});
+
+// Read user by ID
+app.get('/user/:id', (req, res) => {
+    const userId = req.params.id;
+    readUserById(userId, (err, user) => {
+        if (err) return res.status(500).send(err.message);
+        if (!user) return res.status(404).send('User not found');
+        res.json(user);
+    });
+});
+
+// Update user
+app.put('/user/:id', (req, res) => {
+    const userId = req.params.id;
+    const { name, profilePicture } = req.body;  
+    updateUser(userId, name, profilePicture, (err, result) => {
+        if (err) return res.status(500).send(err.message);
+        res.json(result);
+    });
+});
+app.delete('/user/:id', (req, res) => {
+    const userId = req.params.id;
+    deleteUser(userId, (err, result) => {
+        if (err) return res.status(500).send(err.message);
+        res.json(result);
+    });
+});
+
 
 app.listen(3001, () => {
     console.log("Server is running on http://localhost:3001/")
