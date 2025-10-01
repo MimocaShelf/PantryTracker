@@ -340,6 +340,25 @@ app.get('/api/test', (req, res) => {
     res.json({message: 'testing'})
 })
 
+// Get low stock pantry items
+app.get('/getLowStockItems', (req, res) => {
+    const LOW_STOCK_THRESHOLD = 2;
+    // Query all items and filter in JS, or do it in SQL:
+    import('./sql/app.js').then(({ default: db }) => {
+        db.all(
+            'SELECT * FROM pantry_items WHERE quantity < ?',
+            [LOW_STOCK_THRESHOLD],
+            (err, rows) => {
+                if (err) {
+                    res.status(500).send(err.message);
+                } else {
+                    res.status(200).json(rows);
+                }
+            }
+        );
+    });
+});
+
 app.listen(3001, () => {
     console.log("Server is running on http://localhost:3001/")
 })

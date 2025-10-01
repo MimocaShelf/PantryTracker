@@ -12,6 +12,7 @@ import Login from './login.jsx';
 import Signup from './signup.jsx';
 import React from 'react';
 import NutritionLogic from "./pantry/nutritionLogic.jsx";
+import ShoppingMode from "./ShoppingMode.jsx";
 // import './sql/app.js';
 // import './nutritionLogic.js';
 
@@ -26,7 +27,8 @@ function App() {
             <Route path="/addToPantry" element={<AddToPantry />} />
             <Route path="/user" element={<User />} />
             <Route path="/household" element={<Household />} />
-            <Route path="/shoppingList" element={<ShoppingList />} /> 
+            <Route path="/shoppingList" element={<ShoppingList />} />
+            <Route path="/shoppingMode" element={<ShoppingMode />} /> 
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/pantryView" element={<PantryView />} /> 
