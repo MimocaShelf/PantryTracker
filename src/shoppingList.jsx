@@ -3,16 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import './style.css';
 
 function ShoppingList() {
-    const [items, setItems] = useState([
-        { name: 'Apples', quantity: 1 },
-        { name: 'Bananas', quantity: 2 },
-        { name: 'Carrots', quantity: 3 },
-    ]);
+    const [items, setItems] = useState([]);
     const [inputValue, setInputValue] = useState('');
     const [quantityValue, setQuantityValue] = useState(1);
 
     // Fetch low stock items from the backend
     const [lowStockRecommendations, setLowStockRecommendations] = useState([]);
+
+    // Fetch shopping list from the backend on mount
+    useEffect(() => {
+        fetch('http://localhost:3001/getShoppingList')
+            .then(res => res.json())
+            .then(data => setItems(data));
+    }, []);
 
     useEffect(() => {
         fetch('http://localhost:3001/getLowStockItems')
@@ -24,7 +27,7 @@ function ShoppingList() {
                             !items.some(
                                 item =>
                                     item.name.toLowerCase() ===
-                                    stockItem.item_name.toLowerCase()
+                                    (stockItem.item_name || stockItem.name).toLowerCase()
                             )
                     )
                 );
@@ -32,60 +35,108 @@ function ShoppingList() {
     }, [items]);
 
     // Function to handle adding an item
-    const addItem = () => {
+    const addItem = async () => {
         if (
             inputValue.trim() !== '' &&
             quantityValue > 0 &&
             Number.isInteger(quantityValue)
         ) {
-            setItems([...items, { name: inputValue.trim(), quantity: quantityValue }]);
-            setInputValue('');
-            setQuantityValue(1);
+            // Add to DB via backend
+            const res = await fetch('http://localhost:3001/addShoppingListItem', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: inputValue.trim(), quantity: quantityValue }),
+            });
+            if (res.ok) {
+                // Refresh list from backend
+                fetch('http://localhost:3001/getShoppingList')
+                    .then(res => res.json())
+                    .then(data => setItems(data));
+                setInputValue('');
+                setQuantityValue(1);
+            }
         }
     };
 
     // Function to handle removing an item
-    const removeItem = (index) => {
-        const updatedItems = [...items];
-        updatedItems.splice(index, 1);
-        setItems(updatedItems);
+    const removeItem = async (index) => {
+        const item = items[index];
+        await fetch('http://localhost:3001/removeShoppingListItem', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: item.name }),
+        });
+        // Refresh list from backend
+        fetch('http://localhost:3001/getShoppingList')
+            .then(res => res.json())
+            .then(data => setItems(data));
     };
 
     // Function to increase the quantity of an item
-    const increaseQuantity = (index) => {
-        const updatedItems = items.map((item, i) =>
-            i === index ? { ...item, quantity: item.quantity + 1 } : item
-        );
-        setItems(updatedItems);
+    const increaseQuantity = async (index) => {
+        const item = items[index];
+        await fetch('http://localhost:3001/updateShoppingListItem', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: item.name, quantity: item.quantity + 1 }),
+        });
+        fetch('http://localhost:3001/getShoppingList')
+            .then(res => res.json())
+            .then(data => setItems(data));
     };
 
     // Function to decrease the quantity of an item
-    const decreaseQuantity = (index) => {
-        const updatedItems = items.map((item, i) =>
-            i === index && item.quantity > 1
-                ? { ...item, quantity: item.quantity - 1 }
-                : item
-        );
-        setItems(updatedItems);
+    const decreaseQuantity = async (index) => {
+        const item = items[index];
+        if (item.quantity > 1) {
+            await fetch('http://localhost:3001/updateShoppingListItem', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: item.name, quantity: item.quantity - 1 }),
+            });
+            fetch('http://localhost:3001/getShoppingList')
+                .then(res => res.json())
+                .then(data => setItems(data));
+        }
     };
 
     // Add recommended item to shopping list
-    const addRecommendedItem = (name) => {
-        setItems([...items, { name, quantity: 1 }]);
+    const addRecommendedItem = async (name) => {
+        await fetch('http://localhost:3001/addShoppingListItem', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, quantity: 1 }),
+        });
+        fetch('http://localhost:3001/getShoppingList')
+            .then(res => res.json())
+            .then(data => setItems(data));
     };
 
     // Add navigation to shopping mode
     const navigate = useNavigate();
 
+    useEffect(() => {
+        localStorage.setItem('shoppingList', JSON.stringify(items));
+    }, [items]);
+
     return (
         <div className="genericContentBox" style={{ maxWidth: 600, margin: '40px auto' }}>
-            <h1>Shopping List</h1>
+            <h1
+                id="lavender-text"
+                style={{
+                    color: 'var(--white)',
+                    textShadow: '0 2px 8px var(--purple), 0 1px 0 #000',
+                    letterSpacing: '1px',
+                }}
+            >
+                Shopping List
+            </h1>
             <button
                 style={{
                     marginBottom: '24px',
                     background: 'var(--lavender)',
                     color: 'var(--purple)',
-                    border: '1px solid var(--purple)',  
+                    border: '1px solid var(--purple)',
                     borderRadius: '8px',
                     padding: '10px 24px',
                     fontWeight: 600,

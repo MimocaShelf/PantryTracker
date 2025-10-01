@@ -359,6 +359,75 @@ app.get('/getLowStockItems', (req, res) => {
     });
 });
 
+// --- Shopping List Endpoints ---
+
+// Get all shopping list items
+app.get('/getShoppingList', (req, res) => {
+    import('./sql/app.js').then(({ default: db }) => {
+        db.all('SELECT name, quantity FROM shopping_list', [], (err, rows) => {
+            if (err) return res.status(500).send(err.message);
+            res.json(rows);
+        });
+    });
+});
+
+// Add an item to the shopping list
+app.post('/addShoppingListItem', (req, res) => {
+    const { name, quantity } = req.body;
+    import('./sql/app.js').then(({ default: db }) => {
+        db.get('SELECT * FROM shopping_list WHERE name = ?', [name], (err, row) => {
+            if (err) return res.status(500).send(err.message);
+            if (row) {
+                // If item exists, update quantity
+                db.run(
+                    'UPDATE shopping_list SET quantity = quantity + ? WHERE name = ?',
+                    [quantity, name],
+                    function (err) {
+                        if (err) return res.status(500).send(err.message);
+                        res.json({ success: true, updated: true });
+                    }
+                );
+            } else {
+                // Else, insert new item
+                db.run(
+                    'INSERT INTO shopping_list (name, quantity) VALUES (?, ?)',
+                    [name, quantity],
+                    function (err) {
+                        if (err) return res.status(500).send(err.message);
+                        res.json({ success: true, inserted: true });
+                    }
+                );
+            }
+        });
+    });
+});
+
+// Remove an item from the shopping list
+app.post('/removeShoppingListItem', (req, res) => {
+    const { name } = req.body;
+    import('./sql/app.js').then(({ default: db }) => {
+        db.run('DELETE FROM shopping_list WHERE name = ?', [name], function (err) {
+            if (err) return res.status(500).send(err.message);
+            res.json({ success: true });
+        });
+    });
+});
+
+// Update quantity of an item in the shopping list
+app.post('/updateShoppingListItem', (req, res) => {
+    const { name, quantity } = req.body;
+    import('./sql/app.js').then(({ default: db }) => {
+        db.run(
+            'UPDATE shopping_list SET quantity = ? WHERE name = ?',
+            [quantity, name],
+            function (err) {
+                if (err) return res.status(500).send(err.message);
+                res.json({ success: true });
+            }
+        );
+    });
+});
+
 app.listen(3001, () => {
     console.log("Server is running on http://localhost:3001/")
 })

@@ -1,6 +1,5 @@
 /*
     Add SQL strings to the array, and it will run them in order
-
 */
 
 import maindb from "./app.js";
@@ -14,7 +13,7 @@ const sql_array = [
     'DROP TABLE IF EXISTS households',
     'DROP TABLE IF EXISTS meal_slots',
     'DROP TABLE IF EXISTS meal_prep',
-
+    'DROP TABLE IF EXISTS shopping_list',
 
     //CREATE TABLES
     `CREATE TABLE pantry_items (
@@ -42,7 +41,6 @@ const sql_array = [
         pantry_ownder VARCHAR(100),
         pantry_name VARCHAR(100),
         pantry_itemAmount INTEGER
-
     )`,
 
      `CREATE TABLE users (
@@ -62,7 +60,11 @@ const sql_array = [
         FOREIGN KEY(created_by) REFERENCES users(user_id)
     )`,
 
-
+    `CREATE TABLE IF NOT EXISTS shopping_list (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        quantity INTEGER NOT NULL DEFAULT 1
+    )`,
 
     //INSERT ITEM DATA
     'INSERT INTO pantry_items(pantry_id, item_name, quantity, unit) VALUES (1, "Apple", 4, "units")',
@@ -125,7 +127,10 @@ const sql_array = [
     `INSERT INTO households (household_name, created_by) 
      VALUES ('Doe Family', 1)`,
 
-
+    // INSERT SHOPPING LIST DATA 
+    `INSERT INTO shopping_list (name, quantity) VALUES ('Apples', 2)`,
+    `INSERT INTO shopping_list (name, quantity) VALUES ('Bananas', 3)`,
+    `INSERT INTO shopping_list (name, quantity) VALUES ('Carrots', 1)`,
 ]
 
 //For loop so it runs in order

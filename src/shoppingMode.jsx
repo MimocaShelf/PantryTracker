@@ -1,14 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.css';
 
 function ShoppingMode() {
-    const [itemsToBuy, setItemsToBuy] = useState([
-        { name: 'Apples', quantity: 1 },
-        { name: 'Bananas', quantity: 2 },
-        { name: 'Carrots', quantity: 3 },
-    ]);
+    const [itemsToBuy, setItemsToBuy] = useState([]);
     const [boughtItems, setBoughtItems] = useState([]);
     const [message, setMessage] = useState('');
+
+    // Load shopping list from localStorage or backend
+    useEffect(() => {
+        // Try to get shopping list from localStorage (as an example)
+        const stored = localStorage.getItem('shoppingList');
+        if (stored) {
+            setItemsToBuy(JSON.parse(stored));
+        } else {
+            // Fallback: fetch from backend if you have an endpoint
+            // fetch('http://localhost:3001/getShoppingList')
+            //     .then(res => res.json())
+            //     .then(data => setItemsToBuy(data));
+        }
+    }, []);
+
+    // Optionally, keep shopping list in sync with localStorage
+    useEffect(() => {
+        localStorage.setItem('shoppingList', JSON.stringify(itemsToBuy));
+    }, [itemsToBuy]);
 
     // Mark item as bought
     const markAsBought = (idx) => {
