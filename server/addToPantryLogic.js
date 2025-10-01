@@ -1,5 +1,3 @@
-import React from 'react';
-// import maindb from './sql/app.js'
 /*
     take input from addToPantry:
         - pantry (pantry_name)
