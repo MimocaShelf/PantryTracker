@@ -1,5 +1,5 @@
 import React from 'react';
-import addItemToPantry from './addToPantryLogic.jsx';
+// import addItemToPantry from '../../server/addToPantryLogic.jsx';
 
 /*
 FEATURES:
