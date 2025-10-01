@@ -11,7 +11,6 @@ import ShoppingList from './shoppingList.jsx';
 import Login from './login.jsx';
 import Signup from './signup.jsx';
 import React from 'react';
-import NutritionLogic from "./pantry/nutritionLogic.jsx";
 import ShoppingMode from "./ShoppingMode.jsx";
 import NutritionLogic from "./nutrition management/nutritionLogic.jsx";
 // import './sql/app.js';
