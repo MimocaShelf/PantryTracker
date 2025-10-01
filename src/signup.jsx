@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { signup } from './server/sql/authService.js';
+import { signup } from './server/services/authService.js';
 
 function Signup() {
     return (

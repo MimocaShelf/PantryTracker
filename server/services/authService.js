@@ -1,4 +1,4 @@
-import db from './sql/app.js'
+import db from '../sql/app.js'
 
 // Handles database operations for user authentication
 

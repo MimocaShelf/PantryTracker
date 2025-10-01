@@ -1,5 +1,5 @@
 import express from 'express';
-import { loginUser, registerUser } from '../services/authService.js';
+import { login, signup } from '../services/authService.js';
 import { isValidEmail, isValidPassword } from '../services/ultilityService.js';
 
 // Handles auth routes and logic
@@ -10,15 +10,12 @@ const app = express();
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
 
-    // Validate email and password
+    // Validate email
     if (!isValidEmail(email)) {
         return res.status(400).json({ error: 'Invalid email format.' });
     }
-    if (!isValidPassword(password)) {
-        return res.status(400).json({ error: 'Invalid password format.' });
-    }
 
-    loginUser(email, password, (err, user) => {
+    login(email, password, (err, user) => {
         if (err) return res.status(500).send(err.message);
         res.json(user);
     });
@@ -35,7 +32,7 @@ app.post('/signup', (req, res) => {
     if (!isValidPassword(password)) {
         return res.status(400).json({ error: 'Invalid password format.' });
     }
-    registerUser(name, email, password, (err, user) => {
+    signup(name, email, password, (err, user) => {
         if (err) return res.status(500).send(err.message);
         res.json(user);
     });
