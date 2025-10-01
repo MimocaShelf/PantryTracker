@@ -1,10 +1,12 @@
 import express from 'express'
 import cors from 'cors'
 import {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep} from './crud.js'
+import {addItemToPantry, getLatestAddedItem} from './addToPantryLogic.js'
 const app = express();
 
 app.use(cors({origin: 'http://localhost:5173'}))
 app.use(express.json())
+app.use(express.urlencoded({ extended: true })) 
 
 app.get('/', (req, res) => {
     console.log('root route hit');
@@ -22,6 +24,59 @@ app.get('/getAllItems', (req, res) => {
         }
     })
 })
+
+//recieve post requests, will add an item with the following format
+/* example request:
+HEADER:
+{"Content-Type": "application/json"}
+
+
+BODY:
+{
+    "pantry_id": 1,
+    "item_name": "Durian",
+    "extra_info": "None",
+    "quantity": 4,
+    "unit": "units"
+}
+*/
+app.post('/postAddItemToPantry', (req, res, next) => {
+    console.log('POST postAddItemToPantry received.')
+    
+    // console.log(req);
+    console.log(req.body);
+    let body = req.body;
+    // res.status(200).send(body)
+    addItemToPantry(body.pantry_id, body.item_name, body.extra_info, body.quantity, body.unit);
+    try {
+    } 
+    catch (error) {
+        res.status(500).send(error);
+    }
+
+    
+
+    res.status(200).send()
+})
+
+
+//Function primarily used for testing. send a get request, and it will get the last item added in all pantries
+app.get('/getLatestAddeditem', (req,res) => {
+    console.log('GET getLatestAddeditem received.')
+    getLatestAddedItem(async (err, rows) => {
+        if (err) {
+            res.status(500).send(err)
+        }
+        res.status(200).send(rows)
+    })
+
+
+})
+
+
+
+
+
 
 //function that queries the Nutrition Tracking API (Calorie Ninja) for a specific item and receives the nutrition values that is stored in a list
 export async function getAllPantryItems(queryString) {
@@ -335,6 +390,9 @@ app.get('/getSpecificItems', (req, res) => {
         }
     })
 })
+
+
+
 
 app.get('/api/test', (req, res) => {
     res.json({message: 'testing'})
