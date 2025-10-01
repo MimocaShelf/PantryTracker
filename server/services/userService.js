@@ -1,4 +1,4 @@
-import db from './sql/app.js'
+import db from '../sql/app.js'
 
 // Create User
 const createUser = (name, email, password, callback) => {

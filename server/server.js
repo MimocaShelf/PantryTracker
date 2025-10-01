@@ -3,7 +3,8 @@ import cors from 'cors'
 import {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep} from './crud.js'
 import {addItemToPantry, getLatestAddedItem} from './addToPantryLogic.js'
 
-import { createUser, readUserByEmail, readUserById, updateUser, deleteUser } from './userServices.js';
+import userRoutes from './routes/userRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 const app = express();
 
@@ -490,42 +491,10 @@ app.post('/updateShoppingListItem', (req, res) => {
 });
 
 // --- User Endpoints ---
+app.use('/user', userRoutes);
 
-// Create user
-app.post('/user', (req, res) => {
-    const { name, email, password } = req.body;
-    createUser(name, email, password, (err, result) => {
-        if (err) return res.status(500).send(err.message);
-        res.json(result);
-    });
-});
-
-// Read user by ID
-app.get('/user/:id', (req, res) => {
-    const userId = req.params.id;
-    readUserById(userId, (err, user) => {
-        if (err) return res.status(500).send(err.message);
-        if (!user) return res.status(404).send('User not found');
-        res.json(user);
-    });
-});
-
-// Update user
-app.put('/user/:id', (req, res) => {
-    const userId = req.params.id;
-    const { name, profilePicture } = req.body;  
-    updateUser(userId, name, profilePicture, (err, result) => {
-        if (err) return res.status(500).send(err.message);
-        res.json(result);
-    });
-});
-app.delete('/user/:id', (req, res) => {
-    const userId = req.params.id;
-    deleteUser(userId, (err, result) => {
-        if (err) return res.status(500).send(err.message);
-        res.json(result);
-    });
-});
+// --- Auth Endpoints ---
+app.use('/auth/', authRoutes);
 
 
 app.listen(3001, () => {
