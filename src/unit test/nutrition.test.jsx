@@ -4,8 +4,8 @@ import { MemoryRouter } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import NutritionLogic from './nutrition management/nutritionLogic.jsx';
-import { getAllPantryItems, getRecipe } from '../server/server.js';
+import NutritionLogic from '../nutrition management/nutritionLogic.jsx';
+import { getAllPantryItems, getRecipe } from '../../server/server.js';
 
 describe('Testing Nutrition Management Feature', () => {
 
@@ -105,7 +105,7 @@ describe('Testing Nutrition Management Feature', () => {
         const encodedQuery = encodeURIComponent('tomato onion');
 
         global.fetch = vi.fn( () => 
-            Promise.resolved({
+            Promise.resolve({
                 ok: true,
                 json: () => Promise.resolve([])
             })

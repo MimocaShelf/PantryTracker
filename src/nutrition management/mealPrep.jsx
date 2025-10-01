@@ -130,7 +130,7 @@ function MealPrep() {
                 <p><bold>Serving:</bold> {item.servings}</p>
                 <p><bold>Ingredients:</bold> {item.ingredients}</p>
                 <div class="right-aligned">
-                <button class="search-bar-button" onClick={() => alert('Feature not yet available...')}>Start Cooking &gt;</button>
+                <button class="search-bar-button" onClick={() => alert('Feature not yet available...')}>Start Cooking</button>
                 </div>
             </div>
         ))
@@ -143,7 +143,7 @@ function MealPrep() {
                 <p>Check which ingredients you set to your meal plan and generate recipes to help you cook easy but nutritious meals</p>
                 <button onClick={() => navigate('/nutrition')}>Nutrition Tracker</button>  
             </div>
-            <div class="section">
+
                 <div class="mealTimes">
                     <h2>Breakfast</h2>
                     {renderMealTimeItems(1, breakfastItems)}
@@ -156,7 +156,7 @@ function MealPrep() {
                     <h2>Dinner</h2>
                     {renderMealTimeItems(3, dinnerItems)}
                 </div>
-            </div>
+                
             <div class="section">
                 <h1>Recommended Recipes</h1>
                 <p>See a list of recipes we recommend for each of your meal time today</p>

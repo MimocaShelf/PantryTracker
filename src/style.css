@@ -115,8 +115,8 @@ button:focus-visible {
 }
 
 .search-bar-button {
-  background-color: #213547;
-  color: white;
+  background-color: light-dark(var(--blue), var(--lavender));
+  color: light-dark(var(--white), var(--blue));
 }
 
 .search-bar-button:hover {
@@ -140,19 +140,19 @@ button:focus-visible {
 }
 
 #purple-text {
-  color: #783572;
+  color: light-dark(#783572, var(--white));
 }
 
 #pink-text {
-  color: #C799D4;
+  color: light-dark(#C799D4, var(--white));
 }
 
 #lavender-text {
-  color: #B9C7F2;
+  color: light-dark(#B9C7F2, var(--white));
 }
 
 .nutritionBox {
-  border: 3px solid #111344;
+  border: 3px solid light-dark(var(--blue), var(--white));
   border-radius: 10px;
   width: 1200px;
   padding: 30px;
@@ -190,7 +190,7 @@ button:focus-visible {
 }
 
 .selector {
-  background-color: #f9f9f9;
+  background-color: light-dark(#f9f9f9, black);
   padding: 0.6em 1.2em;
   border: 1px solid transparent;
   border-radius: 8px;
@@ -201,7 +201,7 @@ button:focus-visible {
 }
 
 .mealTimes {
-  border: 3px solid #111344;
+  border: 3px solid light-dark(var(--blue), var(--white));
   border-radius: 10px;
   width: 1200px;
   padding: 30px;
@@ -213,13 +213,19 @@ button:focus-visible {
 }
 
 .mealTimes > .row {
-  border: 3px solid #111344;
+  border: 3px solid light-dark(var(--blue), var(--white));
   border-radius: 10px;
   padding: 10px;
 }
 
 .section {
-  padding-bottom: 100px;
+  margin-bottom: 100px;
+  padding: 50px -0px 50px 0px;
+  /*background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("./images/nutrition-background.jpeg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;*/
 }
 
 .warning {
