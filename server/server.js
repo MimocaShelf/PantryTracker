@@ -24,7 +24,7 @@ app.get('/getAllItems', (req, res) => {
 })
 
 //function that queries the Nutrition Tracking API (Calorie Ninja) for a specific item and receives the nutrition values that is stored in a list
-async function getAllPantryItems(queryString) {
+export async function getAllPantryItems(queryString) {
 
     //Stores the pantry item name in variable
     const encodedQuery = encodeURIComponent(queryString);
@@ -163,7 +163,7 @@ app.post('/addToMealPrep', (req, res) => {
 /**************************************************/
 
 //Function that calls the Recipe API (Ninja API) to get different recipes based on certain ingredients
-async function getRecipe(rows) {
+export async function getRecipe(rows) {
     
     //Formats the query to insert all the pantry item names into one line seperated by spaces
      const queryString = rows.map(row => row.item_name).join(' ');
