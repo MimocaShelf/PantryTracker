@@ -8,20 +8,22 @@
 
 PantryTracker, a web app created to track and manage your pantry. Created with React and Sqlite.
 
+### Folder Setup
+
 ### MVP
 
 
-| Features                              | Release        |
-|---------------------------------------|----------------|
-| User / Account Management             |                |
-| Shopping List Management              |                |
-| Nutrition & Food Plan Management      |                |
-| Pantry Tracking	                    |                |
-| Pantry Analysis                       |                |
-| Pantry Sections / Categories          |                |
-| Recipe / Ingredient Suggestions       |                |
-| Notification Integration              |                |
-| Grocery Cost Analysis / Comparison    |                |
-| Trading System / Social Sharing       |                |
+| Features                              | Release        | Assigned Member |
+|---------------------------------------|----------------|-----------------|
+| User / Account Management             |                |                 |
+| Shopping List Management              |                |                 |
+| Nutrition & Food Plan Management      | R1             | Chanel          |
+| Pantry Tracking	                    |                |                 |
+| Pantry Analysis                       |                |                 |
+| Pantry Sections / Categories          |                |                 |
+| Recipe / Ingredient Suggestions       |                |                 |
+| Notification Integration              |                |                 |
+| Grocery Cost Analysis / Comparison    |                |                 |
+| Trading System / Social Sharing       |                |                 |
 
 

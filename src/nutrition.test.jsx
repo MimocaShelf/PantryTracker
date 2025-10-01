@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import NutritionLogic from './pantry/nutritionLogic.jsx';
+import NutritionLogic from './nutrition management/nutritionLogic.jsx';
 import { getAllPantryItems, getRecipe } from '../server/server.js';
 
 describe('Testing Nutrition Management Feature', () => {
