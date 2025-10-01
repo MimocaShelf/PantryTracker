@@ -1,5 +1,3 @@
-import React from 'react';
-// import maindb from './sql/app.js'
 /*
     take input from addToPantry:
         - pantry (pantry_name)
@@ -38,13 +36,14 @@ function addItemToPantry(pantry, item_name, extra_info, quantity, unit) {
 
     let sql_string = 'INSERT INTO pantry_items(pantry_id, item_name, extra_info, quantity, unit) VALUES (?, ?, ?, ?, ?)';
     
-    let addToDatabase = () => {
+    let addToDatabase = (pantry_id, item_name, extra_info, quantity, unit) => {
         // need to import sql database or something?
         maindb.run(sql_string, [pantry_id, item_name, extra_info, quantity, unit], (err) => {
             if (err) return console.error(err.message);
         })
     }
 
+    addToDatabase('main_pantry', 'Apple', null, 10, 'units')
     try {
         addToDatabase();
     } catch (err) {

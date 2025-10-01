@@ -4,12 +4,14 @@ FEATURES:
 - View all items in given pantry
 */
 
-function PantryView(pantry_id) {
+function PantryView() {
+    let pantry_id = 1
+    
     return (
-        <div class="section">
+        <div class="section"> 
             <h1>View of Pantry </h1>
             <div>
-                <button>Filters</button>
+                <button>Filters</button> 
                 <button>Order By</button>
                 <input id="search-bar" placeholder='Search...' type="text"/>
             </div>
@@ -17,7 +19,7 @@ function PantryView(pantry_id) {
                 <div class="pantryCard">
                     <h2>Apple</h2>
                     <p>Extra Information: Lorem Ipsum Dolor Sit Amet</p>
-                    <p>Amount: 4 Units</p>
+                    <p>Amount: 4 Units</p> 
                 </div>
                 <div class="pantryCard">
                     <h2>Flour</h2>

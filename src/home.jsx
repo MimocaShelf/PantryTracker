@@ -12,7 +12,8 @@ function Home() {
                 <li id="homeList"><Link to="/nutrition">Go to Nutrition</Link></li>
                 <li id="homeList"><Link to="/mealPrep">Go to Meal Prep</Link></li>
                 <li id="homeList"><Link to="/user">Go to User</Link></li>
-                <li id="homeList"><Link to="/shoppingList">Go to Shopping List</Link></li>
+                <li id="homeList"><Link to="/shoppingList">Shopping List</Link></li>
+                <li id="homeList"><Link to="/shoppingMode">Shopping Mode</Link></li>
                 <li id="homeList"><Link to="/login">Login</Link></li>
                 <li id="homeList"><Link to="/signup">Signup</Link></li>
             </ul>

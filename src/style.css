@@ -103,18 +103,40 @@ button:focus-visible {
   }
 }
 
-.input-field {
-  padding-bottom: 20px;
-  text-align: left;
+/*nutrition*/
+
+.nutritionContainer {
+  width: 1200px;
 }
 
-.input-field > button {
-  margin-left: 20px;
+.nutrition-input-field {
+  padding-bottom: 50px;
+  text-align: center;
+}
+
+.search-bar-button {
+  background-color: #213547;
+  color: white;
+}
+
+.search-bar-button:hover {
+  background-color: #B9C7F2;
+}
+
+.warning-message {
+  font-style: italic;
+  padding-top: 10px;
+  font-size: 15px;
+}
+
+.input-field > button, .input-field > .selector {
+  margin-right: 20px;
 }
 
 #search-bar {
   padding: 10px 50px 10px 10px;
   width: 50%;
+  margin-right: 20px;
 }
 
 #purple-text {
@@ -143,11 +165,13 @@ button:focus-visible {
   justify-content: left;
   text-align: left;
   font-weight: bold;
+  margin-bottom: 20px;
 }
 
 .right-aligned {
   display: flex;
   justify-content: right;
+  gap: 20px;
 }
 
 .nutritionBox > button, .nutritionBox > select {
@@ -163,6 +187,17 @@ button:focus-visible {
 .right-container {
   display: flex;
   gap: 3rem;
+}
+
+.selector {
+  background-color: #f9f9f9;
+  padding: 0.6em 1.2em;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
 }
 
 .mealTimes {
@@ -201,6 +236,8 @@ button:focus-visible {
 .total > h3 {
   padding-right: 30px;
 }
+
+/*end of nutrition*/
 
 .pantryCards{
   display: flex;

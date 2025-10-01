@@ -12,9 +12,7 @@ pool:
 steps:
 - script: 
     echo "installing project dependencies..."
-    echo "installed react"
-    echo "installed react-dom"
-    echo "installed react-router-dom"
+    npm install
   displayName: 'Install Dependencies'
 
 - script: |
@@ -28,15 +26,12 @@ steps:
 
 - script: |
     echo "commencing unit testing..."
+    npm run test
   displayName: 'Run Unit Tests'
 
 - script: |
     echo "clearing dummy database..."
   displayName: 'Remove Test Database'
-
-- script: |
-    echo "setting build version..."
-  displayName: 'Set Build Version'
 
 - script: |
     echo "sending build status notification to communication platforms"
