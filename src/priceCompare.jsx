@@ -219,11 +219,13 @@ function ProductSearch() {
     );
 }
 
-export default function App() {
-    return (
-        <div>
-            <PriceCompare />
-            <ProductSearch />
-        </div>
-    );
-}
+
+export {PriceCompare};
+// export default function App() {
+//     return (
+//         <div>
+//             <PriceCompare />
+//             <ProductSearch />
+//         </div>
+//     );
+// }
