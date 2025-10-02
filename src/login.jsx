@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Login() {
+
+    // State for login form inputs
     const [form, setForm] = useState({ 
         email: '',
         password: '',
@@ -9,6 +11,8 @@ function Login() {
     });
     const [error, setError] = useState('');
     const navigate = useNavigate();
+
+    // Base URL for API requests
     const path = "http://localhost:3001";
 
     const handleChange = (e) => {
@@ -34,9 +38,11 @@ function Login() {
 
             const data = await res.json();
 
+            // Store user ID in local storage for future authentication
             localStorage.setItem('user_id', JSON.stringify(data.user_id));
             console.log("User ID stored in localStorage:", data.user_id);
 
+            // Navigate to the user page after successful login
             navigate('/user');
 
         } catch (err) {

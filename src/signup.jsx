@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Signup() {
+
+    // State for form inputs and error message
     const [form, setForm] = useState({ 
         name: '',
         email: '',
@@ -13,6 +15,7 @@ function Signup() {
     const navigate = useNavigate();
     const path = "http://localhost:3001";
 
+    // Function to handle form changes and submission
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setForm(prevForm => ({
@@ -28,7 +31,7 @@ function Signup() {
             setError('You must agree to the terms and privacy policy.');
             return;
         }
-
+        // Validate passwords matching
         if(form.password !== form.confirmPassword) {
             setError('Passwords do not match.');
             return;

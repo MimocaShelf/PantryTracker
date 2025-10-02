@@ -9,6 +9,7 @@ function User() {
     const [editedUserData, setEditedUserData] = useState({...userData});
     const [deleteConfirm, setDeleteConfirm] = useState(false);
 
+    // Retreive user ID from local storage
     const userId = localStorage.getItem('user_id');
 
     // Fetch user data from backend
@@ -37,7 +38,7 @@ function User() {
         fetchUserData();
     }, []);
 
-
+    // Handles fomr submission of user data
     const handleEditSubmit = async (e) => {
     e.preventDefault();
 
@@ -51,6 +52,7 @@ function User() {
     };
 
     try {
+        // Sends PUT request to update user data
         const res = await fetch(("http://localhost:3001/user/" + userId), {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -62,8 +64,9 @@ function User() {
 
         const updatedUser = await res.json();
         console.log('User updated successfully:', updatedUser);
-        // setUserData(updatedUser);
-        // setIsEditing(false);
+
+        // Reload the page after successful update
+        window.location.reload();
 
     } catch (err) {
         alert('Error updating user profile.');
@@ -77,7 +80,7 @@ function User() {
                 <p>Manage your profile information and pantries</p>
             </div>
 
-
+            {/*Conditional rendering based on whether user is logged in*/}
             {userData === null ? (
                 <p>Loading user data...</p>
             ) : (
@@ -138,7 +141,6 @@ function User() {
                 )}
             </div>
             )}
-
 
             <Link to="/household">Manage Household</Link>
 
