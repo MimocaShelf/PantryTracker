@@ -1,7 +1,9 @@
-import express from 'express'
-import cors from 'cors'
+import express from 'express';
+import cors from 'cors';
+import https from 'https'; // Import https for API requests
+
 import {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep} from './crud.js'
-import {addItemToPantry, getLatestAddedItem} from './addToPantryLogic.js'
+import {addItemToPantry, getLatestAddedItem, getPantriesForUser} from './pantryLogic.js'
 
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
@@ -12,9 +14,106 @@ app.use(cors({origin: 'http://localhost:5173'}))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true })) 
 
+// --- Coles Product Search API ---
+/**
+ * Fetch product details from the Coles API based on a query
+ */
+app.get('/getColesProduct', (req, res) => {
+    const productQuery = req.query.query; // Get the product query from the request
+    if (!productQuery) {
+        return res.status(400).send('Missing "query" parameter');
+    }
+
+    const options = {
+        method: 'GET',
+        hostname: 'coles-product-price-api.p.rapidapi.com',
+        port: null,
+        path: `/coles/product-search/?query=${encodeURIComponent(productQuery)}`,
+        headers: {
+            'x-rapidapi-key': '2ab8f6ffd4msh70b8a797bf6ec14p12f920jsn56d934beaef5',
+            'x-rapidapi-host': 'coles-product-price-api.p.rapidapi.com',
+        },
+    };
+
+    const apiRequest = https.request(options, (apiRes) => {
+        const chunks = [];
+
+        apiRes.on('data', (chunk) => {
+            chunks.push(chunk);
+        });
+
+        apiRes.on('end', () => {
+            const body = Buffer.concat(chunks);
+            try {
+                const data = JSON.parse(body.toString()); // Parse the API response
+                res.status(200).json(data); // Send the parsed data to the client
+            } catch (error) {
+                console.error('Error parsing Coles API response:', error.message);
+                res.status(500).send('Error parsing Coles API response');
+            }
+        });
+    });
+
+    apiRequest.on('error', (error) => {
+        console.error('Error calling Coles API:', error.message);
+        res.status(500).send('Error calling Coles API');
+    });
+
+    apiRequest.end();
+});
+
+// --- Woolworths Product Search API ---
+/**
+ * Fetch product details from the Woolworths API based on a query
+ */
+app.get('/getWoolworthsProduct', (req, res) => {
+    const productQuery = req.query.query; // Get the product query from the request
+    if (!productQuery) {
+        return res.status(400).send('Missing "query" parameter');
+    }
+
+    const options = {
+        method: 'GET',
+        hostname: 'woolworths-products-api.p.rapidapi.com',
+        port: null,
+        path: `/woolworths/product-search/?query=${encodeURIComponent(productQuery)}`,
+        headers: {
+            'x-rapidapi-key': '2ab8f6ffd4msh70b8a797bf6ec14p12f920jsn56d934beaef5',
+            'x-rapidapi-host': 'woolworths-products-api.p.rapidapi.com',
+        },
+    };
+
+    const apiRequest = https.request(options, (apiRes) => {
+        const chunks = [];
+
+        apiRes.on('data', (chunk) => {
+            chunks.push(chunk);
+        });
+
+        apiRes.on('end', () => {
+            const body = Buffer.concat(chunks);
+            try {
+                const data = JSON.parse(body.toString()); // Parse the API response
+                res.status(200).json(data); // Send the parsed data to the client
+            } catch (error) {
+                console.error('Error parsing Woolworths API response:', error.message);
+                res.status(500).send('Error parsing Woolworths API response');
+            }
+        });
+    });
+
+    apiRequest.on('error', (error) => {
+        console.error('Error calling Woolworths API:', error.message);
+        res.status(500).send('Error calling Woolworths API');
+    });
+
+    apiRequest.end();
+});
+
+// --- Example Root Route ---
 app.get('/', (req, res) => {
-    console.log('root route hit');
-    res.send('server is definitely running');
+    console.log('Root route hit');
+    res.send('Server is running');
 });
 
 //Not Used
@@ -51,8 +150,8 @@ app.post('/postAddItemToPantry', (req, res, next) => {
     console.log(req.body);
     let body = req.body;
     // res.status(200).send(body)
-    addItemToPantry(body.pantry_id, body.item_name, body.extra_info, body.quantity, body.unit);
     try {
+        addItemToPantry(body.pantry_id, body.item_name, body.extra_info, body.quantity, body.unit);
     } 
     catch (error) {
         res.status(500).send(error);
@@ -73,8 +172,30 @@ app.get('/getLatestAddeditem', (req,res) => {
         }
         res.status(200).send(rows)
     })
+})
 
 
+//Function to get all pantries for a given user
+/* example request:
+HEADER:
+{"Content-Type": "application/json"}
+
+
+BODY:
+{
+    "user_id": 1
+}
+*/
+app.post('/postGetPantriesForUser', (req, res, next) => {
+    console.log('POST postGetPantriesForUser received')
+    // console.log(req.body)
+    getPantriesForUser(req.body.user_id, async (err, rows) => {
+        if (err) {
+            res.status(500).send(err)
+        }
+        console.log(rows)
+        res.status(200).send(rows)
+    })
 })
 
 
@@ -490,11 +611,14 @@ app.post('/updateShoppingListItem', (req, res) => {
     });
 });
 
+
+
 // --- User Endpoints ---
 app.use('/user', userRoutes);
 
 // --- Auth Endpoints ---
 app.use('/auth/', authRoutes);
+
 app.listen(3001, () => {
-    console.log("Server is running on http://localhost:3001/")
-})
+    console.log("Server is running on http://localhost:3001/");
+});

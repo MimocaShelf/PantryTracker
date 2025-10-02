@@ -1,5 +1,6 @@
-import React from 'react';
-// import addItemToPantry from '../../server/addToPantryLogic.jsx';
+import React, {useState} from 'react';
+import { getPantries } from './getPantries';
+
 
 /*
 FEATURES:
@@ -11,16 +12,88 @@ FEATURES:
 */
 
 function AddToPantry() {
+    /* example request:
+        HEADER:
+        {"Content-Type": "application/json"}
+
+
+        BODY:
+        {
+            "pantry_id": 1,
+            "item_name": "Durian",
+            "extra_info": "None",
+            "quantity": 4,
+            "unit": "units"
+        }
+    */
+   
+   let sendBody = {} 
+    
+
+
+    let pantries = 
+    // getPantries(1);
+    [
+        {pantry_id: 1, pantry_name: 'Main Pantry'},
+        {pantry_id: 2, pantry_name: 'Fridge'},
+        {pantry_id: 3, pantry_name: 'Sink'},
+    ]
+    let [pantry, setPantry] = useState('Select a Pantry')
+
+    let handlePantryChange = (e) => {
+        setPantry(e.target.value)
+
+    }
+
+
+    const sendPostAddItemToPantry = async () => {
+        let json = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(sendBody)
+        }
+        console.log(json)
+        return await fetch('http://localhost:3001/postAddItemToPantry', json)
+    }
+    
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData (form);
+        
+        sendBody.item_name = formData.get('item_name');
+        sendBody.extra_info = formData.get('extra_info');
+        sendBody.quantity = formData.get('quantity');
+        sendBody.unit = formData.get('unit');
+        sendBody.pantry_id = parseInt(pantry)
+        console.log('Submitted')
+        // console.log(sendBody)
+        sendPostAddItemToPantry()
+        
+    }
+
     return (
-        <div class="section">
-            <h1>Add an Item</h1>
-            <div class="genericContentBox">
-                <form method="post">
+        <div className="AddToPantry">
+            <div class="section">
+                <h1>Add an Item</h1>
+                {pantry}
+                
+
+
+
+
+                <div class="genericContentBox">
+
+
+                <form method="post" onSubmit={handleSubmit}>
                     <label for="pantries">Choose a pantry: </label>
-                    <select name="pantries" id="pantries">
-                        <option value="main_pantry">Main Pantry</option>
-                        <option value="fridge">Fridge</option>
-                        <option value="sink">Sink</option>
+                    <select onChange={handlePantryChange} name="pantries" id="pantries">
+                        <option value="Select a Pantry">-- Select a Pantry --</option>
+                        
+                        {pantries.map((entry) => (
+                            <option value={entry.pantry_id}>{entry.pantry_name}</option>
+                        ))}
                     </select>
                     <br></br>
 
@@ -57,9 +130,10 @@ function AddToPantry() {
                     <br></br>
                     <br></br>
 
-                    <input type="submit" name="submit" value="Save"></input>
+                    {/* <input type="submit" name="submit" value="Save"></input> */}
                     <input type="submit" name="submit" value="Add Item"></input>
                 </form>
+                </div>
             </div>
         </div>
     );

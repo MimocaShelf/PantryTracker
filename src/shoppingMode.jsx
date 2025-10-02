@@ -8,15 +8,9 @@ function ShoppingMode() {
 
     // Load shopping list from localStorage or backend
     useEffect(() => {
-        // Try to get shopping list from localStorage (as an example)
         const stored = localStorage.getItem('shoppingList');
         if (stored) {
             setItemsToBuy(JSON.parse(stored));
-        } else {
-            // Fallback: fetch from backend if you have an endpoint
-            // fetch('http://localhost:3001/getShoppingList')
-            //     .then(res => res.json())
-            //     .then(data => setItemsToBuy(data));
         }
     }, []);
 
@@ -36,14 +30,15 @@ function ShoppingMode() {
     const syncBoughtItems = async () => {
         let success = true;
         for (const item of boughtItems) {
-            const res = await fetch('http://localhost:3001/addPantryItem', {
+            const res = await fetch('http://localhost:3001/postAddItemToPantry', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+                    pantry_id: 1, // Assuming pantry_id is 1 for now
                     item_name: item.name,
+                    extra_info: 'None', // Default extra info
                     quantity: item.quantity,
-                    unit: 'units',
-                    pantry_id: 1,
+                    unit: 'units', // Default unit
                 }),
             });
             if (!res.ok) success = false;
@@ -54,20 +49,20 @@ function ShoppingMode() {
 
     return (
         <div className="genericContentBox" style={{ maxWidth: 600, margin: '40px auto' }}>
-            <h1 id="lavender-text">Shopping Mode</h1>
-            <p style={{ color: 'var(--white)' }}>
+            <h1 style={{ color: 'black' }}>Shopping Mode</h1>
+            <p style={{ color: 'black' }}>
                 Mark items as bought and add them to your pantry.
             </p>
 
-            <h2 style={{ color: 'var(--lavender)' }}>Items To Buy</h2>
+            <h2 style={{ color: 'black' }}>Items To Buy</h2>
             <ul style={{ listStyle: 'none', padding: 0 }}>
-                {itemsToBuy.length === 0 && <li style={{ color: 'var(--white)' }}>All items bought!</li>}
+                {itemsToBuy.length === 0 && <li style={{ color: 'black' }}>All items bought!</li>}
                 {itemsToBuy.map((item, idx) => (
                     <li
                         key={idx}
                         style={{
                             background: 'var(--lavender)',
-                            color: 'var(--blue)',
+                            color: 'black',
                             borderRadius: '6px',
                             padding: '10px 16px',
                             marginBottom: '10px',
@@ -95,9 +90,9 @@ function ShoppingMode() {
                 ))}
             </ul>
 
-            <h2 style={{ color: 'var(--lavender)' }}>Bought Items</h2>
+            <h2 style={{ color: 'black' }}>Bought Items</h2>
             <ul style={{ listStyle: 'none', padding: 0 }}>
-                {boughtItems.length === 0 && <li style={{ color: 'var(--white)' }}>No items bought yet.</li>}
+                {boughtItems.length === 0 && <li style={{ color: 'black' }}>No items bought yet.</li>}
                 {boughtItems.map((item, idx) => (
                     <li
                         key={idx}
@@ -120,7 +115,7 @@ function ShoppingMode() {
                 style={{
                     marginTop: '20px',
                     background: 'var(--lavender)',
-                    color: 'var(--purple)',
+                    color: 'black',
                     border: '1px solid var(--purple)',
                     borderRadius: '8px',
                     padding: '10px 24px',
@@ -131,7 +126,7 @@ function ShoppingMode() {
                 Add Bought Items to Pantry
             </button>
             {message && (
-                <div style={{ marginTop: '16px', color: 'var(--white)' }}>{message}</div>
+                <div style={{ marginTop: '16px', color: 'black' }}>{message}</div>
             )}
         </div>
     );

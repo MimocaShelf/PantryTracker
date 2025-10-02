@@ -13,6 +13,7 @@ import Signup from './signup.jsx';
 import React from 'react';
 import ShoppingMode from "./shoppingMode.jsx";
 import NutritionLogic from "./nutrition management/nutritionLogic.jsx";
+import {PriceCompare} from "./priceCompare.jsx";
 // import './sql/app.js';
 // import './nutritionLogic.js';
 
@@ -32,6 +33,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/pantryView" element={<PantryView />} /> 
+            <Route path="/priceCompare" element={<PriceCompare />} />
         </Routes>
         </BrowserRouter>
     );
