@@ -3,7 +3,7 @@ import cors from 'cors';
 import https from 'https'; // Import https for API requests
 
 import {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep} from './crud.js'
-import {addItemToPantry, getLatestAddedItem} from './addToPantryLogic.js'
+import {addItemToPantry, getLatestAddedItem} from './pantryLogic.js'
 
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
@@ -596,8 +596,6 @@ app.use('/user', userRoutes);
 
 // --- Auth Endpoints ---
 app.use('/auth/', authRoutes);
-
-app.use(cors({ origin: 'http://localhost:5173' }));
 app.listen(3001, () => {
     console.log("Server is running on http://localhost:3001/")
 })

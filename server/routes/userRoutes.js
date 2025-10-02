@@ -25,8 +25,8 @@ app.get('/:id', (req, res) => {
 // Update user
 app.put('/:id', (req, res) => {
     const userId = req.params.id;
-    const { name, profilePicture } = req.body;  
-    updateUser(userId, name, profilePicture, (err, result) => {
+    const { name, email, profilePicture } = req.body;  
+     updateUser(userId, name, email, profilePicture, (err, result) => {
         if (err) return res.status(500).send(err.message);
         res.json(result);
     });

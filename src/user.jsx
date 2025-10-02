@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 function User() {
@@ -9,31 +9,66 @@ function User() {
     const [editedUserData, setEditedUserData] = useState({...userData});
     const [deleteConfirm, setDeleteConfirm] = useState(false);
 
+    const userId = localStorage.getItem('user_id');
+
     // Fetch user data from backend
-    React.useEffect(() => { 
+    useEffect(() => { 
 
         const fetchUserData = async () => {
-            // Replace with actual API call
-            const user = {
-                name: "John Doe",
-                email: "john.doe@example.com",
-                password: "password123"
-            };
-            setUserData(user);
-            setEditedUserData(user);
+
+            if (!userId) {
+                setUserData(null);
+                return;
+            }
+
+            try {
+                const res = await fetch("http://localhost:3001/user/" + userId);
+                if (!res.ok) {
+                    throw new Error('Failed to fetch user data');
+                }
+
+                const user = await res.json();
+                setUserData(user);
+                setEditedUserData(user);
+            } catch (err) {
+                setUserData(null);
+            }
         };
         fetchUserData();
     }, []);
 
-    if (!userData) {
-        return <div>Loading...</div>;
-    }
 
-    const handleEditSubmit = (e) => {
-        e.preventDefault();
-        setUserData(editedUserData);
-        setIsEditing(false);
+    const handleEditSubmit = async (e) => {
+    e.preventDefault();
+
+    const userId = localStorage.getItem('user_id');
+
+    // Fallback to previous data if field is empty
+    const updatedData = {
+        name: editedUserData.name || userData.name,
+        email: editedUserData.email || userData.email,
+        profilePicture: editedUserData.profilePicture || userData.profilePicture,
     };
+
+    try {
+        const res = await fetch(("http://localhost:3001/user/" + userId), {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedData),
+        });
+        if (!res.ok) {
+            throw new Error('Failed to update user data');
+        }
+
+        const updatedUser = await res.json();
+        console.log('User updated successfully:', updatedUser);
+        // setUserData(updatedUser);
+        // setIsEditing(false);
+
+    } catch (err) {
+        alert('Error updating user profile.');
+    }
+};
     
     return (
         <div>
@@ -42,8 +77,10 @@ function User() {
                 <p>Manage your profile information and pantries</p>
             </div>
 
-            <Link to="/household">Manage Household</Link>
 
+            {userData === null ? (
+                <p>Loading user data...</p>
+            ) : (
             <div className="section">
                 <h2>Profile Information</h2>
                 {isEditing ? (
@@ -53,7 +90,7 @@ function User() {
                             <input 
                                 type="text" 
                                 id="name" 
-                                value={editedUserData.name}
+                                value={editedUserData.name || ''}
                                 onChange={(e) => setEditedUserData({...editedUserData, name: e.target.value})}
                                 required
                             />
@@ -63,9 +100,8 @@ function User() {
                             <input 
                                 type="email" 
                                 id="email" 
-                                value={editedUserData.email}
+                                value={editedUserData.email || ''}
                                 onChange={(e) => setEditedUserData({...editedUserData, email: e.target.value})}
-                                required
                             />
                         </div>
                         <div className="input-field">
@@ -73,7 +109,7 @@ function User() {
                             <input 
                                 type="url" 
                                 id="profilePicture" 
-                                value={editedUserData.profilePicture}
+                                value={editedUserData.profilePicture || ''}
                                 onChange={(e) => setEditedUserData({...editedUserData, profilePicture: e.target.value})}
                             />
                         </div>
@@ -101,6 +137,11 @@ function User() {
                     </div>
                 )}
             </div>
+            )}
+
+
+            <Link to="/household">Manage Household</Link>
+
 
         </div>
     );

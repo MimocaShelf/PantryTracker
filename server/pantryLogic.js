@@ -30,6 +30,9 @@ function addItemToPantry(pantry_id, item_name, extra_info, quantity, unit) {
     }
 }
 
+
+
+//get latest added item for testing purposes
 function getLatestAddedItem(callback) {
     const sql = 'SELECT a.pantry_item_id, a.pantry_id, a.item_name, a.extra_info, a.quantity, a.unit FROM pantry_items a WHERE pantry_item_id = (SELECT max(b.pantry_item_id) FROM pantry_items b)'
     db.get(sql, [], callback)
