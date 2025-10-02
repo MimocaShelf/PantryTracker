@@ -51,7 +51,7 @@ describe('Testing Nutrition Management Feature', () => {
         const encodedQuery = encodeURIComponent('tomato onion');
 
         global.fetch = vi.fn( () => 
-            Promise.resolved({
+            Promise.resolve({
                 ok: true,
                 json: () => Promise.resolve([])
             })
