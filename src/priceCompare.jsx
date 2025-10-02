@@ -1,231 +1,145 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 function PriceCompare() {
-    const [colesPrices, setColesPrices] = useState([]);
-    const [woolworthsPrices, setWoolworthsPrices] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [query, setQuery] = useState('');
+    const [results, setResults] = useState([]); // normalized results from both stores
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    // Fetch prices from Coles and Woolworths APIs
-    useEffect(() => {
-        const fetchPrices = async () => {
-            try {
-                setLoading(true);
-
-                // Fetch Coles prices
-                const colesResponse = await fetch('http://localhost:3001/getColesPriceChanges');
-                const colesData = await colesResponse.json();
-
-                // Fetch Woolworths prices (replace with your Woolworths API endpoint)
-                const woolworthsResponse = await fetch('http://localhost:3001/getWoolworthsPriceChanges');
-                const woolworthsData = await woolworthsResponse.json();
-
-                setColesPrices(colesData);
-                setWoolworthsPrices(woolworthsData);
-            } catch (err) {
-                console.error('Error fetching prices:', err);
-                setError('Failed to fetch prices. Please try again later.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchPrices();
-    }, []);
-
-    // Helper function to find the best price for a product
-    const findBestPrice = (productName) => {
-        const colesProduct = colesPrices.find((item) => item.name === productName);
-        const woolworthsProduct = woolworthsPrices.find((item) => item.name === productName);
-
-        if (!colesProduct && !woolworthsProduct) return null;
-
-        if (!colesProduct) return { store: 'Woolworths', price: woolworthsProduct.price };
-        if (!woolworthsProduct) return { store: 'Coles', price: colesProduct.price };
-
-        return colesProduct.price < woolworthsProduct.price
-            ? { store: 'Coles', price: colesProduct.price }
-            : { store: 'Woolworths', price: woolworthsProduct.price };
+    const parsePrice = (p) => {
+        if (p == null) return null;
+        if (typeof p === 'number') return p;
+        if (typeof p === 'string') {
+            const num = parseFloat(p.replace(/[^0-9.-]+/g, ''));
+            return Number.isFinite(num) ? num : null;
+        }
+        if (p && typeof p === 'object') {
+            if (p.price != null) return parsePrice(p.price);
+            if (p.raw != null) return parsePrice(p.raw);
+        }
+        return null;
     };
 
-    return (
-        <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-            <h1>Price Comparison: Coles vs Woolworths</h1>
+    const extractProducts = (data) => {
+        if (!data) return [];
+        // Common shapes: { products: [...] } or { data: [...] } or an array
+        if (Array.isArray(data)) return data;
+        if (data.products && Array.isArray(data.products)) return data.products;
+        if (data.items && Array.isArray(data.items)) return data.items;
+        if (data.results && Array.isArray(data.results)) return data.results;
+        // fallback: return [] but keep raw in a single-element array for debugging
+        return [];
+    };
 
-            {loading && <p>Loading prices...</p>}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+    const normalizeColes = (raw) => {
+        const items = extractProducts(raw);
+        return items.map((it, i) => ({
+            store: 'Coles',
+            id: it.id ?? it.productId ?? `coles-${i}`,
+            name: it.name ?? it.product_name ?? it.title ?? String(it),
+            price: parsePrice(it.current_price ?? it.sellingPrice ?? it.unit_price ?? it.display_price),
+            raw: it,
+        }));
+    };
 
-            {!loading && !error && (
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                    <thead>
-                        <tr>
-                            <th style={{ border: '1px solid #ccc', padding: '8px' }}>Product</th>
-                            <th style={{ border: '1px solid #ccc', padding: '8px' }}>Coles Price</th>
-                            <th style={{ border: '1px solid #ccc', padding: '8px' }}>Woolworths Price</th>
-                            <th style={{ border: '1px solid #ccc', padding: '8px' }}>Best Price</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {[
-                            ...new Set([
-                                ...colesPrices.map((item) => item.name),
-                                ...woolworthsPrices.map((item) => item.name),
-                            ]),
-                        ].map((productName) => {
-                            const colesProduct = colesPrices.find((item) => item.name === productName);
-                            const woolworthsProduct = woolworthsPrices.find((item) => item.name === productName);
-                            const bestPrice = findBestPrice(productName);
-
-                            return (
-                                <tr key={productName}>
-                                    <td style={{ border: '1px solid #ccc', padding: '8px' }}>{productName}</td>
-                                    <td style={{ border: '1px solid #ccc', padding: '8px' }}>
-                                        {colesProduct ? `$${colesProduct.price.toFixed(2)}` : 'N/A'}
-                                    </td>
-                                    <td style={{ border: '1px solid #ccc', padding: '8px' }}>
-                                        {woolworthsProduct ? `$${woolworthsProduct.price.toFixed(2)}` : 'N/A'}
-                                    </td>
-                                    <td style={{ border: '1px solid #ccc', padding: '8px' }}>
-                                        {bestPrice ? `${bestPrice.store} ($${bestPrice.price.toFixed(2)})` : 'N/A'}
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
-            )}
-        </div>
-    );
-}
-
-function ProductSearch() {
-    const [query, setQuery] = useState('');
-    const [colesData, setColesData] = useState(null);
-    const [woolworthsData, setWoolworthsData] = useState(null);
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
+    const normalizeWoolworths = (raw) => {
+        const items = extractProducts(raw);
+        return items.map((it, i) => ({
+            store: 'Woolworths',
+            id: it.id ?? it.productId ?? `ww-${i}`,
+            name: it.Name ?? it.name ?? it.product_name ?? it.title ?? String(it),
+            price: parsePrice(it.current_price ?? it.price ?? it.sellingPrice ?? it.unit_price),
+            raw: it,
+        }));
+    };
 
     const searchProduct = async () => {
+        if (!query.trim()) return;
+        setLoading(true);
+        setError('');
+        setResults([]);
         try {
-            setLoading(true);
-            setError('');
-            setColesData(null);
-            setWoolworthsData(null);
+            const q = encodeURIComponent(query.trim());
 
-            // Fetch Coles product data
-            const colesResponse = await fetch(`http://localhost:3001/getColesProduct?query=${query}`);
-            if (!colesResponse.ok) {
-                throw new Error('Failed to fetch Coles product data');
-            }
-            const colesResult = await colesResponse.json();
-            setColesData(colesResult);
+            const [colesRes, wwRes] = await Promise.all([
+                fetch(`http://localhost:3001/getColesProduct?query=${q}`),
+                fetch(`http://localhost:3001/getWoolworthsProduct?query=${q}`),
+            ]);
 
-            // Fetch Woolworths product data
-            const woolworthsResponse = await fetch(`http://localhost:3001/getWoolworthsProduct?query=${query}`);
-            if (!woolworthsResponse.ok) {
-                throw new Error('Failed to fetch Woolworths product data');
-            }
-            const woolworthsResult = await woolworthsResponse.json();
-            setWoolworthsData(woolworthsResult);
+            if (!colesRes.ok) throw new Error('Coles API error');
+            if (!wwRes.ok) throw new Error('Woolworths API error');
+
+            const [colesJson, wwJson] = await Promise.all([colesRes.json(), wwRes.json()]);
+
+            console.log('coles response', colesJson);
+            console.log('woolworths response', wwJson);
+
+            const colesItems = normalizeColes(colesJson);
+            const wwItems = normalizeWoolworths(wwJson);
+
+            // combine and sort by price if available
+            const combined = [...colesItems, ...wwItems].sort((a, b) => {
+                if (a.price == null && b.price == null) return 0;
+                if (a.price == null) return 1;
+                if (b.price == null) return -1;
+                return a.price - b.price;
+            });
+
+            setResults(combined);
         } catch (err) {
             console.error(err);
-            setError('Error fetching product data. Please try again.');
+            setError('Failed to fetch prices. Check server and endpoints.');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-            <h1>Product Search: Coles vs Woolworths</h1>
-            <input
-                type="text"
-                placeholder="Enter product name"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                style={{ padding: '8px', width: '100%', marginBottom: '10px' }}
-            />
-            <button
-                onClick={searchProduct}
-                style={{
-                    padding: '10px 20px',
-                    backgroundColor: '#007BFF',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                }}
-            >
-                Search
-            </button>
-            {loading && <p>Loading...</p>}
-            {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
-            {!loading && (colesData || woolworthsData) && (
-                <div style={{ marginTop: '20px' }}>
-                    <h2>Search Results:</h2>
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                        <thead>
-                            <tr>
-                                <th style={{ border: '1px solid #ccc', padding: '8px' }}>Store</th>
-                                <th style={{ border: '1px solid #ccc', padding: '8px' }}>Product</th>
-                                <th style={{ border: '1px solid #ccc', padding: '8px' }}>Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {/* Coles Results */}
-                            {colesData && colesData.products && colesData.products.length > 0 ? (
-                                colesData.products.map((product, index) => (
-                                    <tr key={`coles-${index}`}>
-                                        <td style={{ border: '1px solid #ccc', padding: '8px' }}>Coles</td>
-                                        <td style={{ border: '1px solid #ccc', padding: '8px' }}>{product.name}</td>
-                                        <td style={{ border: '1px solid #ccc', padding: '8px' }}>
-                                            ${product.price.toFixed(2)}
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td style={{ border: '1px solid #ccc', padding: '8px' }}>Coles</td>
-                                    <td style={{ border: '1px solid #ccc', padding: '8px' }} colSpan="2">
-                                        No results found
-                                    </td>
-                                </tr>
-                            )}
+        <div style={{ padding: 20, maxWidth: 900, margin: '0 auto' }}>
+            <h1>Product Search — Coles & Woolworths</h1>
 
-                            {/* Woolworths Results */}
-                            {woolworthsData && woolworthsData.products && woolworthsData.products.length > 0 ? (
-                                woolworthsData.products.map((product, index) => (
-                                    <tr key={`woolworths-${index}`}>
-                                        <td style={{ border: '1px solid #ccc', padding: '8px' }}>Woolworths</td>
-                                        <td style={{ border: '1px solid #ccc', padding: '8px' }}>{product.name}</td>
-                                        <td style={{ border: '1px solid #ccc', padding: '8px' }}>
-                                            ${product.price.toFixed(2)}
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td style={{ border: '1px solid #ccc', padding: '8px' }}>Woolworths</td>
-                                    <td style={{ border: '1px solid #ccc', padding: '8px' }} colSpan="2">
-                                        No results found
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            )}
+            <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+                <input
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && searchProduct()}
+                    placeholder="e.g. Kraft Singles"
+                    style={{ flex: 1, padding: 8 }}
+                />
+                <button onClick={searchProduct} disabled={loading} style={{ padding: '8px 16px' }}>
+                    {loading ? 'Searching…' : 'Search'}
+                </button>
+            </div>
+
+            {error && <div style={{ color: 'red', marginBottom: 12 }}>{error}</div>}
+
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                    <tr>
+                        <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd', padding: 8 }}>Store</th>
+                        <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd', padding: 8 }}>Product</th>
+                        <th style={{ textAlign: 'right', borderBottom: '1px solid #ddd', padding: 8 }}>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {results.length === 0 && !loading && (
+                        <tr><td colSpan="3" style={{ padding: 12, color: '#666' }}>No results — try a different query.</td></tr>
+                    )}
+                    {results.map((r) => (
+                        <tr key={`${r.store}-${r.id}`} >
+                            <td style={{ padding: 8, borderBottom: '1px solid #f0f0f0' }}>{r.store}</td>
+                            <td style={{ padding: 8, borderBottom: '1px solid #f0f0f0' }}>{r.name}</td>
+                            <td style={{ padding: 8, textAlign: 'right', borderBottom: '1px solid #f0f0f0' }}>
+                                {r.price != null ? `$${Number(r.price).toFixed(2)}` : 'N/A'}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+
+            {/* Debug: view raw data in console */}
         </div>
     );
 }
 
-
-export {PriceCompare};
-// export default function App() {
-//     return (
-//         <div>
-//             <PriceCompare />
-//             <ProductSearch />
-//         </div>
-//     );
-// }
+export default PriceCompare;

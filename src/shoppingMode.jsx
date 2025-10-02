@@ -14,7 +14,7 @@ function ShoppingMode() {
         }
     }, []);
 
-    // Optionally, keep shopping list in sync with localStorage
+    // Keep shopping list in sync with localStorage
     useEffect(() => {
         localStorage.setItem('shoppingList', JSON.stringify(itemsToBuy));
     }, [itemsToBuy]);
@@ -26,10 +26,11 @@ function ShoppingMode() {
         setItemsToBuy(itemsToBuy.filter((_, i) => i !== idx));
     };
 
-    // Send bought items to the backend to add to the DB
+    // Send bought items to the backend to add to the DB and remove them from the shopping list
     const syncBoughtItems = async () => {
         let success = true;
         for (const item of boughtItems) {
+            // Add item to pantry
             const res = await fetch('http://localhost:3001/postAddItemToPantry', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -41,10 +42,30 @@ function ShoppingMode() {
                     unit: 'units', // Default unit
                 }),
             });
-            if (!res.ok) success = false;
+
+            if (!res.ok) {
+                success = false;
+                continue;
+            }
+
+            // Remove item from shopping list
+            const removeRes = await fetch('http://localhost:3001/removeShoppingListItem', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: item.name }),
+            });
+
+            if (!removeRes.ok) {
+                success = false;
+            }
         }
-        setMessage(success ? 'All bought items added to pantry!' : 'Some items failed to sync.');
-        setBoughtItems([]);
+
+        if (success) {
+            setMessage('All bought items added to pantry and removed from the shopping list!');
+            setBoughtItems([]); // Clear bought items after syncing
+        } else {
+            setMessage('Some items failed to sync. Please try again.');
+        }
     };
 
     return (

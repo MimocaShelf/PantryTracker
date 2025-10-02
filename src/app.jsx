@@ -14,7 +14,7 @@ import Signup from './signup.jsx';
 import React from 'react';
 import ShoppingMode from "./shoppingMode.jsx";
 import NutritionLogic from "./nutrition management/nutritionLogic.jsx";
-import {PriceCompare} from "./priceCompare.jsx";
+import PriceCompare from "./priceCompare.jsx";
 // import './sql/app.js';
 // import './nutritionLogic.js';
 
