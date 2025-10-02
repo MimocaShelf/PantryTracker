@@ -3,7 +3,7 @@ import db from '../sql/app.js'
 // Handles database operations for user authentication
 
 // Signup function to create a new user in the database
-async function signup(name, email, password, callback) {
+async function registerUser(name, email, password, callback) {
     const sql = 'INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)';
     db.run(sql, [name, email, password], function(err) {
         callback(err, { id: this.lastID });
@@ -24,4 +24,4 @@ async function logout(callback) {
 }
 
 
-export { signup, login, logout };
+export { registerUser, login, logout };
