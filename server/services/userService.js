@@ -25,9 +25,13 @@ const readUserById = (user_id, callback) => {
 }
 
 // Update User
-const updateUser = (user_id, name, profilePicture, callback) => {
-    const sql = 'UPDATE users SET name = ?, profile_picture = ? WHERE user_id =  ';
-    db.run(sql, [name, profilePicture, user_id], function(err) {
+const updateUser = (user_id, name, email, profilePicture, callback) => {
+    const sql = `
+        UPDATE users 
+        SET name = ?, email = ?, password_hash = ?, profile_picture = ?
+        WHERE user_id = ?
+    `;
+    db.run(sql, [name, email, "Password1234", profilePicture, user_id], function(err) {
         callback(err, { changes: this.changes });
     });
 }

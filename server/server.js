@@ -495,8 +495,6 @@ app.use('/user', userRoutes);
 
 // --- Auth Endpoints ---
 app.use('/auth/', authRoutes);
-
-app.use(cors({ origin: 'http://localhost:5173' }));
 app.listen(3001, () => {
     console.log("Server is running on http://localhost:3001/")
 })

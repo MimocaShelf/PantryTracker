@@ -11,7 +11,7 @@ function Signup() {
     });
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const path = "http://localhost:3001"
+    const path = "http://localhost:3001";
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
