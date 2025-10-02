@@ -1,5 +1,7 @@
-import express from 'express'
-import cors from 'cors'
+import express from 'express';
+import cors from 'cors';
+import https from 'https'; // Import https for API requests
+
 import {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep} from './crud.js'
 import {addItemToPantry, getLatestAddedItem} from './addToPantryLogic.js'
 
@@ -12,9 +14,106 @@ app.use(cors({origin: 'http://localhost:5173'}))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true })) 
 
+// --- Coles Product Search API ---
+/**
+ * Fetch product details from the Coles API based on a query
+ */
+app.get('/getColesProduct', (req, res) => {
+    const productQuery = req.query.query; // Get the product query from the request
+    if (!productQuery) {
+        return res.status(400).send('Missing "query" parameter');
+    }
+
+    const options = {
+        method: 'GET',
+        hostname: 'coles-product-price-api.p.rapidapi.com',
+        port: null,
+        path: `/coles/product-search/?query=${encodeURIComponent(productQuery)}`,
+        headers: {
+            'x-rapidapi-key': '2ab8f6ffd4msh70b8a797bf6ec14p12f920jsn56d934beaef5',
+            'x-rapidapi-host': 'coles-product-price-api.p.rapidapi.com',
+        },
+    };
+
+    const req = https.request(options, (apiRes) => {
+        const chunks = [];
+
+        apiRes.on('data', (chunk) => {
+            chunks.push(chunk);
+        });
+
+        apiRes.on('end', () => {
+            const body = Buffer.concat(chunks);
+            try {
+                const data = JSON.parse(body.toString()); // Parse the API response
+                res.status(200).json(data); // Send the parsed data to the client
+            } catch (error) {
+                console.error('Error parsing Coles API response:', error.message);
+                res.status(500).send('Error parsing Coles API response');
+            }
+        });
+    });
+
+    req.on('error', (error) => {
+        console.error('Error calling Coles API:', error.message);
+        res.status(500).send('Error calling Coles API');
+    });
+
+    req.end();
+});
+
+// --- Woolworths Product Search API ---
+/**
+ * Fetch product details from the Woolworths API based on a query
+ */
+app.get('/getWoolworthsProduct', (req, res) => {
+    const productQuery = req.query.query; // Get the product query from the request
+    if (!productQuery) {
+        return res.status(400).send('Missing "query" parameter');
+    }
+
+    const options = {
+        method: 'GET',
+        hostname: 'woolworths-products-api.p.rapidapi.com',
+        port: null,
+        path: `/woolworths/product-search/?query=${encodeURIComponent(productQuery)}`,
+        headers: {
+            'x-rapidapi-key': '2ab8f6ffd4msh70b8a797bf6ec14p12f920jsn56d934beaef5',
+            'x-rapidapi-host': 'woolworths-products-api.p.rapidapi.com',
+        },
+    };
+
+    const req = https.request(options, (apiRes) => {
+        const chunks = [];
+
+        apiRes.on('data', (chunk) => {
+            chunks.push(chunk);
+        });
+
+        apiRes.on('end', () => {
+            const body = Buffer.concat(chunks);
+            try {
+                const data = JSON.parse(body.toString()); // Parse the API response
+                res.status(200).json(data); // Send the parsed data to the client
+            } catch (error) {
+                console.error('Error parsing Woolworths API response:', error.message);
+                res.status(500).send('Error parsing Woolworths API response');
+            }
+        });
+    });
+
+    req.on('error', (error) => {
+        console.error('Error calling Woolworths API:', error.message);
+        res.status(500).send('Error calling Woolworths API');
+    });
+
+    req.end();
+});
+
+// --- Example Root Route ---
 app.get('/', (req, res) => {
-    console.log('root route hit');
-    res.send('server is definitely running');
+    console.log('Root route hit');
+    res.send('Server is running');
 });
 
 //Not Used
@@ -489,6 +588,8 @@ app.post('/updateShoppingListItem', (req, res) => {
         );
     });
 });
+
+
 
 // --- User Endpoints ---
 app.use('/user', userRoutes);

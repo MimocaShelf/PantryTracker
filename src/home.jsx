@@ -16,6 +16,7 @@ function Home() {
                 <li id="homeList"><Link to="/shoppingMode">Shopping Mode</Link></li>
                 <li id="homeList"><Link to="/login">Login</Link></li>
                 <li id="homeList"><Link to="/signup">Signup</Link></li>
+                <li id="homeList"><Link to="/priceCompare">Price Compare</Link></li>
             </ul>
         </nav>
 
