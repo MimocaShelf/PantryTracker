@@ -3,7 +3,7 @@ import cors from 'cors';
 import https from 'https'; // Import https for API requests
 
 import {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep} from './crud.js'
-import {addItemToPantry, getLatestAddedItem} from './pantryLogic.js'
+import {addItemToPantry, getLatestAddedItem, getPantriesForUser} from './pantryLogic.js'
 
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
@@ -150,8 +150,8 @@ app.post('/postAddItemToPantry', (req, res, next) => {
     console.log(req.body);
     let body = req.body;
     // res.status(200).send(body)
-    addItemToPantry(body.pantry_id, body.item_name, body.extra_info, body.quantity, body.unit);
     try {
+        addItemToPantry(body.pantry_id, body.item_name, body.extra_info, body.quantity, body.unit);
     } 
     catch (error) {
         res.status(500).send(error);
@@ -172,8 +172,30 @@ app.get('/getLatestAddeditem', (req,res) => {
         }
         res.status(200).send(rows)
     })
+})
 
 
+//Function to get all pantries for a given user
+/* example request:
+HEADER:
+{"Content-Type": "application/json"}
+
+
+BODY:
+{
+    "user_id": 1
+}
+*/
+app.post('/postGetPantriesForUser', (req, res, next) => {
+    console.log('POST postGetPantriesForUser received')
+    // console.log(req.body)
+    getPantriesForUser(req.body.user_id, async (err, rows) => {
+        if (err) {
+            res.status(500).send(err)
+        }
+        console.log(rows)
+        res.status(200).send(rows)
+    })
 })
 
 

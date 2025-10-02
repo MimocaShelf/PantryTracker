@@ -38,6 +38,12 @@ function getLatestAddedItem(callback) {
     db.get(sql, [], callback)
 }
 
+function getPantriesForUser(user_id, callback) {
+    const sql = 'SELECT pantry_id, pantry_name FROM pantry LEFT JOIN users ON pantry.pantry_ownder = users.name WHERE user_id = ?'
+    db.all(sql, [user_id], callback)
+}
 
 
-export {addItemToPantry, getLatestAddedItem};
+
+
+export {addItemToPantry, getLatestAddedItem, getPantriesForUser};

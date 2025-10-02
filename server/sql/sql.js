@@ -107,6 +107,7 @@ const sql_array = [
     'INSERT INTO pantry VALUES (10, "Matthew Roberts","Spice Cabinet", 21)',
     'INSERT INTO pantry VALUES (11, "Wednesday Adams", "Party Items", 18)',
     'INSERT INTO pantry VALUES (12, "Miguel Xavier","Cleaning Products", 7)',
+    'INSERT INTO pantry VALUES (13, "Jane Doe","Fridge", 7)',
 
     'SELECT * FROM pantry',
 
