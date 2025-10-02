@@ -35,7 +35,7 @@ app.get('/getColesProduct', (req, res) => {
         },
     };
 
-    const req = https.request(options, (apiRes) => {
+    const apiReq = https.request(options, (apiRes) => {
         const chunks = [];
 
         apiRes.on('data', (chunk) => {
@@ -54,12 +54,12 @@ app.get('/getColesProduct', (req, res) => {
         });
     });
 
-    req.on('error', (error) => {
+    apiReq.on('error', (error) => {
         console.error('Error calling Coles API:', error.message);
         res.status(500).send('Error calling Coles API');
     });
 
-    req.end();
+    apiReq.end();
 });
 
 // --- Woolworths Product Search API ---
@@ -83,7 +83,7 @@ app.get('/getWoolworthsProduct', (req, res) => {
         },
     };
 
-    const req = https.request(options, (apiRes) => {
+    const apiReq = https.request(options, (apiRes) => {
         const chunks = [];
 
         apiRes.on('data', (chunk) => {
@@ -102,12 +102,12 @@ app.get('/getWoolworthsProduct', (req, res) => {
         });
     });
 
-    req.on('error', (error) => {
+    apiReq.on('error', (error) => {
         console.error('Error calling Woolworths API:', error.message);
         res.status(500).send('Error calling Woolworths API');
     });
 
-    req.end();
+    apiReq.end();
 });
 
 // --- Example Root Route ---
