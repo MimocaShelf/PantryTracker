@@ -53,7 +53,7 @@ function AddToPantry() {
             body: JSON.stringify(sendBody)
         }
         console.log(json)
-        return await fetch('http://localhost:3001/postAddItemToPantry', )
+        return await fetch('http://localhost:3001/postAddItemToPantry', json)
     }
     
 
@@ -66,7 +66,7 @@ function AddToPantry() {
         sendBody.extra_info = formData.get('extra_info');
         sendBody.quantity = formData.get('quantity');
         sendBody.unit = formData.get('unit');
-        sendBody.pantry = parseInt(pantry)
+        sendBody.pantry_id = parseInt(pantry)
         console.log('Submitted')
         // console.log(sendBody)
         sendPostAddItemToPantry()
