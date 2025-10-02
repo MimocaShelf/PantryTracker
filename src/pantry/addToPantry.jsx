@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 // import addItemToPantry from '../../server/addToPantryLogic.jsx';
 
 /*
@@ -11,16 +11,42 @@ FEATURES:
 */
 
 function AddToPantry() {
+
+    const getPantries = () => {}
+
+
+    let pantries = [
+        {value: 'main_pantry', text: 'Main Pantry'},
+        {value: 'fridge', text: 'Fridge'},
+        {value: 'sink', text: 'Sink'},
+    ]
+    let [pantry, setPantry] = useState('Select a Pantry')
+
+    let handlePantryChange = (e) => {
+        setPantry(e.target.value)
+    }
+
+    
+
     return (
-        <div class="section">
-            <h1>Add an Item</h1>
-            <div class="genericContentBox">
-                <form method="post">
+        <div className="AddToPantry">
+            <div class="section">
+                <h1>Add an Item</h1>
+                {pantry}
+                
+
+
+
+
+                <div class="genericContentBox">
+
                     <label for="pantries">Choose a pantry: </label>
-                    <select name="pantries" id="pantries">
-                        <option value="main_pantry">Main Pantry</option>
-                        <option value="fridge">Fridge</option>
-                        <option value="sink">Sink</option>
+                    <select onChange={handlePantryChange} name="pantries" id="pantries">
+                        <option value="Select a Pantry">-- Select a Pantry --</option>
+                        
+                        {pantries.map((entry) => (
+                            <option value={entry.value}>{entry.text}</option>
+                        ))}
                     </select>
                     <br></br>
 
@@ -59,7 +85,7 @@ function AddToPantry() {
 
                     <input type="submit" name="submit" value="Save"></input>
                     <input type="submit" name="submit" value="Add Item"></input>
-                </form>
+                </div>
             </div>
         </div>
     );

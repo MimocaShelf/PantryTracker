@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep} from './crud.js'
-import {addItemToPantry, getLatestAddedItem} from './addToPantryLogic.js'
+import {addItemToPantry, getLatestAddedItem} from './pantryLogic.js'
 
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
