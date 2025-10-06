@@ -1,15 +1,16 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import ShoppingList from '../shoppingList.jsx';
+import { vi, describe, it, beforeEach, expect } from 'vitest';
 
 // Mock useNavigate from react-router-dom
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    useNavigate: () => jest.fn(),
+vi.mock('react-router-dom', () => ({
+    ...vi.importActual('react-router-dom'),
+    useNavigate: () => vi.fn(),
 }));
 
 // Mock fetch
-global.fetch = jest.fn(() =>
+global.fetch = vi.fn(() =>
     Promise.resolve({
         json: () => Promise.resolve([]),
         ok: true,
