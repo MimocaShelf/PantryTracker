@@ -15,6 +15,7 @@ import React from 'react';
 import ShoppingMode from "./shoppingMode.jsx";
 import NutritionLogic from "./nutrition management/nutritionLogic.jsx";
 import PriceCompare from "./priceCompare.jsx";
+import CalendarPage from "./calendar.jsx";
 // import './sql/app.js';
 // import './nutritionLogic.js';
 
@@ -36,6 +37,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/pantryView" element={<PantryView />} /> 
             <Route path="/priceCompare" element={<PriceCompare />} />
+            <Route path="/calendar" element={<CalendarPage />} />
         </Routes>
         </BrowserRouter>
     );
