@@ -58,6 +58,27 @@ function Pantry() {
       .then(data => setPantries(data))
       .catch(err => console.error("Error fetching pantries:", err));
   }, []);
+  
+//Handle Deleting pantries from front and backend
+const handleDeletePantry = async (id) => {
+  try {
+    const response = await fetch(`http://localhost:3001/deletePantry/${id}`, {
+      method: 'DELETE'
+    });
+
+    if (response.ok) {
+      // Remove pantry from state
+      setPantries(prev => prev.filter(p => p.pantry_id !== id));
+    } else {
+      const errorText = await response.text();
+      console.error("Failed to delete pantry:", errorText);
+      alert("Failed to delete pantry. Please try again.");
+    }
+  } catch (err) {
+    console.error("Error deleting pantry:", err);
+    alert("Error deleting pantry. Please try again.");
+  }
+};
 
   return (
     <div>
@@ -106,6 +127,7 @@ function Pantry() {
               <Link to={`/pantry/${pantry.pantry_id}`}>
                 <button>View Items</button>
               </Link>
+              <button onClick={() => handleDeletePantry(pantry.pantry_id)}>Delete</button>
             </div>
           </div>
         ))}

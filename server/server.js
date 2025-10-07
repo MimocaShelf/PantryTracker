@@ -4,7 +4,7 @@ import https from 'https'; // Import https for API requests
 
 import {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep} from './crud.js'
 import {addItemToPantry, getLatestAddedItem, getPantriesForUser} from './pantryLogic.js'
-import { readAllPantries, insertPantry } from './crud.js';
+import { readAllPantries, insertPantry, deletePantry } from './crud.js';
 
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
@@ -645,6 +645,21 @@ app.post('/addPantry', (req, res) => {
       res.status(500).send(err.message);
     } else {
       res.status(201).json({ message: 'Pantry added', pantry_id: result.pantry_id });
+    }
+  });
+});
+
+app.delete('/deletePantry/:id', (req, res) => {
+  const pantryId = req.params.id;
+
+  deletePantry(pantryId, (err, result) => {
+    if (err) {
+      console.error("Delete error:", err.message);
+      res.status(500).send("Failed to delete pantry");
+    } else {
+      res.status(200).json({ message: "Pantry deleted", changes: result.changes });
+      console.log(`Deleting pantry with ID: ${pantryId}`);
+
     }
   });
 });

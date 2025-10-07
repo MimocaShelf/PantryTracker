@@ -40,6 +40,13 @@ const deleteMealPrepItem = (pantry_Id, meal_slot_id, callback) => {
     db.run(sql, [pantry_Id, meal_slot_id], callback)
 }
 
+const deletePantry = (pantryId, callback) => {
+  const sql = 'DELETE FROM pantry WHERE pantry_id = ?';
+  db.run(sql, [pantryId], function (err) {
+    callback(err, { changes: this.changes });
+  });
+};
+
 //INSERT
 const insertPantryItemToMealPrep = (time, itemName, callback) => {
     const sql = 'INSERT INTO meal_prep (meal_slots_id, pantry_item_id) VALUES (?, ?)'
@@ -61,4 +68,4 @@ const insertPantry = (owner, name, callback) => {
 };
 
 
-export {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep, readAllPantries, insertPantry}
+export {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep, readAllPantries, insertPantry, deletePantry}
