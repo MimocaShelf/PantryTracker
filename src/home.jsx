@@ -17,6 +17,8 @@ function Home() {
                 <li id="homeList"><Link to="/login">Login</Link></li>
                 <li id="homeList"><Link to="/signup">Signup</Link></li>
                 <li id="homeList"><Link to="/priceCompare">Price Compare</Link></li>
+                <li id="homeList"><Link to="/calendar">Go to Calendar Meal Planner</Link></li>
+
             </ul>
         </nav>
 
