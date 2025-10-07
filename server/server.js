@@ -4,6 +4,7 @@ import https from 'https'; // Import https for API requests
 
 import {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep} from './crud.js'
 import {addItemToPantry, getLatestAddedItem, getPantriesForUser} from './pantryLogic.js'
+import { readAllPantries, insertPantry } from './crud.js';
 
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
@@ -618,6 +619,36 @@ app.use('/user', userRoutes);
 
 // --- Auth Endpoints ---
 app.use('/auth/', authRoutes);
+
+// --- Pantry Section Endpoints ---
+app.get('/getAllPantries', (req, res ) => {
+    readAllPantries((err, rows) => {
+        if(err) {
+            res.status(500).send(err.message);
+        }else{
+            res.status(200).json(rows);
+        }
+    });
+});
+
+app.post('/addPantry', (req, res) => {
+  console.log("Received pantry POST:", req.body); // This should log to terminal
+
+  const { pantry_owner, pantry_name } = req.body;
+  if (!pantry_owner || !pantry_name) {
+    return res.status(400).send('Missing pantry_owner or pantry_name');
+  }
+
+  insertPantry(pantry_owner, pantry_name, (err, result) => {
+    if (err) {
+      console.error("Insert error:", err.message);
+      res.status(500).send(err.message);
+    } else {
+      res.status(201).json({ message: 'Pantry added', pantry_id: result.pantry_id });
+    }
+  });
+});
+
 
 app.listen(3001, () => {
     console.log("Server is running on http://localhost:3001/");

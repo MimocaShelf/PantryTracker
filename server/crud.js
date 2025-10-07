@@ -15,6 +15,11 @@ const readSpecificPantryItems = (name, callback) => {
     })
 }
 
+const readAllPantries = (callback) => {
+    const sql = 'SELECT * FROM pantry';
+    db.all(sql, [], callback);
+}
+
 const readBreakfastIngredients = (callback) => {
     const sql = 'SELECT * FROM meal_prep INNER JOIN pantry_items ON meal_prep.pantry_item_id = pantry_items.pantry_item_id WHERE meal_slots_id = 1';
     db.all(sql, [], callback)
@@ -48,4 +53,12 @@ const checkIfItemRecordExistInMealPrep = (time, itemName, callback) => {
     db.all(sql, [time, itemName], callback)
 }
 
-export {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep}
+const insertPantry = (owner, name, callback) => {
+  const sql = 'INSERT INTO pantry (pantry_owner, pantry_name, pantry_itemAmount) VALUES (?, ?, ?)';
+  db.run(sql, [owner, name, 0], function (err) {
+    callback(err, { pantry_id: this.lastID });
+  });
+};
+
+
+export {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep, readAllPantries, insertPantry}

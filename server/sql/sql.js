@@ -16,7 +16,7 @@ const sql_array = [
     'DROP TABLE IF EXISTS shopping_list',
 
     //CREATE TABLES
-    `CREATE TABLE pantry_items (
+    `CREATE TABLE IF NOT EXISTS pantry_items (
         pantry_item_id INTEGER PRIMARY KEY AUTOINCREMENT,
         pantry_id INTEGER,
         item_name VARCHAR(100),
@@ -27,7 +27,7 @@ const sql_array = [
 
     `CREATE TABLE IF NOT EXISTS nutrition(nutrition_id INTEGER PRIMARY KEY, pantry_item_id INTEGER, calories , protein , carbs , fats , FOREIGN KEY(pantry_item_id) REFERENCES pantry_items(pantry_item_id))`,
 
-    `CREATE TABLE IF NOT EXISTS meal_slots(meal_slots_id INTEGER PRIMARY KEY AUTOINCREMENT, time)`,
+    `CREATE TABLE IF NOT EXISTS meal_slots(meal_slots_id INTEGER PRIMARY KEY AUTOINCREMENT, time TEXT)`,
     `CREATE TABLE IF NOT EXISTS meal_prep(
         meal_prep_id INTEGER PRIMARY KEY AUTOINCREMENT, 
         meal_slots_id INTEGER, 
@@ -36,12 +36,13 @@ const sql_array = [
         FOREIGN KEY(pantry_item_id) REFERENCES pantry_items(pantry_item_id)
     )`,
 
-    `CREATE TABLE pantry (
-        pantry_id INTEGER PRIMARY KEY,
-        pantry_ownder VARCHAR(100),
-        pantry_name VARCHAR(100),
+    `CREATE TABLE IF NOT EXISTS pantry (
+        pantry_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        pantry_owner TEXT,
+        pantry_name TEXT,
         pantry_itemAmount INTEGER
     )`,
+
 
      `CREATE TABLE users (
         user_id INTEGER PRIMARY KEY AUTOINCREMENT,
