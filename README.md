@@ -6,7 +6,7 @@
 
 ### Project Description 
 
-PantryTracker, a web app created to track and manage your pantry. Created with React and Sqlite.
+PantryTracker, a web app created to track and manage your pantry. Created with React, Sqlite, Node.js and Express.js
 
 ### Folder Setup
 
@@ -18,9 +18,21 @@ PantryTracker/
         ---- sql/
     ---- src/
         ---- components/
-        
+
+### How to run
+
+1. Download the project folder
+2. Open.....
+3. Run the server using `npm ....`
+4. Run the project using `npm run dev..`
+5. Click on the provided link in terminal or use `http://localhost:5173/`
 
 
+> Admin Details
+
+> Email: 
+
+> Password: 
 
 
 ### MVP
@@ -28,15 +40,15 @@ PantryTracker/
 
 | Features                              | Release        | Assigned Member |
 |---------------------------------------|----------------|-----------------|
-| User / Account Management             |                |                 |
-| Shopping List Management              |                |                 |
+| User / Account Management             | R1             | Jess            |
+| Shopping List Management              | R1             | Drew            |
 | Nutrition & Food Plan Management      | R1             | Chanel          |
-| Pantry Tracking	                    |                |                 |
-| Pantry Analysis                       |                |                 |
-| Pantry Sections / Categories          |                |                 |
-| Recipe / Ingredient Suggestions       |                |                 |
-| Notification Integration              |                |                 |
-| Grocery Cost Analysis / Comparison    |                |                 |
-| Trading System / Social Sharing       |                |                 |
+| Pantry Tracking	                    | R1             | Atticus         |
+| Pantry Analysis                       | R2             | Atticus         |
+| Pantry Sections / Categories          | R1             | Maia            |
+| Recipe / Ingredient Suggestions       | R2             | Chanel          |
+| Notification Integration              | R2             | Jess            |
+| Grocery Cost Analysis / Comparison    | R2             | Drew            |
+| Calendar Meal Planner                 | R2             | Maia            |
 
 
