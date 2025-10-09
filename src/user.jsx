@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import userProfile from '../src/images/icon.png';
 
 function User() {
     // State for user information
@@ -126,7 +127,7 @@ function User() {
                         <div className="row">
                             <div className="left-container">
                                 <img 
-                                    src={userData.profilePicture} 
+                                    src={userData.profilePicture ? userData.profilePicture : userProfile} 
                                     alt={`${userData.name}'s profile`} 
                                     style={{ width: '150px', height: '150px', borderRadius: '50%' }}
                                 />
@@ -142,11 +143,9 @@ function User() {
             </div>
             )}
 
-            <Link to="/household">Manage Household</Link>
-
-
         </div>
     );
 }
 
 export default User;
+// <Link to="/household">Manage Household</Link>
