@@ -43,7 +43,17 @@ function getPantriesForUser(user_id, callback) {
     db.all(sql, [user_id], callback)
 }
 
+function getPantryName(pantry_id, callback) {
+    const sql = 'SELECT pantry_name FROM pantry WHERE pantry_id = ?'
+    db.get(sql, [pantry_id], callback)
+}
+
+function getPantryItemsFromPantryID(pantry_id, callback) {
+    const sql = 'SELECT * FROM pantry_items WHERE pantry_id = ?'
+    db.all(sql, [pantry_id], callback)
+}
 
 
 
-export {addItemToPantry, getLatestAddedItem, getPantriesForUser};
+
+export {addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryName, getPantryItemsFromPantryID};
