@@ -31,7 +31,7 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
+  /*display: flex;
   /*place-items: center;*/
   min-width: 320px;
   min-height: 100vh;
@@ -219,7 +219,7 @@ button:focus-visible {
 }
 
 .section {
-  margin-bottom: 100px;
+  /*margin-bottom: 100px;*/
   padding: 50px -0px 50px 0px;
   /*background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("./images/nutrition-background.jpeg");
   background-position: center;
@@ -247,13 +247,15 @@ button:focus-visible {
 
 .pantryCards{
   display: flex;
-  gap: 20px;
+  gap: 30px;
   flex-wrap: wrap;
   justify-content: flex-start;
-  padding: 16px;
+  padding: 5px;
   width: 100%;
   box-sizing: border-box;
+  justify-content: center;
 }
+
 .pantryCard{
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 2);
   transition: box-shadow 0.3s ease, background-color 0.3s ease;
@@ -279,19 +281,19 @@ button:focus-visible {
   text-align: left;
 }
 
-.pantrySearch{
-  position: absolute;
-  top: 250px;
-  left: 50px;
+#pantrySearch{
+  width: 40%;
+  padding: 10px 50px 10px 10px;
+  margin-right: 20px;
+  font-size: 15px;
+  border-radius: 6px;
 }
 
-#pantryButton{
-  margin-left: 15px;
+.pantryInput-field{
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-#pantrySortButton{
-  margin-left: 720px;
-}
 
 .genericContentBox{
   padding: 40px;

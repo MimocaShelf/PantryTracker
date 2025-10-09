@@ -69,6 +69,8 @@ const handleDeletePantry = async (id) => {
     if (response.ok) {
       // Remove pantry from state
       setPantries(prev => prev.filter(p => p.pantry_id !== id));
+      setConfirmation(`Pantry "${id}" deleted!`);
+      setTimeout(() => setConfirmation(""), 3000);
     } else {
       const errorText = await response.text();
       console.error("Failed to delete pantry:", errorText);
@@ -84,13 +86,20 @@ const handleDeletePantry = async (id) => {
     <div>
       <div className="section">
         <h1>Pantry Page</h1>
-        <p>See your created pantry/pantries below</p>
-        <p>Or create your own pantry!</p>
+        <p>Create and store all your pantries here!</p>
+        <p>Click on your pantries to see ingredients/items you've stored </p>
       </div>
 
-      <div className="pantrySearch">
-        <input id="search-bar" placeholder="Search for Pantry..." type="text" />
-        <button id="pantryButton" onClick={() => setIsAddingPantry(true)}>+ Create New Pantry</button>
+      <div class='pantryInput-field'>
+        <input id="pantrySearch" placeholder="Search for Pantry..." type="text" />
+        <button onClick={() => setIsAddingPantry(true)}>+ Create New Pantry</button>
+        <button>Sort Pantry
+          <select>
+            <option>Alphabetical</option>
+            <option>Recently Used</option>
+            <option>Recently Created</option>
+          </select>
+        </button>
 
         {isAddingPantry && (
           <form onSubmit={handleAddPantry} className="input-field">
@@ -105,14 +114,6 @@ const handleDeletePantry = async (id) => {
             <button type="button" onClick={() => setIsAddingPantry(false)}>Cancel</button>
           </form>
         )}
-
-        <button id="pantrySortButton">Sort Pantry
-          <select>
-            <option>Alphabetical</option>
-            <option>Recently Used</option>
-            <option>Recently Created</option>
-          </select>
-        </button>
       </div>
 
       {confirmation && <p className="confirmation">{confirmation}</p>}
@@ -124,8 +125,8 @@ const handleDeletePantry = async (id) => {
             <p id="cardText">Owner : {pantry.pantry_owner}</p>
             <p id="cardText">Items : {pantry.pantry_itemAmount}</p>
             <div className="pantry-actions">
-              <Link to={`/pantry/${pantry.pantry_id}`}>
-                <button>View Items</button>
+              <Link to={`/pantry/${pantry.pantry_id}`}>  
+                <button>Edit Pantry</button> 
               </Link>
               <button onClick={() => handleDeletePantry(pantry.pantry_id)}>Delete</button>
             </div>
@@ -135,5 +136,5 @@ const handleDeletePantry = async (id) => {
     </div>
   );
 }
-
+//Change edit Pantry button!!
 export default Pantry;
