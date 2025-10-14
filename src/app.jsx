@@ -16,29 +16,32 @@ import ShoppingMode from "./shoppingMode.jsx";
 import NutritionLogic from "./nutrition management/nutritionLogic.jsx";
 import PriceCompare from "./priceCompare.jsx";
 import CalendarPage from "./calendar.jsx";
+import Nav from "./components/Nav.jsx";
 // import './sql/app.js';
 // import './nutritionLogic.js';
 
 function App() {
     return (
         <BrowserRouter>
-        <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/nutrition" element={<NutritionLogic />} />
-            <Route path="/mealPrep" element={<MealPrep />} />
-            <Route path="/recipe" element={<Recipe />} />
-            <Route path="/pantry" element={<Pantry />} />
-            <Route path="/addToPantry" element={<AddToPantry />} />
-            <Route path="/user" element={<User />} />
-            <Route path="/household" element={<Household />} />
-            <Route path="/shoppingList" element={<ShoppingList />} />
-            <Route path="/shoppingMode" element={<ShoppingMode />} /> 
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/pantryView" element={<PantryView />} /> 
-            <Route path="/priceCompare" element={<PriceCompare />} />
-            <Route path="/calendar" element={<CalendarPage />} />
-        </Routes>
+            <Nav />  {/* Navigation bar */}
+            
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/nutrition" element={<NutritionLogic />} />
+                <Route path="/mealPrep" element={<MealPrep />} />
+                <Route path="/recipe" element={<Recipe />} />
+                <Route path="/pantry" element={<Pantry />} />
+                <Route path="/addToPantry" element={<AddToPantry />} />
+                <Route path="/user" element={<User />} />
+                <Route path="/household" element={<Household />} />
+                <Route path="/shoppingList" element={<ShoppingList />} />
+                <Route path="/shoppingMode" element={<ShoppingMode />} /> 
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/pantryView" element={<PantryView />} /> 
+                <Route path="/priceCompare" element={<PriceCompare />} />
+                <Route path="/calendar" element={<CalendarPage />} />
+            </Routes>
         </BrowserRouter>
     );
 }
