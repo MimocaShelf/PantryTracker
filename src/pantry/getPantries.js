@@ -9,5 +9,27 @@ async function getPantries(user_id) {
             return response.json();
         })
     }
+//fetch request for pantry items from pantry id
+async function getPantryItems(pantry_id) {
+        return await fetch('http://localhost:3001/postGetPantryItemsFromPantryID', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({'pantry_id': pantry_id})
+            }
+        ).then((response) => {
+            return response.json();
+        })
+    }
+async function getPantryName(pantry_id) {
+        return await fetch('http://localhost:3001/postGetPantryNameFromPantry', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({'pantry_id': pantry_id})
+            }
+        ).then((response) => {
+            return response.json();
+        })
+    }
 
-export {getPantries};
+export {getPantries, getPantryItems, getPantryName};
+

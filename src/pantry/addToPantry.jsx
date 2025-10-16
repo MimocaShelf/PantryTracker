@@ -29,7 +29,7 @@ function AddToPantry() {
 
     let sendBody = {}
     let getUserID = parseInt(localStorage.getItem('user_id'));
-    let user_id = (getUserID == null) ? getUserID : -1; //placeholder in case user_id doesn't work.
+    let user_id = (getUserID != null) ? getUserID : -1; //placeholder in case user_id doesn't work.
 
 
     
@@ -48,7 +48,6 @@ function AddToPantry() {
 
     let handlePantryChange = (e) => {
         setPantry(e.target.value)
-        // console.log(e.target.value)
     }
 
 
@@ -67,7 +66,7 @@ function AddToPantry() {
         e.preventDefault();
         const form = e.target;
         const formData = new FormData(form);
-        // if (pantry == '&noPantry') {}
+
 
 
         sendBody.item_name = formData.get('item_name');
@@ -76,7 +75,6 @@ function AddToPantry() {
         sendBody.unit = formData.get('unit');
         sendBody.pantry_id = parseInt(pantry)
         console.log('Submitted')
-        // console.log(sendBody)
         sendPostAddItemToPantry()
 
     }
