@@ -125,8 +125,8 @@ const handleDeletePantry = async (id) => {
             <p id="cardText">Owner : {pantry.pantry_owner}</p>
             <p id="cardText">Items : {pantry.pantry_itemAmount}</p>
             <div className="pantry-actions">
-              <Link to={`/pantry/${pantry.pantry_id}`}>  
-                <button>Edit Pantry</button> 
+              <Link to={`/pantryview`}>  
+                <button onClick={() => localStorage.setItem("pantry_id", pantry.pantry_id)}>Edit Pantry</button> 
               </Link>
               <button onClick={() => handleDeletePantry(pantry.pantry_id)}>Delete</button>
             </div>
