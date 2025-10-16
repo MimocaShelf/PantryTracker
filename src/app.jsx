@@ -20,11 +20,13 @@ import Nav from "./components/Nav.jsx";
 // import './sql/app.js';
 // import './nutritionLogic.js';
 
+// Add context for user to be passed to the ret of the application.
+
 function App() {
     return (
         <BrowserRouter>
             <Nav />  {/* Navigation bar */}
-            
+
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/nutrition" element={<NutritionLogic />} />

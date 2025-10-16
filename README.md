@@ -23,9 +23,10 @@ PantryTracker/
 
 1. Download the project folder
 2. Open.....
-3. Run the server using `npm ....`
-4. Run the project using `npm run dev..`
-5. Click on the provided link in terminal or use `http://localhost:5173/`
+3. Install all dependencies using `npm install`
+4. Run the server using `npm ....`
+5. Run the project using `npm run dev..`
+6. Click on the provided link in terminal or use `http://localhost:5173/`
 
 
 > Admin Details
@@ -33,6 +34,9 @@ PantryTracker/
 > Email: 
 
 > Password: 
+
+*Update instructions + add in Windows and Mac commands*
+*Add env details*
 
 
 ### MVP
@@ -52,3 +56,4 @@ PantryTracker/
 | Calendar Meal Planner                 | R2             | Maia            |
 
 
+### Resources Used

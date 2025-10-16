@@ -451,4 +451,7 @@ button:focus-visible {
 
 #homeList{
   list-style-type: none;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
