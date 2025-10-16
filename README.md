@@ -9,15 +9,65 @@
 PantryTracker, a web app created to track and manage your pantry. Created with React, Sqlite, Node.js and Express.js
 
 ### Folder Setup
-
-PantryTracker/
-    ---- public/ 
-    ---- server/
-        ---- routes/
-        ---- services/
-        ---- sql/
-    ---- src/
-        ---- components/
+```
+public
+   |-- vite.svg
+server
+   |-- crud.js
+   |-- nutritionLogic.js
+   |-- pantryLogic.js
+   |-- routes
+   |   |-- authRoutes.js
+   |   |-- userRoutes.js
+   |-- server.js
+   |-- services
+   |   |-- authService.js
+   |   |-- ultilityService.js
+   |   |-- userService.js
+   |-- sql
+   |   |-- app.js
+   |   |-- sql.js
+src
+   |-- app.jsx
+   |-- calendar.jsx
+   |-- components
+   |   |-- Nav.jsx
+   |-- counter.js
+   |-- home.jsx
+   |-- household.jsx
+   |-- images
+   |   |-- icon.png
+   |   |-- nutrition-background.jpeg
+   |-- javascript.svg
+   |-- login.jsx
+   |-- main.jsx
+   |-- nutrition management
+   |   |-- mealPrep.jsx
+   |   |-- nutritionLogic.jsx
+   |-- nutrition.jsx
+   |-- pantry.jsx
+   |-- pantry
+   |   |-- addToPantry.jsx
+   |   |-- getPantries.js
+   |   |-- pantryView.jsx
+   |-- priceCompare.jsx
+   |-- recipe management
+   |   |-- recipe.jsx
+   |-- shoppingList.jsx
+   |-- shoppingMode.jsx
+   |-- signup.jsx
+   |-- style.css
+   |-- unit test
+   |   |-- auth.test.jsx
+   |   |-- nutrition.test.jsx
+   |   |-- pantry.test.jsx
+   |   |-- pantrylogic.test.jsx
+   |   |-- shopping.test.jsx
+   |   |-- user.test.jsx
+   |-- user.jsx
+vitest.config.js
+```
+---    
 
 ### How to run
 
@@ -26,21 +76,16 @@ PantryTracker/
 3. Install all dependencies using `npm install`
 4. Run the server using `npm ....`
 5. Run the project using `npm run dev..`
-6. Click on the provided link in terminal or use `http://localhost:5173/`
-
-
-> Admin Details
-
-> Email: 
-
-> Password: 
-
-*Update instructions + add in Windows and Mac commands*
-*Add env details*
-
+6. Click on the provided link in terminal or use `http://localhost:5173/`      
+<br>
+  
+>***Admin Details***
+>
+> Email: admin@gmail.com  
+> Password: Password1234!  
 
 ### MVP
-
+#
 
 | Features                              | Release        | Assigned Member |
 |---------------------------------------|----------------|-----------------|
@@ -56,4 +101,13 @@ PantryTracker/
 | Calendar Meal Planner                 | R2             | Maia            |
 
 
-### Resources Used
+### Resources Used    
+    
+        
+<!--
+TO DO
+- Update instructions + add in Windows and Mac commands
+- Add env details
+- Add Screenshot
+- Update folder structure + tree
+-->

@@ -124,6 +124,8 @@ const sql_array = [
      VALUES ('Michael Wazowski', 'mike@monsters.inc', 'hashed_password_here')`,
     `INSERT INTO users (name, email, password_hash) 
      VALUES ('Sam Smith', 'sam.smith@example.com', 'hashed_password_here')`,
+    `INSERT INTO users (name, email, password_hash) 
+     VALUES ('Admin Admin', 'admin@gmail.com', 'Password1234!')`,
 
     // INSERT HOUSEHOLD DATA
     `INSERT INTO households (household_name, created_by) 

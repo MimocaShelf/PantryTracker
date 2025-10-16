@@ -17,34 +17,40 @@ import NutritionLogic from "./nutrition management/nutritionLogic.jsx";
 import PriceCompare from "./priceCompare.jsx";
 import CalendarPage from "./calendar.jsx";
 import Nav from "./components/Nav.jsx";
+import UserContext from "./context/UserContext.jsx";
+import { useState } from "react";
 // import './sql/app.js';
 // import './nutritionLogic.js';
 
-// Add context for user to be passed to the ret of the application.
-
 function App() {
-    return (
-        <BrowserRouter>
-            <Nav />  {/* Navigation bar */}
 
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/nutrition" element={<NutritionLogic />} />
-                <Route path="/mealPrep" element={<MealPrep />} />
-                <Route path="/recipe" element={<Recipe />} />
-                <Route path="/pantry" element={<Pantry />} />
-                <Route path="/addToPantry" element={<AddToPantry />} />
-                <Route path="/user" element={<User />} />
-                <Route path="/household" element={<Household />} />
-                <Route path="/shoppingList" element={<ShoppingList />} />
-                <Route path="/shoppingMode" element={<ShoppingMode />} /> 
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/pantryView" element={<PantryView />} /> 
-                <Route path="/priceCompare" element={<PriceCompare />} />
-                <Route path="/calendar" element={<CalendarPage />} />
-            </Routes>
-        </BrowserRouter>
+    // Add context for user to be passed to the rest of the application.
+    const [userData, setUserData] = useState([]);
+
+    return (
+        <UserContext value={[ userData, setUserData ]}>
+            <BrowserRouter>
+                <Nav />  {/* Navigation bar */}
+
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/nutrition" element={<NutritionLogic />} />
+                    <Route path="/mealPrep" element={<MealPrep />} />
+                    <Route path="/recipe" element={<Recipe />} />
+                    <Route path="/pantry" element={<Pantry />} />
+                    <Route path="/addToPantry" element={<AddToPantry />} />
+                    <Route path="/user" element={<User />} />
+                    <Route path="/household" element={<Household />} />
+                    <Route path="/shoppingList" element={<ShoppingList />} />
+                    <Route path="/shoppingMode" element={<ShoppingMode />} /> 
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/pantryView" element={<PantryView />} /> 
+                    <Route path="/priceCompare" element={<PriceCompare />} />
+                    <Route path="/calendar" element={<CalendarPage />} />
+                </Routes>
+            </BrowserRouter>
+        </UserContext>
     );
 }
 

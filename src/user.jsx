@@ -1,11 +1,12 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import userProfile from '../src/images/icon.png';
+import UserContext from '../src/context/UserContext';
 
 function User() {
     // State for user information
-    const [userData, setUserData] = useState(null);
+    const [userData, setUserData] = useContext(UserContext);
     const [isEditing, setIsEditing] = useState(false);
     const [editedUserData, setEditedUserData] = useState({...userData});
     const [deleteConfirm, setDeleteConfirm] = useState(false);

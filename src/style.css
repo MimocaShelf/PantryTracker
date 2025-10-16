@@ -451,6 +451,9 @@ button:focus-visible {
 
 #homeList{
   list-style-type: none;
+}
+
+#homeList, #homeList span {
   display: flex;
   justify-content: center;
   gap: 20px;
