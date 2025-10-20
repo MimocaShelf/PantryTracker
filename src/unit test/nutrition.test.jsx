@@ -10,7 +10,7 @@ import { getAllPantryItems, getRecipe } from '../../server/server.js';
 describe('Testing Nutrition Management Feature', () => {
 
     //Unit test to determine if the view provideds suitable feedback to users when there are no pantry items
-    it('Correctly show message when no pantry items', async () => {
+    it('Show valid confirmation message when there is no pantry items', async () => {
         global.fetch = vi.fn(() => 
             Promise.resolve({
                 json: () => Promise.resolve([]),

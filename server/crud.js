@@ -20,6 +20,11 @@ const readAllPantries = (callback) => {
     db.all(sql, [], callback);
 }
 
+const readAllRecipe = (callback) => {
+    const sql = 'SELECT * FROM recipe';
+    db.all(sql, [], callback);
+}
+
 const readBreakfastIngredients = (callback) => {
     const sql = 'SELECT * FROM meal_prep INNER JOIN pantry_items ON meal_prep.pantry_item_id = pantry_items.pantry_item_id WHERE meal_slots_id = 1';
     db.all(sql, [], callback)
@@ -47,6 +52,13 @@ const deletePantry = (pantryId, callback) => {
   });
 };
 
+const deleteRecipe = (name, callback) => {
+  const sql = 'DELETE FROM recipe WHERE recipe_name = ?';
+  db.run(sql, [name], function (err) {
+    callback(err, { changes: this.changes });
+  });
+};
+
 //INSERT
 const insertPantryItemToMealPrep = (time, itemName, callback) => {
     const sql = 'INSERT INTO meal_prep (meal_slots_id, pantry_item_id) VALUES (?, ?)'
@@ -55,9 +67,21 @@ const insertPantryItemToMealPrep = (time, itemName, callback) => {
     }) 
 }
 
+const insertIntoRecipe = (name, callback) => {
+    const sql = 'INSERT INTO recipe (recipe_name) VALUES (?)'
+    db.run(sql, [name], function(err) {
+        callback(err, { id: this.lastID })
+    }) 
+}
+
 const checkIfItemRecordExistInMealPrep = (time, itemName, callback) => {
     const sql = 'SELECT * FROM meal_prep WHERE meal_slots_id = ? AND pantry_item_id = ?'
     db.all(sql, [time, itemName], callback)
+}
+
+const checkIfRecipeIsSaved = (name, callback) => {
+    const sql = 'SELECT * FROM recipe WHERE recipe_name = ?'
+    db.all(sql, [name], callback)
 }
 
 const insertPantry = (owner, name, callback) => {
@@ -68,4 +92,4 @@ const insertPantry = (owner, name, callback) => {
 };
 
 
-export {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep, readAllPantries, insertPantry, deletePantry}
+export {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep, readAllPantries, insertPantry, deletePantry, deleteRecipe, insertIntoRecipe, checkIfRecipeIsSaved, readAllRecipe}

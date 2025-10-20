@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import https from 'https'; // Import https for API requests
 
-import {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep} from './crud.js'
+import {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep, deleteRecipe, insertIntoRecipe, checkIfRecipeIsSaved, readAllRecipe} from './crud.js'
 import {addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryItemsFromPantryID, getPantryName} from './pantryLogic.js'
 import { readAllPantries, insertPantry, deletePantry } from './crud.js';
 
@@ -407,6 +407,49 @@ export async function getRecipe(rows) {
         }
 }
 
+export async function getRecipeSingle(item) {
+    
+     const encodedQuery = encodeURIComponent(item);
+     console.log(encodedQuery);
+
+        try {
+            //Call the API Ninja to acquire a recipe based on pantry items
+            const response = await fetch(`https://api.api-ninjas.com/v1/recipe?query=${encodedQuery}`, {
+                headers: {
+                    'X-Api-Key': '56pVmwMXIBB6/OsFU9yBjw==2WphEiN4FEbAQk6E'
+                }
+            });
+
+            //If API is unable to return a recipe, return undefined
+            if(!response.ok){
+                const errorText = await response.text();
+                console.log('API Error', errorText);
+                return undefined;
+            }
+
+            //Wait for response body to be parsed as JSON
+            const data = await response.json();
+            
+            //Map over recipe entries
+            const recipe = await 
+                data.map(async entry => ({
+                    title: entry.title,
+                    ingredients: await convertMeasurementAcronymToWords(entry.ingredients), //function converts measurement acronyms such as c or ts as cup and tablespoons
+                    servings: entry.servings,
+                    instructions: entry.instructions,
+                })
+            )
+            console.log('testing');
+
+            return recipe; //return transformed array of recipe objects
+
+        } catch (outerError){
+            console.error('Fetch Failed', outerError)
+        }
+}
+
+
+
 //Function that converts measurement acronyms e.g c and ts as cups and tablespoons
 async function convertMeasurementAcronymToWords(text){
     return text
@@ -540,6 +583,90 @@ app.get('/getSpecificItems', (req, res) => {
 
 
 
+/* End of Nutrition */
+/* Recipe */
+
+//API endpoint that calls the API for a recipe for each meal prep time e.g. breakfast, lunch and dinner
+app.get('/getRecipeForEachItem', (req, res) => {
+
+     try{
+         readPantryItems(async (err, items) => {
+                if(err) {
+                    return res.status(500).send('Error getting pantry items record from database')
+                }
+
+                try {
+                    const results = await Promise.all(items.map(item => getRecipeSingle(item.item_name)));
+
+                    const recipes = await Promise.all(results.flat().map(p => p));
+
+
+                    console.log('All Recipe', recipes)
+                    res.json(recipes)
+
+                } catch(innerError){
+                    console.log('Error', innerError);
+                    res.status(500).send('Error Fetching Recipes');
+                }
+                
+            })
+
+    } catch (outerError){
+        console.error('Fetch Failed', outerError) //test this
+    }
+}) 
+
+app.get('/getSavedRecipe', (req, res) => {
+
+     try{
+         readAllRecipe(async (err, items) => {
+                if(err) {
+                    return res.status(500).send('Error getting pantry items record from database')
+                }
+
+                try {
+                    const results = await Promise.all(items.map(item => getRecipeSingle(item.recipe_name)));
+
+                    const recipes = await Promise.all(results.flat().map(p => p));
+
+
+                    console.log('All Recipe', recipes)
+                    res.json(recipes)
+
+                } catch(innerError){
+                    console.log('Error', innerError);
+                    res.status(500).send('Error Fetching Recipes');
+                }
+                
+            })
+
+    } catch (outerError){
+        console.error('Fetch Failed', outerError) //test this
+    }
+}) 
+
+
+//API endpoint that removes a pantry item in the meal prep table 
+app.post('/removeRecipe', (req, res) => {
+
+    //Stores the items from the request into the different variables
+    const recipe = req.body.recipe;
+
+    console.log("recipe ", recipe);
+
+
+            //Calls a function that deletes the meal prep record that matches the pantry item ID and the meal time
+            deleteRecipe(recipe, err => {
+                if(err){ 
+                    res.status(500).send(err.message) 
+                } else {
+                    res.send({success: true, message: 'Recipe removed'})
+                }
+    })  
+    
+})
+
+
 
 app.get('/api/test', (req, res) => {
     res.json({message: 'testing'})
@@ -563,6 +690,42 @@ app.get('/getLowStockItems', (req, res) => {
         );
     });
 });
+
+//API endpoint that sets a specific pantry item as a record in the meal prep table
+app.post('/addToSavedRecipes', (req, res) => {
+    const recipe = req.body.recipe; //variable storing the ingredient name
+
+    console.log('Received front frontend', recipe);
+
+    try {
+        //function that attempts to find the specific pantry item record based on the item name received from the request body
+            
+            checkIfRecipeIsSaved(recipe, async (err, rows) => {
+                if(err){
+                    res.status(500).send(err.message)
+                }  
+
+                    if(rows.length === 1){
+                        console.log("Item exist");
+                        return res.send({success: false, recipe})
+                    }
+                    
+                    //Insert a record into the meal prep table with the pantry item ID and meal slot ID
+                    insertIntoRecipe(recipe, async (err) => {
+                        if(err){
+                            res.status(500).send(err.message)
+                        }   
+                        console.log("successfully added", recipe)
+                        res.send({success: true, recipe})
+                    })
+
+            })
+
+    } catch (outerError){
+        res.status(500).send('Unexpected Error');
+    }
+})
+
 
 // --- Shopping List Endpoints ---
 
