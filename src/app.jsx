@@ -19,6 +19,7 @@ import CalendarPage from "./calendar.jsx";
 import Nav from "./components/Nav.jsx";
 import UserContext from "./context/UserContext.jsx";
 import { useState } from "react";
+import PantrySummary from "./pantry/pantrySummary.jsx";
 // import './sql/app.js';
 // import './nutritionLogic.js';
 
@@ -48,6 +49,7 @@ function App() {
                     <Route path="/pantryView" element={<PantryView />} /> 
                     <Route path="/priceCompare" element={<PriceCompare />} />
                     <Route path="/calendar" element={<CalendarPage />} />
+                    <Route path="/pantrySummary" element={<PantrySummary />} />
                 </Routes>
             </BrowserRouter>
         </UserContext>
