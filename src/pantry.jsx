@@ -124,10 +124,10 @@ function Pantry() {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
 
-        <button onClick={() => setIsAddingPantry(true)}>+ Create New Pantry</button>
+        <button className="createPantryButton" onClick={() => setIsAddingPantry(true)}>+ Create New Pantry</button>
         <label>
           Sort Pantry:
-          <select value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
+          <select className="pantry-dropdown" value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
             <option value="Alphabetical">Alphabetical</option>
             <option value="RecentlyCreated">Recently Created</option>
             <option value="RecentlyUsed">Recently Used</option>
