@@ -43,6 +43,10 @@ function SavedRecipe() {
       .catch(err => console.error('Error: ', err))
     }
 
+    function slugifyName(recipe) {
+        return recipe.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '')
+    }
+
   useEffect(() => {
       fetch('http://localhost:3001/getSavedRecipe')
       .then(res => res.json())
@@ -71,7 +75,7 @@ function SavedRecipe() {
                 <p>Ingredients: {item.ingredients}</p>
                 <div className="right-aligned">
                   <button onClick={() => removeRecipe(item.title)}>Remove</button>
-                <button className="search-bar-button" onClick={() => alert('Feature not yet available...')}>View More</button>
+                <button className="search-bar-button" onClick={() => navigate(`/recipeDetail/${slugifyName(item.title)}`)}>View More</button>
                 </div>
             </div>
       ))}

@@ -1,8 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import https from 'https'; // Import https for API requests
+import { promisify } from 'util';
 
-import {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep, deleteRecipe, insertIntoRecipe, checkIfRecipeIsSaved, readAllRecipe} from './crud.js'
+import {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep, deleteRecipe, insertIntoRecipe, checkIfRecipeIsSaved, readAllRecipe, checkForShoppingList, insertShoppingIngredient} from './crud.js'
 import {addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryItemsFromPantryID, getPantryName} from './pantryLogic.js'
 import { readAllPantries, insertPantry, deletePantry } from './crud.js';
 
@@ -10,6 +11,11 @@ import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 
 const app = express();
+
+
+const checkForShoppingListAsync = promisify(checkForShoppingList);
+const insertShoppingIngredientAsync = promisify(insertShoppingIngredient);
+const readSpecificPantryItemsAsync = promisify(readSpecificPantryItems);
 
 app.use(cors({origin: 'http://localhost:5173'}))
 app.use(express.json())
@@ -431,13 +437,13 @@ export async function getRecipeSingle(item) {
             const data = await response.json();
             
             //Map over recipe entries
-            const recipe = await 
+            const recipe = await Promise.all(
                 data.map(async entry => ({
                     title: entry.title,
                     ingredients: await convertMeasurementAcronymToWords(entry.ingredients), //function converts measurement acronyms such as c or ts as cup and tablespoons
                     servings: entry.servings,
                     instructions: entry.instructions,
-                })
+                }))
             )
             console.log('testing');
 
@@ -616,6 +622,22 @@ app.get('/getRecipeForEachItem', (req, res) => {
     }
 }) 
 
+app.post('/getSpecificRecipe', async (req, res) => {
+    const recipe = req.body.recipe;
+
+                try {
+                    const results = await getRecipeSingle(recipe);
+
+                    console.log('Recipe Detail: ', results)
+                    res.json(results)
+
+                } catch(innerError){
+                    console.log('Error', innerError);
+                    res.status(500).send('Error Fetching Recipes');
+                }
+                
+})
+
 app.get('/getSavedRecipe', (req, res) => {
 
      try{
@@ -646,6 +668,8 @@ app.get('/getSavedRecipe', (req, res) => {
 }) 
 
 
+
+
 //API endpoint that removes a pantry item in the meal prep table 
 app.post('/removeRecipe', (req, res) => {
 
@@ -665,6 +689,51 @@ app.post('/removeRecipe', (req, res) => {
     })  
     
 })
+
+app.post('/addToShoppingList', async (req, res) => {
+     const ingredients = req.body.ingredients;
+
+     const ingredientList = extractIngredientList(ingredients)
+     console.log(ingredientList);
+
+    try {
+        for(const ingredient of ingredientList){
+            const name = ingredient.toLowerCase();
+
+            const inPantry = await readSpecificPantryItemsAsync(name);
+            const inShoppingList = await checkForShoppingListAsync(name);
+
+            console.log(inPantry);
+            console.log(inShoppingList);
+
+            if(inPantry.length === 0 && inShoppingList.length === 0){
+                await insertShoppingIngredientAsync(name, 1)
+                console.log('add item to list ', name);
+            } else {
+                console.log('item in system');
+            }
+            
+
+        }
+        res.status(200).json({message: 'shopping list updated successfully'});
+        
+    } catch(error) {
+        console.error('Error updating shopping list', error);
+        res.status(500).json({error: 'Internal server error'});
+    }
+     
+    
+})
+
+function extractIngredient(ingredientList) {
+    return ingredientList.replace(/^\d+\/?\d*\s*(cup|tablespoon|teaspoon)?\s*/i, '').trim();
+}
+
+function extractIngredientList(ingredientList) {
+    return ingredientList.split('|').map(item=> item.trim()).filter(item => item && !item.endsWith(':')).map(extractIngredient);
+}
+
+
 
 
 

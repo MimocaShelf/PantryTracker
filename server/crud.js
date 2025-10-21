@@ -84,6 +84,18 @@ const checkIfRecipeIsSaved = (name, callback) => {
     db.all(sql, [name], callback)
 }
 
+const checkForShoppingList = (name, callback) => {
+    const sql = 'SELECT * FROM shopping_list WHERE name LIKE ?'
+    db.all(sql, [name], callback)
+}
+
+const insertShoppingIngredient = (name, amount, callback) => {
+  const sql = 'INSERT INTO shopping_list (name, quantity) VALUES (?, ?)';
+  db.run(sql, [name, amount], function (err) {
+    callback(err, { id: this.lastID });
+  });
+};
+
 const insertPantry = (owner, name, callback) => {
   const sql = 'INSERT INTO pantry (pantry_owner, pantry_name, pantry_itemAmount) VALUES (?, ?, ?)';
   db.run(sql, [owner, name, 0], function (err) {
@@ -92,4 +104,4 @@ const insertPantry = (owner, name, callback) => {
 };
 
 
-export {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep, readAllPantries, insertPantry, deletePantry, deleteRecipe, insertIntoRecipe, checkIfRecipeIsSaved, readAllRecipe}
+export {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep, readAllPantries, insertPantry, deletePantry, deleteRecipe, insertIntoRecipe, checkIfRecipeIsSaved, readAllRecipe, insertShoppingIngredient, checkForShoppingList}

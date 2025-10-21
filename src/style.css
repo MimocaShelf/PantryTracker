@@ -243,6 +243,11 @@ button:focus-visible {
   padding-right: 30px;
 }
 
+.recipeDetails {
+  text-align: left;
+  padding-left: 100px;
+}
+
 /*end of nutrition*/
 
 .pantryCards{

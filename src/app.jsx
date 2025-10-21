@@ -4,6 +4,7 @@ import Nutrition from './nutrition.jsx';
 import MealPrep from './nutrition management/mealPrep.jsx';
 import Recipe from './recipe management/recipe.jsx';
 import SavedRecipe from './recipe management/savedRecipe.jsx';
+import RecipeDetail from "./recipe management/recipeDetail.jsx";
 import Pantry from './pantry.jsx';
 import AddToPantry from './pantry/addToPantry.jsx';
 import PantryView from './pantry/pantryView.jsx';
@@ -39,7 +40,8 @@ function App() {
                     <Route path="/nutrition" element={<NutritionLogic />} />
                     <Route path="/mealPrep" element={<MealPrep />} />
                     <Route path="/recipe" element={<Recipe />} />
-                <Route path="/savedRecipe" element={<SavedRecipe />} />
+                    <Route path="/savedRecipe" element={<SavedRecipe />} />
+                    <Route path="/recipeDetail/:name" element={<RecipeDetail />} />
                     <Route path="/pantry" element={<Pantry />} />
                     <Route path="/addToPantry" element={<AddToPantry />} />
                     <Route path="/user" element={<User />} />
