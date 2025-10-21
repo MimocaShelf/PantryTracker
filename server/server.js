@@ -153,11 +153,7 @@ BODY:
 */
 app.post('/postAddItemToPantry', (req, res, next) => {
     console.log('POST postAddItemToPantry received.')
-    
-    // console.log(req);
-    console.log(req.body);
     let body = req.body;
-    // res.status(200).send(body)
     try {
         addItemToPantry(body.pantry_id, body.item_name, body.extra_info, body.quantity, body.unit).then(() => {
             res.status(200).send('Recieved');
