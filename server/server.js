@@ -4,11 +4,12 @@ import https from 'https'; // Import https for API requests
 import { promisify } from 'util';
 
 import {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep, deleteRecipe, insertIntoRecipe, checkIfRecipeIsSaved, readAllRecipe, checkForShoppingList, insertShoppingIngredient} from './crud.js'
-import {addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryItemsFromPantryID, getPantryName} from './pantryLogic.js'
+import {addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryItemsFromPantryID, getPantryName, getPantryInformation} from './pantryLogic.js'
 import { readAllPantries, insertPantry, deletePantry } from './crud.js';
 
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import { getPantryItems } from '../src/pantry/getPantries.js';
 
 const app = express();
 
@@ -158,15 +159,13 @@ app.post('/postAddItemToPantry', (req, res, next) => {
     let body = req.body;
     // res.status(200).send(body)
     try {
-        addItemToPantry(body.pantry_id, body.item_name, body.extra_info, body.quantity, body.unit);
+        addItemToPantry(body.pantry_id, body.item_name, body.extra_info, body.quantity, body.unit).then(() => {
+            res.status(200).send('Recieved');
+        });
     } 
     catch (error) {
         res.status(500).send(error);
     }
-
-    
-
-    res.status(200).send()
 })
 
 
@@ -231,10 +230,16 @@ app.post('/postGetPantryItemsFromPantryID', (req, res, next) => {
 app.post('/postGetPantrySummaryFromPantryID', (req, res, next) => {
     console.log('POST postGetPantrySummaryFromPantryID received')
     let pantry_id = req.body.pantry_id
-    let sendRows = [];
-    // Promise.all(sendRows).then()
-    console.log(sendRows)
-    res.status(200).send(sendRows)
+
+    try {
+        Promise.all([getPantryInformation(pantry_id), getPantryItems(pantry_id)]).then((data) => {
+            let info = data[0];
+            let items = data[1];
+            res.status(200).json({info: info, items: items})
+        })
+    } catch (err) {
+        res.status(500).send(err)
+    }
 })
 
 

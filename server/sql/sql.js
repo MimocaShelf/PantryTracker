@@ -15,6 +15,7 @@ const sql_array = [
     'DROP TABLE IF EXISTS meal_prep',
     'DROP TABLE IF EXISTS shopping_list',
     'DROP TABLE IF EXISTS recipe',
+    'DROP TABLE IF EXISTS pantry_items_status_record',
 
     //CREATE TABLES
     `CREATE TABLE IF NOT EXISTS pantry_items (
@@ -25,6 +26,17 @@ const sql_array = [
         quantity DECIMAL(20, 5),
         unit VARCHAR(50)
     )`,
+    `CREATE TABLE IF NOT EXISTS pantry_items_status_record (
+        history_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        status CHAR(1), 
+        pantry_item_id INTEGER,
+        pantry_id INTEGER,
+        item_name VARCHAR(100),
+        extra_info VARCHAR(65535),
+        quantity DECIMAL(20, 5),
+        unit VARCHAR(50)
+    )`, //statuses: C – Create, R – Read, U – Updated, D – Deleted
+
 
     `CREATE TABLE IF NOT EXISTS nutrition(nutrition_id INTEGER PRIMARY KEY, pantry_item_id INTEGER, calories , protein , carbs , fats , FOREIGN KEY(pantry_item_id) REFERENCES pantry_items(pantry_item_id))`,
     `CREATE TABLE IF NOT EXISTS recipe(recipe_id INTEGER PRIMARY KEY AUTOINCREMENT, recipe_name)`,

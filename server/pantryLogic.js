@@ -12,22 +12,15 @@ import db from './sql/app.js'
 
 
 function addItemToPantry(pantry_id, item_name, extra_info, quantity, unit) {
-
-
-    let sql_string = 'INSERT INTO pantry_items(pantry_id, item_name, extra_info, quantity, unit) VALUES (?, ?, ?, ?, ?)';
-
-    let addToDatabase = (pantry_id, item_name, extra_info, quantity, unit) => {
-        db.run(sql_string, [pantry_id, item_name, extra_info, quantity, unit], (err) => {
-            if (err) return console.error(err.message);
+    let sql = 'INSERT INTO pantry_items(pantry_id, item_name, extra_info, quantity, unit) VALUES (?, ?, ?, ?, ?)';
+    return new Promise((resolve, reject) => {
+        db.run(sql, [pantry_id, item_name, extra_info, quantity, unit], async (err) => {
+            if (err) {
+                reject(err)
+            }
+            resolve()
         })
-    }
-
-    // addToDatabase('main_pantry', 'Apple', null, 10, 'units')
-    try {
-        addToDatabase(pantry_id, item_name, extra_info, quantity, unit);
-    } catch (err) {
-        console.error(err.message);
-    }
+    })
 }
 
 
@@ -69,10 +62,22 @@ function getPantryName(pantry_id) {
     })
 }
 
+function getPantryInformation(pantry_id) {
+    const sql = 'SELECT * FROM pantry WHERE pantry_id = ?'
+    return new Promise((resolve, reject) => {
+        db.get(sql, [pantry_id], async (err, rows) => {
+            if (err) {
+                reject(err)
+            }
+            resolve(rows)
+        })
+    })
+}
+
 function getPantryItemsFromPantryID(pantry_id) {
     const sql = 'SELECT * FROM pantry_items WHERE pantry_id = ?'
     return new Promise((resolve, reject) => {
-        db.get(sql, [pantry_id], async (err, rows) => {
+        db.all(sql, [pantry_id], async (err, rows) => {
             if (err) {
                 reject(err)
             }
@@ -84,4 +89,4 @@ function getPantryItemsFromPantryID(pantry_id) {
 
 
 
-export { addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryName, getPantryItemsFromPantryID };
+export { addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryName, getPantryItemsFromPantryID, getPantryInformation};
