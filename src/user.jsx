@@ -3,6 +3,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import userProfile from '../src/images/icon.png';
 import UserContext from '../src/context/UserContext';
+import toast from 'react-hot-toast';
 
 function User() {
     // State for user information
@@ -62,13 +63,17 @@ function User() {
         });
         if (!res.ok) {
             throw new Error('Failed to update user data');
+            toast.error("User profile updated successfully");
         }
 
         const updatedUser = await res.json();
-        console.log('User updated successfully:', updatedUser);
+        
 
         // Reload the page after successful update
         window.location.reload();
+        console.log('User updated successfully:', updatedUser);
+        toast.success("User profile updated successfully");
+        
 
     } catch (err) {
         alert('Error updating user profile.');

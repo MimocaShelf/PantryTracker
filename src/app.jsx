@@ -22,13 +22,19 @@ import Nav from "./components/Nav.jsx";
 import UserContext from "./context/UserContext.jsx";
 import { useState } from "react";
 import PantrySummary from "./pantry/pantrySummary.jsx";
+import toast, { Toaster } from 'react-hot-toast';
 // import './sql/app.js';
 // import './nutritionLogic.js';
+
+
+const notify = () => toast('This is a toast notification!');
 
 function App() {
 
     // Add context for user to be passed to the rest of the application.
     const [userData, setUserData] = useState([]);
+
+    
 
     return (
         <UserContext value={[ userData, setUserData ]}>
@@ -56,6 +62,10 @@ function App() {
                     <Route path="/pantrySummary" element={<PantrySummary />} />
                 </Routes>
             </BrowserRouter>
+
+            <div>
+                <Toaster position="bottom-right" toastOptions={{duration: 10000}}/>
+            </div>
         </UserContext>
     );
 }
