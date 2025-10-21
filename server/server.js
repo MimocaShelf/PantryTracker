@@ -173,12 +173,15 @@ app.post('/postAddItemToPantry', (req, res, next) => {
 //Function primarily used for testing. send a get request, and it will get the last item added in all pantries
 app.get('/getLatestAddeditem', (req,res) => {
     console.log('GET getLatestAddeditem received.')
-    getLatestAddedItem(async (err, rows) => {
-        if (err) {
-            res.status(500).send(err)
-        }
-        res.status(200).send(rows)
-    })
+    try {
+        getLatestAddedItem().then(value => {
+            res.status(200).send(value)
+        })
+    }
+    catch (err) {
+        res.status(500).send(err)
+    }
+    
 })
 
 
@@ -195,35 +198,43 @@ BODY:
 */
 app.post('/postGetPantriesForUser', (req, res, next) => {
     console.log('POST postGetPantriesForUser received')
-    // console.log(req.body)
-    getPantriesForUser(req.body.user_id, async (err, rows) => {
-        if (err) {
-            res.status(500).send(err)
-        }
-        console.log(rows)
-        res.status(200).send(rows)
-    })
+    try {
+        getPantriesForUser(req.body.user_id).then(value => {
+            res.status(200).send(value)
+        })
+    }
+    catch (err) {res.status(500).send(err)}
 })
-
+//gets the pantry name, needs field "pantry_id" in request
 app.post('/postGetPantryNameFromPantry', (req, res, next) => {
     console.log('POST postGetPantryNameFromPantry received')
-    getPantryName(req.body.pantry_id, async (err, rows) => {
-        if (err) {
-            res.status(500).send(err)
-        }
-        console.log(rows)
-        res.status(200).send(rows)
-    })
+    try {
+        getPantryName(req.body.pantry_id).then(value => {
+            res.status(200).send(value)
+        })
+    }
+    catch (err) {res.status(500).send(err)}
 })
+//returns a list of pantry items when given the pantry id
 app.post('/postGetPantryItemsFromPantryID', (req, res, next) => {
     console.log('POST postGetPantryItemsFromPantryID received')
-    getPantryItemsFromPantryID(req.body.pantry_id, async (err, rows) => {
-        if (err) {
-            res.status(500).send(err)
-        }
-        console.log(rows)
-        res.status(200).send(rows)
-    })
+    try {
+        getPantryItemsFromPantryID(req.body.pantry_id).then(value => {
+            res.status(200).send(value)
+        })
+    }
+    catch (err) {
+        res.status(500).send(err)
+    }
+})
+//submit all requests, wait for all of them with Promise.all then send.
+app.post('/postGetPantrySummaryFromPantryID', (req, res, next) => {
+    console.log('POST postGetPantrySummaryFromPantryID received')
+    let pantry_id = req.body.pantry_id
+    let sendRows = [];
+    // Promise.all(sendRows).then()
+    console.log(sendRows)
+    res.status(200).send(sendRows)
 })
 
 

@@ -15,6 +15,8 @@ FEATURES:
 */
 
 function PantrySummary() {
+    let getPantryID = localStorage.getItem('pantry_id');
+    let pantry_id = (getPantryID != null) ? parseInt(getPantryID) : 1;
 
 
     return (
