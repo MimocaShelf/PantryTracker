@@ -1,17 +1,4 @@
 # Starter pipeline
-- task: AzureRmWebAppDeployment@5
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Azure subscription 1(cdef35dd-a2e4-477b-9bb5-aa674344c828)'
-    appType: 'webAppLinux'
-    WebAppName: 'PantryTracker'
-    deployToSlotOrASE: true
-    ResourceGroupName: 'PantryTracker_group'
-    SlotName: 'production'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-    RuntimeStack: 'NODE|22-lts'
-    StartupCommand: 'npm run dev'
-    DeploymentTypeLinux: 'oneDeploy'
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
@@ -57,3 +44,17 @@ steps:
 - script: |
     echo "sending build status notification to communication platforms"
   displayName: 'Build Succeeded'
+
+- task: AzureRmWebAppDeployment@5
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Azure subscription 1(cdef35dd-a2e4-477b-9bb5-aa674344c828)'
+    appType: 'webAppLinux'
+    WebAppName: 'PantryTracker'
+    deployToSlotOrASE: true
+    ResourceGroupName: 'PantryTracker_group'
+    SlotName: 'production'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    RuntimeStack: 'NODE|22-lts'
+    StartupCommand: 'npm run dev'
+    DeploymentTypeLinux: 'oneDeploy'
