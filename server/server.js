@@ -272,9 +272,9 @@ app.post('/postGetPantrySummaryFromPantryID', (req, res, next) => {
     }
 })
 
-
-
-
+/**************************************************/
+/* API Endpoints and Functions For Nutrition Page */
+/**************************************************/
 
 
 //function that queries the Nutrition Tracking API (Calorie Ninja) for a specific item and receives the nutrition values that is stored in a list
@@ -633,73 +633,71 @@ app.get('/getSpecificItems', (req, res) => {
     })
 })
 
+/**************************************************/
+/*  API Endpoints and Functions For Recipe Page   */
+/**************************************************/
 
-
-/* End of Nutrition */
-/* Recipe */
-
-//API endpoint that calls the API for a recipe for each meal prep time e.g. breakfast, lunch and dinner
+//API endpoint that calls the API to get a recipes for each pantry item
 app.get('/getRecipeForEachItem', (req, res) => {
 
      try{
-         readPantryItems(async (err, items) => {
-                if(err) {
-                    return res.status(500).send('Error getting pantry items record from database')
-                }
+        readPantryItems(async (err, items) => { //Queries the database to get all the pantry items
+            if(err) {
+                return res.status(500).send('Error getting pantry items record from database')
+            }
 
-                try {
-                    const results = await Promise.all(items.map(item => getRecipeSingle(item.item_name)));
+            try {
+                const results = await Promise.all(items.map(item => getRecipeSingle(item.item_name))); //Ensure that all pantry items are passed to a function that should provide a specific recipe as a response
 
-                    const recipes = await Promise.all(results.flat().map(p => p));
+                const recipes = await Promise.all(results.flat().map(p => p)); //Store all the recipes into a single variable
 
+                res.json(recipes) //Send the recipe list in a JSON format as a response
 
-                    console.log('All Recipe', recipes)
-                    res.json(recipes)
-
-                } catch(innerError){
-                    console.log('Error', innerError);
-                    res.status(500).send('Error Fetching Recipes');
-                }
-                
-            })
+            } catch(innerError){
+                console.log('Error', innerError);
+                res.status(500).send('Error Fetching Recipes');
+            }
+            
+        })
 
     } catch (outerError){
         console.error('Fetch Failed', outerError) //test this
     }
 }) 
 
+
+//API Endpoint that gets the recipe details based on the name
 app.post('/getSpecificRecipe', async (req, res) => {
     const recipe = req.body.recipe;
 
-                try {
-                    const results = await getRecipeSingle(recipe);
+    try {
+        const results = await getRecipeSingle(recipe); //Calls the function to query the external API to get the recipe details based on the recipe name
 
-                    console.log('Recipe Detail: ', results)
-                    res.json(results)
+        res.json(results) //Sends the recipe details as a JSON response
 
-                } catch(innerError){
-                    console.log('Error', innerError);
-                    res.status(500).send('Error Fetching Recipes');
-                }
+    } catch(innerError){
+        console.log('Error', innerError);
+        res.status(500).send('Error Fetching Recipes');
+    }
                 
 })
 
+//API Endpoint that provides a list of all the recipes the user has saved
 app.get('/getSavedRecipe', (req, res) => {
 
      try{
-         readAllRecipe(async (err, items) => {
+        //Queries the database to retrieve all the records from the recipe table (which represent all the recipes the user has saved)
+         readAllRecipe(async (err, items) => { 
                 if(err) {
                     return res.status(500).send('Error getting pantry items record from database')
                 }
 
                 try {
-                    const results = await Promise.all(items.map(item => getRecipeSingle(item.recipe_name)));
+                    const results = await Promise.all(items.map(item => getRecipeSingle(item.recipe_name))); //Ensure that all pantry items are passed to a function that should provide a specific recipe as a response
 
-                    const recipes = await Promise.all(results.flat().map(p => p));
+                    const recipes = await Promise.all(results.flat().map(p => p)); //Store all the recipes into a single variable
 
-
-                    console.log('All Recipe', recipes)
-                    res.json(recipes)
+                    res.json(recipes) //Send the recipe list in a JSON format as a response
 
                 } catch(innerError){
                     console.log('Error', innerError);
@@ -713,54 +711,48 @@ app.get('/getSavedRecipe', (req, res) => {
     }
 }) 
 
-
-
-
-//API endpoint that removes a pantry item in the meal prep table 
+//API Endpoint that removes a recipe from their saved recipe list
 app.post('/removeRecipe', (req, res) => {
 
-    //Stores the items from the request into the different variables
+    //Gets the recipe name from the request message
     const recipe = req.body.recipe;
 
-    console.log("recipe ", recipe);
-
-
-            //Calls a function that deletes the meal prep record that matches the pantry item ID and the meal time
-            deleteRecipe(recipe, err => {
-                if(err){ 
-                    res.status(500).send(err.message) 
-                } else {
-                    res.send({success: true, message: 'Recipe removed'})
-                }
+    //Calls a CRUD function that deletes the recipe recorded that matches the recipe name
+    deleteRecipe(recipe, err => {
+        if(err){ 
+            res.status(500).send(err.message) 
+        } else {
+            res.send({success: true, message: 'Recipe removed'})
+        }
     })  
     
 })
 
+//API Endpoint that adds the list of ingredients to the user's shopping list
 app.post('/addToShoppingList', async (req, res) => {
-     const ingredients = req.body.ingredients;
 
-     const ingredientList = extractIngredientList(ingredients)
-     console.log(ingredientList);
+    const ingredients = req.body.ingredients; //Extract the ingredients list from the request message
+
+    const ingredientList = extractIngredientList(ingredients) //Calls a function that extracts that removes the measurements and splits ingredient string to become a list of ingredients
 
     try {
+        //Loops through each ingredient in the ingredient list
         for(const ingredient of ingredientList){
+
             const name = ingredient.toLowerCase();
 
-            const inPantry = await readSpecificPantryItemsAsync(name);
-            const inShoppingList = await checkForShoppingListAsync(name);
+            const inPantry = await readSpecificPantryItemsAsync(name); //Check if the ingredient is already listed as a record in the user's pantry
+            const inShoppingList = await checkForShoppingListAsync(name); //Check if the ingredient is already a record in the user's shopping list
 
-            console.log(inPantry);
-            console.log(inShoppingList);
-
+            //If there are no records retrieve (indicating the ingredient is in neither tables), add a new record with the ingredient name and quantity as 1
             if(inPantry.length === 0 && inShoppingList.length === 0){
                 await insertShoppingIngredientAsync(name, 1)
-                console.log('add item to list ', name);
             } else {
                 console.log('item in system');
             }
-            
 
         }
+        //Send a response back to the frontend indicated the ingredient has been added to the shopping list
         res.status(200).json({message: 'shopping list updated successfully'});
         
     } catch(error) {
@@ -771,16 +763,49 @@ app.post('/addToShoppingList', async (req, res) => {
     
 })
 
+//Function that removes the measurements such as '1 cup,' '2 tablespoon'
 function extractIngredient(ingredientList) {
     return ingredientList.replace(/^\d+\/?\d*\s*(cup|tablespoon|teaspoon)?\s*/i, '').trim();
 }
 
+//Function that splits the ingredient string into a list instead by splitting whenever a '|' character is encountered
+//Removes any words that is followed by ':' to eliminate the ingredient categories
 function extractIngredientList(ingredientList) {
     return ingredientList.split('|').map(item=> item.trim()).filter(item => item && !item.endsWith(':')).map(extractIngredient);
 }
 
+//API endpoint that allow users to save recipes
+app.post('/addToSavedRecipes', (req, res) => {
 
+    const recipe = req.body.recipe; //Extracts the recipe name from the request message
 
+    try {
+        //Function that checks whether the recipe is already saved in the database (indicating its a 'saved' recipe)
+        checkIfRecipeIsSaved(recipe, async (err, rows) => {
+            if(err){
+                res.status(500).send(err.message)
+            }  
+
+            //If there is a record present, return a response message indicating 'failed' to save to database due to record existing
+            if(rows.length === 1){
+                console.log("Item exist");
+                return res.send({success: false, recipe})
+            }
+            
+            //Insert a record into the recipe table with the recipe name
+            insertIntoRecipe(recipe, async (err) => {
+                if(err){
+                    res.status(500).send(err.message)
+                }   
+                res.send({success: true, recipe}) //Return a response message to indicate recipe has been successfully saved in the database
+            })
+
+        })
+
+    } catch (outerError){
+        res.status(500).send('Unexpected Error');
+    }
+})
 
 
 app.get('/api/test', (req, res) => {
@@ -806,40 +831,7 @@ app.get('/getLowStockItems', (req, res) => {
     });
 });
 
-//API endpoint that sets a specific pantry item as a record in the meal prep table
-app.post('/addToSavedRecipes', (req, res) => {
-    const recipe = req.body.recipe; //variable storing the ingredient name
 
-    console.log('Received front frontend', recipe);
-
-    try {
-        //function that attempts to find the specific pantry item record based on the item name received from the request body
-            
-            checkIfRecipeIsSaved(recipe, async (err, rows) => {
-                if(err){
-                    res.status(500).send(err.message)
-                }  
-
-                    if(rows.length === 1){
-                        console.log("Item exist");
-                        return res.send({success: false, recipe})
-                    }
-                    
-                    //Insert a record into the meal prep table with the pantry item ID and meal slot ID
-                    insertIntoRecipe(recipe, async (err) => {
-                        if(err){
-                            res.status(500).send(err.message)
-                        }   
-                        console.log("successfully added", recipe)
-                        res.send({success: true, recipe})
-                    })
-
-            })
-
-    } catch (outerError){
-        res.status(500).send('Unexpected Error');
-    }
-})
 
 
 // --- Shopping List Endpoints ---
