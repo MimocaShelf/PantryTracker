@@ -502,8 +502,6 @@ button:focus-visible {
   max-width: 1200px;
   margin: auto;
   font-family: inherit;
-  
-
 }
 
 .react-calendar {
@@ -519,28 +517,49 @@ button:focus-visible {
   vertical-align: top;
   padding: 8px;
   overflow-y: auto;
-  border: 1px solid #cbcefd !important;
+  border: 1px solid #9da1eb !important;
   border: none;
   background-color: #1e1e1e !important;
+}
+
+.react-calendar__tile:hover {
+  background-color: #d1cbcb !important;
+  transition: background-color 0.2s ease;
+  color: #020202;
+}
+
+.react-calendar__tile--now {
+  background-color: #4349d8 !important; 
 }
 
 .react-calendar__tile abbr {
   display: none;
 }
 
+.react-calendar__navigation {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  border-bottom: 1px solid #444;
+}
+
+.react-calendar__navigation button:hover {
+  background-color: #000000; 
+  color: #090909; 
+}
+
 .react-calendar__month-view__weekdays {
   font-weight: bold;
   text-align: center;
-  background-color: #000000;
   padding: 10px 0;
   display: grid !important;
   grid-template-columns: repeat(7, 1fr);
   gap: 1px;
-  background-color: #1e1e1e !important
+  background-color: #1e1e1e !important;
 }
 
 .tile-meals {
   font-size: 12px;
+  font-family: inherit;
   margin-top: 6px;
   margin-bottom: 15px;
 }
@@ -597,6 +616,8 @@ button:focus-visible {
   left: 6px;
   font-weight: bold;
   font-size: 14px;
+  color: #ffffff;
+  transition: color 0.2s;
 }
 
 .tile-meals {
@@ -604,10 +625,16 @@ button:focus-visible {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  color: #ffffff;
+  transition: color 0.2s;
+}
+
+.tile-meals:hover{
+  color: #000000;
 }
 
 .tile-meal {
-  font-size: 15px;
+  font-size: 13px;
   line-height: 1.2;
   text-align: left;
 }
@@ -687,6 +714,7 @@ button:focus-visible {
 
 .tile-button:hover {
   border-color: #646cff;
+  color: #535bf2;
 }
 
 .react-calendar__tile:hover .tile-button {
