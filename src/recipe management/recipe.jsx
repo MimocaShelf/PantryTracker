@@ -122,7 +122,7 @@ function Recipe() {
           <button className="search-bar-button" onClick={() => navigate(`/recipeDetail/${slugifyName(item.title)}`)}>View More</button>
         </div>
         {savedRecipe === item.title && (
-          <p class="successMessage">{item.title} has been successfully added to meal prep</p>
+          <p class="successMessage">{item.title} has been successfully added to saved recipes</p>
         )}
       </div>
     ));
