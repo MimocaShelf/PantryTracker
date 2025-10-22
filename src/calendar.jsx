@@ -84,6 +84,9 @@ function CalendarMealPlanner() {
       <Calendar
         onClickDay={setSelectedDate}
         tileContent={renderTileContent}
+        view='month'
+        maxDetail='month'
+        defaultActiveStartDate={new Date()}
       />
 
       {showModal && selectedDate && (
