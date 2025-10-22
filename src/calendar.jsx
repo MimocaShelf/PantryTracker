@@ -70,7 +70,7 @@ function CalendarMealPlanner() {
             openModalForDate(date);
           }}
         >
-          Plan Meals
+          Plan Meal(s)
         </button>
       </div>
     );
@@ -79,6 +79,8 @@ function CalendarMealPlanner() {
   return (
     <div className="calendar-wrapper">
       <h1>Monthly Meal Planner</h1>
+       <p>View your monthly calendar and see what meals you've planned for each day!</p>
+        <p>Click the "Plan Meals" button on any date to add, update or delete breakfast, lunch and/or dinner entries.</p>
       <Calendar
         onClickDay={setSelectedDate}
         tileContent={renderTileContent}
