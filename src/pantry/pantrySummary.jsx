@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getPantries } from './getPantries';
+import { getPantryInformation, getLatestPantryItem } from './getPantries';
 
 
 /*
@@ -19,15 +19,54 @@ function PantrySummary() {
     let pantry_id = (getPantryID != null) ? parseInt(getPantryID) : 1;
 
 
+    let getPantryInformationFromPantryID = getPantryInformation(pantry_id);
+    let getLatestPantryItemFromPantryID = getLatestPantryItem(pantry_id);
+
+    let [pantryInfo, setPantryInfo] = useState({})
+    let [pantryItems, setPantryItems] = useState([])
+    let [latestPantryItem, setLatestPantryItem] = useState({})
+
+    async function updatePantryInfo() {
+        await getPantryInformationFromPantryID.then((data) => {
+            setPantryInfo(data.info)
+            setPantryItems(data.items)
+            // console.log(pantryInfo)
+            // console.log(pantryItems)
+        })
+    }
+    async function updateLatestPantryItem() {
+        await getLatestPantryItemFromPantryID.then((data) => {
+            setLatestPantryItem(data)
+            console.log(latestPantryItem)
+        })
+    }
+
+    useEffect(() => {
+        updatePantryInfo();
+        updateLatestPantryItem();
+    }, [pantryInfo.pantry_name])
+
+    let extraInfoText = (extra_info) => {
+        if (extra_info != null) {
+            return "with extra info \""+extra_info+"\""
+        }
+        return null;
+    }
+
     return (
         <div className="PantrySummary">
             <div class="section">
-                <h1>Pantry Summary</h1>
-
-
-
+                
+                <h1>Pantry Summary for {pantryInfo.pantry_name}</h1>
                 <div class="genericContentBox">
-
+                    <h2>Owner</h2>
+                    <p>{pantryInfo.pantry_owner}</p>
+                    <h2>Pantry ID</h2>
+                    <p>{pantryInfo.pantry_id}</p>
+                    <h2>Pantry Size</h2>
+                    <p>{pantryInfo.pantry_name} has {pantryItems.length} item types</p>
+                    <h2>Latest Pantry Item</h2>
+                    <p>{latestPantryItem.item_name} ({latestPantryItem.quantity} {latestPantryItem.unit}) added on {latestPantryItem.time} {extraInfoText(latestPantryItem.extra_info)}</p>
                 </div>
             </div>
         </div>

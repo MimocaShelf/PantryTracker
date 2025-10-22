@@ -4,12 +4,11 @@ import https from 'https'; // Import https for API requests
 import { promisify } from 'util';
 
 import {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep, deleteRecipe, insertIntoRecipe, checkIfRecipeIsSaved, readAllRecipe, checkForShoppingList, insertShoppingIngredient} from './crud.js'
-import {addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryItemsFromPantryID, getPantryName, getPantryInformation} from './pantryLogic.js'
+import {addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryItemsFromPantryID, getPantryName, getPantryInformation, getLatestAddedItemHistory, getLatestAddedItemFromPantryID} from './pantryLogic.js'
 import { readAllPantries, insertPantry, deletePantry } from './crud.js';
 
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
-import { getPantryItems } from '../src/pantry/getPantries.js';
 
 const app = express();
 
@@ -178,6 +177,41 @@ app.get('/getLatestAddeditem', (req,res) => {
     }
     
 })
+//same thing with the history table
+app.get('/getLatestAddedItemHistory', (req,res) => {
+    console.log('GET getLatestAddedItemHistory received.')
+    try {
+        getLatestAddedItemHistory().then(value => {
+            res.status(200).send(value)
+        })
+    }
+    catch (err) {
+        res.status(500).send(err)
+    }
+    
+})
+app.post('/postGetLatestAddedItemFromPantryID', (req,res) => {
+    console.log('POST postGetLatestAddedItemFromPantryID received.')
+    try {
+        getLatestAddedItemFromPantryID(req.body.pantry_id).then(value => {
+            res.status(200).send(value)
+        })
+    }
+    catch (err) {
+        res.status(500).send(err)
+    }
+    /* example of a returned json 
+    {
+        "time": "2025-10-22 19:04:34",
+        "pantry_item_id": 9,
+        "pantry_id": 1,
+        "item_name": "Carrots",
+        "extra_info": null,
+        "quantity": 5,
+        "unit": "grams"
+    }
+    */
+})
 
 
 //Function to get all pantries for a given user
@@ -228,7 +262,7 @@ app.post('/postGetPantrySummaryFromPantryID', (req, res, next) => {
     let pantry_id = req.body.pantry_id
 
     try {
-        Promise.all([getPantryInformation(pantry_id), getPantryItems(pantry_id)]).then((data) => {
+        Promise.all([getPantryInformation(pantry_id), getPantryItemsFromPantryID(pantry_id)]).then((data) => {
             let info = data[0];
             let items = data[1];
             res.status(200).json({info: info, items: items})
