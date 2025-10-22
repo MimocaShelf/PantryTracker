@@ -114,7 +114,7 @@ button:focus-visible {
   text-align: center;
 }
 
-.search-bar-button {
+.search-bar-button, .right-aligned > button {
   background-color: light-dark(var(--blue), var(--lavender));
   color: light-dark(var(--white), var(--blue));
 }
@@ -125,6 +125,7 @@ button:focus-visible {
 
 .warning-message {
   font-style: italic;
+  font-weight: normal;
   padding-top: 10px;
   font-size: 15px;
 }
@@ -200,6 +201,12 @@ button:focus-visible {
   cursor: pointer;
 }
 
+.successMessage {
+  text-align: right;
+  font-style: italic;
+  color: var(--purple);
+}
+
 .mealTimes {
   border: 3px solid light-dark(var(--blue), var(--white));
   border-radius: 10px;
@@ -209,7 +216,6 @@ button:focus-visible {
   position: relative;
   justify-content: left;
   text-align: left;
-  font-weight: bold;
 }
 
 .mealTimes > .row {
@@ -246,6 +252,10 @@ button:focus-visible {
 .recipeDetails {
   text-align: left;
   padding-left: 100px;
+}
+
+.recipe-detail-section {
+  padding-bottom: 50px;
 }
 
 /*end of nutrition*/

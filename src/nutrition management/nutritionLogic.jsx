@@ -7,6 +7,7 @@ function NutritionLogic() {
   const [selectedTime, setSelectedTime] = useState({});
   const [sortBy, setSortBy] = useState('calories');
   const [orderBy, setOrderBy] = useState('ascending');
+  const [ingredientAdded, setIngredientAdded] = useState(null);
 
   //Function that acquires all the nutrition values for each pantry item 
   function getNutritionValues() {
@@ -66,6 +67,9 @@ function NutritionLogic() {
       //If backend server response as success is failed, it indicates a record exist for that specific item and meal time
       if(!data.success) {
         alert("This item is already set for " + time) //Triggers a JavaScript alert indicating item has been set for that meal time
+      } else {
+        setIngredientAdded(item.itemName); //Adds the item name into list to ensure successful reponse prompt is triggered when rendering item
+        setTimeout(() => setIngredientAdded(null), 2000); //Ensure success message appears and disappears
       }
     })
     .catch(err => console.error('Error sending data: ', err))
@@ -115,6 +119,9 @@ function NutritionLogic() {
               <option>Dinner</option>
           </select>
         </div>
+        {ingredientAdded === item.itemName && (
+          <p class="successMessage">{item.itemName} has been successfully added to meal prep</p>
+        )}
       </div>
     ));
   }
