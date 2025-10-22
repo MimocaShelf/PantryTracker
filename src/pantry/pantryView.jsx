@@ -82,7 +82,7 @@ function PantryView() {
                     <div class="pantryCard">
                         <h2>{entry.item_name}</h2>
                         <p>Extra Information: {entry.extra_info}</p>
-                        <p>Amount: {entry.quantity} {entry.units}</p>
+                        <p>Amount: {entry.quantity} {entry.unit}</p>
                     </div>
                 ))}
             </div>
