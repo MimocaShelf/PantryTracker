@@ -28,7 +28,7 @@ function RecipeDetail() {
         })
         .then(res => res.json())
         .then(data => {
-            setAddedToShoppingList(recipe); //Adds the recipe into list to ensure successful reponse prompt is triggered when rendering item
+            setAddedToShoppingList(data); //Adds the recipe into list to ensure successful reponse prompt is triggered when rendering item
             setTimeout(() => setAddedToShoppingList(null), 2000); //Ensure success message appears and disappears
         })
         .catch(err => console.error('Error sending data: ', err))
