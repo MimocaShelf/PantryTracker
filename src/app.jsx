@@ -23,6 +23,7 @@ import UserContext from "./context/UserContext.jsx";
 import { useState } from "react";
 import PantrySummary from "./pantry/pantrySummary.jsx";
 import toast, { Toaster } from 'react-hot-toast';
+import Logout from "./logout.jsx";
 // import './sql/app.js';
 // import './nutritionLogic.js';
 
@@ -52,9 +53,10 @@ function App() {
                     <Route path="/addToPantry" element={<AddToPantry />} />
                     <Route path="/user" element={<User />} />
                     <Route path="/household" element={<Household />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/logout" element={<Logout />} />
                     <Route path="/shoppingList" element={<ShoppingList />} />
                     <Route path="/shoppingMode" element={<ShoppingMode />} /> 
-                    <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/pantryView" element={<PantryView />} /> 
                     <Route path="/priceCompare" element={<PriceCompare />} />
