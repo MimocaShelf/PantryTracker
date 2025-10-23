@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 function Home() {
     return (
     <div>
-        <h1>Pantry Tracker Home Page</h1>
+        <h1>Welcome To Pantry Tracker</h1>
+        <p>Your one stop platform to track which ingredients you have in your pantry, what you need to buy in your next trip and what recipes can you make!</p>
         <nav>
             <ul>
                 <li id="homeList"><Link to="/pantry">Go to Pantry</Link></li>
