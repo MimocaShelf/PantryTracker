@@ -207,6 +207,15 @@ function getPantryHistoryFromPantryID(pantry_id) {
 }
 
 
+function getUserFromUserID(user_id) {
+    return new Promise((resolve, reject) => {
+        db.get('SELECT * FROM users WHERE user_id = ?', [user_id], async (err, rows) => {
+            if (err) {
+                reject(err)
+            }
+            resolve(rows)
+        })
+    })
+}
 
-
-export { addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryName, getPantryItemsFromPantryID, getPantryInformation, getLatestAddedItemHistory, deletePantryItemFromPantryItemID, getLatestAddedItemFromPantryID, editItemInPantry, getPantryItemFromPantryItemID, getPantryHistoryFromPantryID};
+export {getUserFromUserID,  addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryName, getPantryItemsFromPantryID, getPantryInformation, getLatestAddedItemHistory, deletePantryItemFromPantryItemID, getLatestAddedItemFromPantryID, editItemInPantry, getPantryItemFromPantryItemID, getPantryHistoryFromPantryID};

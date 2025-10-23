@@ -4,7 +4,7 @@ import https from 'https'; // Import https for API requests
 import { promisify } from 'util';
 
 import {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep, deleteRecipe, insertIntoRecipe, checkIfRecipeIsSaved, readAllRecipe, checkForShoppingList, insertShoppingIngredient} from './crud.js'
-import {addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryItemsFromPantryID, getPantryName, getPantryInformation, getLatestAddedItemHistory, getLatestAddedItemFromPantryID, deletePantryItemFromPantryItemID, editItemInPantry, getPantryItemFromPantryItemID, getPantryHistoryFromPantryID} from './pantryLogic.js'
+import {addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryItemsFromPantryID, getPantryName, getPantryInformation, getLatestAddedItemHistory, getLatestAddedItemFromPantryID, deletePantryItemFromPantryItemID, editItemInPantry, getPantryItemFromPantryItemID, getPantryHistoryFromPantryID, getUserFromUserID} from './pantryLogic.js'
 import { readAllPantries, insertPantry, deletePantry } from './crud.js';
 
 import userRoutes from './routes/userRoutes.js';
@@ -292,6 +292,17 @@ app.post('/postGetPantryHistoryFromPantryID', (req, res, next) => {
         res.status(500).send(err.message)
     })
 })
+
+app.post('/postGetPantryUserFromUserID', (req, res, next) => {
+    console.log('POST postGetPantryUserFromUserID received')
+
+    getUserFromUserID(req.body.user_id).then(value => {
+        res.status(200).send(value)
+    }).catch(err => {
+        res.status(500).send(err.message)
+    })
+})
+
 
 /**************************************************/
 /* API Endpoints and Functions For Nutrition Page */

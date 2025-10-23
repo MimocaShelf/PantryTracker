@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import {getUser} from './pantry/getPantries.js'
 
 function Pantry() {
   const [pantries, setPantries] = useState([]);
@@ -9,19 +10,37 @@ function Pantry() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("Alphabetical");
   const [recentlyUsed, setRecentlyUsed] = useState({});
+  const defaultOwner = "Temporary Owner";
 
+
+  let getUserID = parseInt(localStorage.getItem('user_id'));
+  let user_id = (getUserID != null) ? getUserID : -1;
+  
+  let getUserFromUserID = getUser(user_id);
+  
+  let [username, setUsername] = useState(defaultOwner);
+  async function updateUsername() {
+    getUserFromUserID.then(data => {
+      setUsername(data.name);
+    })
+  }
+
+  useEffect(() => {
+    updateUsername();
+  })
   // Add new pantry
   const handleAddPantry = async (e) => {
     e.preventDefault();
     if (newPantryName.trim()) {
-      const defaultOwner = "Temporary Owner";
+
+
 
       try {
         const response = await fetch('http://localhost:3001/addPantry', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            pantry_owner: defaultOwner,
+            pantry_owner: username,
             pantry_name: newPantryName
           })
         });
