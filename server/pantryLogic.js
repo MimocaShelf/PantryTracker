@@ -194,8 +194,19 @@ function getPantryItemFromPantryItemID(pantry_item_id) {
         })
     })
 }
+function getPantryHistoryFromPantryID(pantry_id) {
+    const sql = 'SELECT * FROM pantry_items_status_record WHERE pantry_id = ?'
+    return new Promise((resolve, reject) => {
+        db.all(sql, [pantry_id], async (err, rows) => {
+            if (err) {
+                reject(err)
+            }
+            resolve(rows)
+        })
+    })
+}
 
 
 
 
-export { addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryName, getPantryItemsFromPantryID, getPantryInformation, getLatestAddedItemHistory, deletePantryItemFromPantryItemID, getLatestAddedItemFromPantryID, editItemInPantry, getPantryItemFromPantryItemID};
+export { addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryName, getPantryItemsFromPantryID, getPantryInformation, getLatestAddedItemHistory, deletePantryItemFromPantryItemID, getLatestAddedItemFromPantryID, editItemInPantry, getPantryItemFromPantryItemID, getPantryHistoryFromPantryID};
