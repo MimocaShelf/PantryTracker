@@ -56,7 +56,7 @@ function PantrySummary() {
     return (
         <div className="PantrySummary">
             <div class="section">
-                
+                <a href="pantryview"><button type="button">Go Back to the Pantry View</button></a>
                 <h1>Pantry Summary for {pantryInfo.pantry_name}</h1>
                 <div class="genericContentBox">
                     <h2>Owner</h2>

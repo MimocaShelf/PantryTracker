@@ -51,3 +51,29 @@ describe('Testing addItemDataValidation', () => {
     expect(testFunc).toBe(true);
   })
 })
+describe('Testing editItemDataValidation', () => {
+  test('should return false when all fields are null', () => {
+    let testFunc = editItemDataValidation(null, null, null,null,null,null)
+    expect(testFunc).toBe(false);
+  })
+  test('should return false when pantry_item_id is null', () => {
+    let testFunc = editItemDataValidation(null, 1, 'Apple',null,5,'units')
+    expect(testFunc).toBe(false);
+  })
+  test('should return false when pantry_id is null', () => {
+    let testFunc = editItemDataValidation(1, null, 'Apple',null,5,'units')
+    expect(testFunc).toBe(false);
+  })
+  test('should return false when item_name is null', () => {
+    let testFunc = editItemDataValidation(1, 1, null,null,5,'units')
+    expect(testFunc).toBe(false);
+  })
+  test('should return false when unit is null', () => {
+    let testFunc = editItemDataValidation(1, 1, 'Apple',null,5,null)
+    expect(testFunc).toBe(false);
+  })
+  test('should return true when all fields are valid', () => {
+    let testFunc = editItemDataValidation(1, 1, 'Apple',null,5,'units')
+    expect(testFunc).toBe(true);
+  })
+})

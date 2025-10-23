@@ -87,10 +87,11 @@ function PantryView() {
         <div class="section">
             <h1>View of {pantryName}</h1>
             <div>
-                <button>Filters</button>
-                <button>Order By</button>
+                {/* <button>Filters</button>
+                <button>Order By</button> */}
+                <a href="pantrysummary"><button type="button">View Pantry Summary</button></a>
                 <a href="addtopantry"><button type="button">Add Item</button></a>
-                <input id="search-bar" placeholder='Search...' type="text" />
+                {/* <input id="search-bar" placeholder='Search...' type="text" /> */}
             </div>
             <br></br>
             <div class="pantryCards">
