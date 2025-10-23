@@ -39,4 +39,11 @@ app.post('/signup', (req, res) => {
 });
 
 
+// Logout user
+app.post('/logout', (req, res) => {
+    // Implement logout logic here
+    res.status(200).json({ message: 'Logged out successfully.' });
+});
+
+
 export default app;

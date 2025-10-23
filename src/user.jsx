@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 
 function User() {
     // State for user information
-    const [userData, setUserData] = useContext(UserContext);
+    const {userData, setUserData} = useContext(UserContext);
     const [isEditing, setIsEditing] = useState(false);
     const [editedUserData, setEditedUserData] = useState({...userData});
     const [deleteConfirm, setDeleteConfirm] = useState(false);
@@ -82,10 +82,11 @@ function User() {
     
     return (
         <div>
-            <div className="section">
+            <div className="user-container">
+                <div className="user-card">
                 <h1>User Profile</h1>
                 <p>Manage your profile information and pantries</p>
-            </div>
+            
 
             {/*Conditional rendering based on whether user is logged in*/}
             {userData === null ? (
@@ -133,7 +134,7 @@ function User() {
                         <div className="row">
                             <div className="left-container">
                                 <img 
-                                    src={userData.profilePicture ? userData.profilePicture : userProfile} 
+                                    src={userData.profilePicture ? userData.profilePicture : '../src/images/icon.png'} 
                                     alt={`${userData.name}'s profile`} 
                                     style={{ width: '150px', height: '150px', borderRadius: '50%' }}
                                 />
@@ -141,7 +142,7 @@ function User() {
                             <div className="right-container">
                                 <h3>{userData.name}</h3>
                                 <p>{userData.email}</p>
-                                <button onClick={() => setIsEditing(true)}>Edit Profile</button>
+                                <button className='user-button' onClick={() => setIsEditing(true)}>Edit Profile</button>
                             </div>
                         </div>
                     </div>
@@ -149,6 +150,8 @@ function User() {
             </div>
             )}
 
+                </div>
+            </div>
         </div>
     );
 }
