@@ -1,5 +1,5 @@
 import db from './sql/app.js'
-import { addItemDataValidation } from './pantryValidation.js'
+import './pantryValidation.js'
 
 /*
     take input from addToPantry:

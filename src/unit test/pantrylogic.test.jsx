@@ -3,9 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
-import '../pantry/addToPantry.jsx';
-import '../pantry/getPantries.js';
-import { getPantries } from '../pantry/getPantries.js';
+import {addItemDataValidation} from '../../server/pantryValidation.js'
 
 // Mock the fetch API
 global.fetch = vi.fn();
@@ -31,9 +29,25 @@ const localStorageMock = {
 global.localStorage = localStorageMock;
 
 
-describe('Testing getPantries', () => {
-  it('should return json body of fetch request', () => {
-    let json = getPantries(3);
-    expect(json).toBe({})
+describe('Testing addItemDataValidation', () => {
+  test('should return false when all fields are null', () => {
+    let testFunc = addItemDataValidation(null, null,null,null,null)
+    expect(testFunc).toBe(false);
+  })
+  test('should return false when pantry_id is null', () => {
+    let testFunc = addItemDataValidation(null, 'Apple',null,5,'units')
+    expect(testFunc).toBe(false);
+  })
+  test('should return false when item_name is null', () => {
+    let testFunc = addItemDataValidation(1, null,null,5,'units')
+    expect(testFunc).toBe(false);
+  })
+  test('should return false when unit is null', () => {
+    let testFunc = addItemDataValidation(1, 'Apple',null,5,null)
+    expect(testFunc).toBe(false);
+  })
+  test('should return true when all fields are valid', () => {
+    let testFunc = addItemDataValidation(1, 'Apple',null,5,'units')
+    expect(testFunc).toBe(true);
   })
 })
