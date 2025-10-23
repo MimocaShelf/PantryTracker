@@ -5,6 +5,9 @@ function ShoppingMode() {
     const [itemsToBuy, setItemsToBuy] = useState([]);
     const [boughtItems, setBoughtItems] = useState([]);
     const [message, setMessage] = useState('');
+    const [pantries, setPantries] = useState([]);
+    const [selectedPantryId, setSelectedPantryId] = useState(null);
+    const [pantryError, setPantryError] = useState('');
 
     // Load shopping list from localStorage or backend
     useEffect(() => {
@@ -12,6 +15,35 @@ function ShoppingMode() {
         if (stored) {
             setItemsToBuy(JSON.parse(stored));
         }
+    }, []);
+
+    // Load user's pantries
+    useEffect(() => {
+        const userId = localStorage.getItem('user_id');
+        if (!userId) {
+            setPantryError('No user found. Please log in to select a pantry.');
+            return;
+        }
+
+        (async () => {
+            try {
+                const res = await fetch('http://localhost:3001/postGetPantriesForUser', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: Number(userId) }),
+                });
+                if (!res.ok) throw new Error('Failed to load pantries');
+                const data = await res.json();
+                setPantries(data || []);
+                if (data && data.length > 0) {
+                    setSelectedPantryId(data[0].pantry_id);
+                } else {
+                    setPantryError('No pantries found for this user.');
+                }
+            } catch (e) {
+                setPantryError('Error loading pantries.');
+            }
+        })();
     }, []);
 
     // Keep shopping list in sync with localStorage
@@ -28,6 +60,10 @@ function ShoppingMode() {
 
     // Send bought items to the backend to add to the DB and remove them from the shopping list
     const syncBoughtItems = async () => {
+        if (!selectedPantryId) {
+            setMessage('Please select a pantry before syncing.');
+            return;
+        }
         let success = true;
         for (const item of boughtItems) {
             // Add item to pantry
@@ -35,7 +71,7 @@ function ShoppingMode() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    pantry_id: 1, // Assuming pantry_id is 1 for now
+                    pantry_id: selectedPantryId,
                     item_name: item.name,
                     extra_info: 'None', // Default extra info
                     quantity: item.quantity,
@@ -74,6 +110,31 @@ function ShoppingMode() {
             <p style={{ color: 'black' }}>
                 Mark items as bought and add them to your pantry.
             </p>
+
+            {/* Pantry selector */}
+            <div style={{ margin: '16px 0' }}>
+                <label htmlFor="pantrySelect" style={{ color: 'black', marginRight: 8 }}>Destination Pantry:</label>
+                <select
+                    id="pantrySelect"
+                    data-testid="pantry-select"
+                    value={selectedPantryId ?? ''}
+                    onChange={(e) => setSelectedPantryId(Number(e.target.value))}
+                    disabled={pantries.length === 0}
+                    style={{ padding: '6px 10px', borderRadius: 6 }}
+                >
+                    {pantries.length === 0 ? (
+                        <option value="" disabled>
+                            {pantryError || 'Loading pantries...'}
+                        </option>
+                    ) : (
+                        pantries.map((p) => (
+                            <option key={p.pantry_id} value={p.pantry_id}>
+                                {p.pantry_name} (ID: {p.pantry_id})
+                            </option>
+                        ))
+                    )}
+                </select>
+            </div>
 
             <h2 style={{ color: 'black' }}>Items To Buy</h2>
             <ul style={{ listStyle: 'none', padding: 0 }}>
@@ -132,7 +193,7 @@ function ShoppingMode() {
 
             <button
                 onClick={syncBoughtItems}
-                disabled={boughtItems.length === 0}
+                disabled={boughtItems.length === 0 || !selectedPantryId}
                 style={{
                     marginTop: '20px',
                     background: 'var(--lavender)',
@@ -141,7 +202,7 @@ function ShoppingMode() {
                     borderRadius: '8px',
                     padding: '10px 24px',
                     fontWeight: 600,
-                    cursor: boughtItems.length === 0 ? 'not-allowed' : 'pointer',
+                    cursor: boughtItems.length === 0 || !selectedPantryId ? 'not-allowed' : 'pointer',
                 }}
             >
                 Add Bought Items to Pantry
