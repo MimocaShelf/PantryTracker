@@ -37,6 +37,7 @@ function Pantry() {
 
 
       try {
+
         const response = await fetch('http://localhost:3001/addPantry', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

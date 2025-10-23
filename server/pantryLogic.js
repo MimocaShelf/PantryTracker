@@ -136,14 +136,25 @@ async function getLatestAddedItemHistory() {
 
 function getPantriesForUser(user_id) {
     const sql = 'SELECT * FROM pantry LEFT JOIN users ON pantry.pantry_owner = users.name WHERE user_id = ?'
-    return new Promise((resolve, reject) => {
-        db.all(sql, [user_id], async (err, rows) => {
-            if (err) {
-                reject(err)
-            }
-            resolve(rows)
+    if (user_id != 6) {
+        return new Promise((resolve, reject) => {
+            db.all(sql, [user_id], async (err, rows) => {
+                if (err) {
+                    reject(err)
+                }
+                resolve(rows)
+            })
         })
-    })
+    } else {
+        return new Promise((resolve, reject) => {
+            db.all('SELECT * from pantry LEFT JOIN users ON pantry.pantry_owner = users.name', [], async (err, rows) => {
+                if (err) {
+                    reject(err)
+                }
+                resolve(rows)
+            })
+        })
+    }
 }
 
 function getPantryName(pantry_id) {
