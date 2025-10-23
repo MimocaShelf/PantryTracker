@@ -745,3 +745,15 @@ button:focus-visible {
 .react-calendar__tile:hover .tile-button {
   display: block;
 }
+
+.table {
+  background-color: var(--pink);
+  margin-left: auto;
+  margin-right: auto;
+}
+.table > tr:nth-child(odd) {
+  background-color: rgba(82, 21, 78, 0.1);
+}
+.table > tr > th:nth-child(odd), .table > tr > td:nth-child(odd) {
+  background-color: rgba(82, 21, 78, 0.1);
+}

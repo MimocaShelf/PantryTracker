@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getPantryInformation, getLatestPantryItem } from './getPantries';
+import { getPantryInformation, getLatestPantryItem, getPantryHistory} from './getPantries';
 
 
 /*
@@ -21,17 +21,35 @@ function PantrySummary() {
 
     let getPantryInformationFromPantryID = getPantryInformation(pantry_id);
     let getLatestPantryItemFromPantryID = getLatestPantryItem(pantry_id);
+    let getPantryHistoryFromPantryID = getPantryHistory(pantry_id);
 
     let [pantryInfo, setPantryInfo] = useState({})
     let [pantryItems, setPantryItems] = useState([])
     let [latestPantryItem, setLatestPantryItem] = useState({})
+    let [pantryHistory, setPantryHistory] = useState([])
+
+    function convertStatus(string) {
+        switch (string) {
+            case 'C':
+                return 'Created';
+            case 'R':
+                return 'Read';
+            case 'U':
+                return 'Updated';
+            case 'D':
+                return 'Deleted';
+        }
+    } 
 
     async function updatePantryInfo() {
         await getPantryInformationFromPantryID.then((data) => {
             setPantryInfo(data.info)
             setPantryItems(data.items)
-            // console.log(pantryInfo)
-            // console.log(pantryItems)
+        })
+    }
+    async function updatePantryHistory() {
+        await getPantryHistoryFromPantryID.then((data) => {
+            setPantryHistory(data)
         })
     }
     async function updateLatestPantryItem() {
@@ -44,6 +62,7 @@ function PantrySummary() {
     useEffect(() => {
         updatePantryInfo();
         updateLatestPantryItem();
+        updatePantryHistory();
     }, [pantryInfo.pantry_name])
 
     let extraInfoText = (extra_info) => {
@@ -56,7 +75,7 @@ function PantrySummary() {
     return (
         <div className="PantrySummary">
             <div class="section">
-                
+                <a href="pantryview"><button type="button">Go Back to the Pantry View</button></a>
                 <h1>Pantry Summary for {pantryInfo.pantry_name}</h1>
                 <div class="genericContentBox">
                     <h2>Owner</h2>
@@ -67,6 +86,34 @@ function PantrySummary() {
                     <p>{pantryInfo.pantry_name} has {pantryItems.length} item types</p>
                     <h2>Latest Pantry Item</h2>
                     <p>{latestPantryItem.item_name} ({latestPantryItem.quantity} {latestPantryItem.unit}) added on {latestPantryItem.time} {extraInfoText(latestPantryItem.extra_info)}</p>
+                    <h2>Pantry History</h2>
+                    <table class='table'>
+                        <tr>
+                            <th>Status</th>
+                            <th>Time</th>
+                            <th>Item ID</th>
+                            <th>Pantry ID</th>
+                            <th>Item Name</th>
+                            <th>Extra Info</th>
+                            <th>Quantity</th>
+                            <th>Units</th>
+                        </tr>
+                        {
+                            pantryHistory.map(entry => (
+                                <tr >
+                                    <td>{convertStatus(entry.status)}</td>
+                                    <td>{entry.time}</td>
+                                    <td>{entry.pantry_item_id}</td>
+                                    <td>{entry.pantry_id}</td>
+                                    <td>{entry.item_name}</td>
+                                    <td>{entry.extra_info}</td>
+                                    <td>{entry.quantity}</td>
+                                    <td>{entry.unit}</td>
+                                </tr>
+                            ))
+                        }
+
+                    </table>
                 </div>
             </div>
         </div>

@@ -50,6 +50,36 @@ async function getLatestPantryItem(pantry_id) {
             return response.json();
         })
     }
+async function postDeletePantryItem(pantry_item_id) {
+        return await fetch('http://localhost:3001/postDeletePantryItemFromPantryID', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({'pantry_item_id': pantry_item_id})
+            }
+        ).then((response) => {
+            return response.json();
+        })
+    }
+async function getPantryItem(pantry_item_id) {
+        return await fetch('http://localhost:3001/postGetPantryItemFromPantryItemID', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({'pantry_item_id': pantry_item_id})
+            }
+        ).then((response) => {
+            return response.json();
+        })
+    }
+async function getPantryHistory(pantry_id) {
+        return await fetch('http://localhost:3001/postGetPantryHistoryFromPantryID', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({'pantry_id': pantry_id})
+            }
+        ).then((response) => {
+            return response.json();
+        })
+    }
 
-export {getPantries, getPantryItems, getPantryName, getPantryInformation, getLatestPantryItem};
+export {getPantries, getPantryItems, getPantryName, getPantryInformation, getLatestPantryItem, postDeletePantryItem, getPantryItem, getPantryHistory};
 
