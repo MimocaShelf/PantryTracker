@@ -74,11 +74,12 @@ function EditPantryItem() {
         sendBody.extra_info = formData.get('extra_info');
         sendBody.quantity = formData.get('quantity');
         sendBody.unit = formData.get('unit');
-        sendBody.pantry_id = parseInt(pantry)
+        sendBody.pantry_id = formData.get('pantries');
         console.log('Submitted')
-        sendPostEditItemInPantry()
-        localStorage.setItem('pantry', pantry)
-        navigate('/pantryview')
+        sendPostEditItemInPantry().then(() => {
+            localStorage.setItem('pantry_id', formData.get('pantries'))
+            navigate('/pantryview')
+        })
         
     }
 

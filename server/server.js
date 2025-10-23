@@ -135,7 +135,7 @@ app.get('/getAllItems', (req, res) => {
     })
 })
 
-//recieve post requests, will add an item with the following format
+//receive post requests, will add an item with the following format
 /* example request:
 HEADER:
 {"Content-Type": "application/json"}
@@ -153,63 +153,49 @@ BODY:
 app.post('/postAddItemToPantry', (req, res, next) => {
     console.log('POST postAddItemToPantry received.')
     let body = req.body;
-    try {
-        addItemToPantry(body.pantry_id, body.item_name, body.extra_info, body.quantity, body.unit).then(() => {
-            res.status(200).send('Recieved');
-        });
-    } 
-    catch (error) {
-        res.status(500).send(error);
-    }
+
+    addItemToPantry(body.pantry_id, body.item_name, body.extra_info, body.quantity, body.unit).then(() => {
+        res.status(200).send('Received');
+    }).catch(error => {
+        res.status(500).send(error.message);
+    });
 })
 
 
 //Function primarily used for testing. send a get request, and it will get the last item added in all pantries
 app.get('/getLatestAddeditem', (req,res) => {
     console.log('GET getLatestAddeditem received.')
-    try {
-        getLatestAddedItem().then(value => {
-            res.status(200).send(value)
-        })
-    }
-    catch (err) {
-        res.status(500).send(err)
-    }
+    getLatestAddedItem().then(value => {
+        res.status(200).send(value)
+    }).catch(err => {
+        res.status(500).send(err.message)
+    })
     
 })
 //same thing with the history table
 app.get('/getLatestAddedItemHistory', (req,res) => {
     console.log('GET getLatestAddedItemHistory received.')
-    try {
-        getLatestAddedItemHistory().then(value => {
-            res.status(200).send(value)
-        })
-    }
-    catch (err) {
-        res.status(500).send(err)
-    }
+    getLatestAddedItemHistory().then(value => {
+        res.status(200).send(value)
+    }).catch(err => {
+        res.status(500).send(err.message)
+    })
 })
 app.get('/getLatestAddedItemHistory', (req,res) => {
     console.log('GET getLatestAddedItemHistory received.')
-    try {
-        getLatestAddedItemHistory().then(value => {
-            res.status(200).send(value)
-        })
-    }
-    catch (err) {
-        res.status(500).send(err)
-    }
+    getLatestAddedItemHistory().then(value => {
+        res.status(200).send(value)
+    }).catch(err => {
+        res.status(500).send(err.message)
+    })
 })
 app.post('/postGetLatestAddedItemFromPantryID', (req,res) => {
     console.log('POST postGetLatestAddedItemFromPantryID received.')
-    try {
-        getLatestAddedItemFromPantryID(req.body.pantry_id).then(value => {
-            res.status(200).send(value)
-        })
-    }
-    catch (err) {
-        res.status(500).send(err)
-    }
+    getLatestAddedItemFromPantryID(req.body.pantry_id).then(value => {
+        res.status(200).send(value)
+    }).catch(err => {
+        res.status(500).send(err.message)
+    })
     /* example of a returned json 
     {
         "time": "2025-10-22 19:04:34",
@@ -237,80 +223,66 @@ BODY:
 */
 app.post('/postGetPantriesForUser', (req, res, next) => {
     console.log('POST postGetPantriesForUser received')
-    try {
-        getPantriesForUser(req.body.user_id).then(value => {
-            res.status(200).send(value)
-        })
-    }
-    catch (err) {res.status(500).send(err)}
+    getPantriesForUser(req.body.user_id).then(value => {
+        res.status(200).send(value)
+    }).catch(err => {
+        res.status(500).send(err.message)
+    })
 })
 //gets the pantry name, needs field "pantry_id" in request
 app.post('/postGetPantryNameFromPantry', (req, res, next) => {
     console.log('POST postGetPantryNameFromPantry received')
-    try {
-        getPantryName(req.body.pantry_id).then(value => {
-            res.status(200).send(value)
-        })
-    }
-    catch (err) {res.status(500).send(err)}
+    getPantryName(req.body.pantry_id).then(value => {
+        res.status(200).send(value)
+    }).catch(err => {
+        res.status(500).send(err.message)
+    })
 })
 //returns a list of pantry items when given the pantry id
 app.post('/postGetPantryItemsFromPantryID', (req, res, next) => {
     console.log('POST postGetPantryItemsFromPantryID received')
-    try {
-        getPantryItemsFromPantryID(req.body.pantry_id).then(value => {
-            res.status(200).send(value)
-        })
-    }
-    catch (err) {
-        res.status(500).send(err)
-    }
+    getPantryItemsFromPantryID(req.body.pantry_id).then(value => {
+        res.status(200).send(value)
+    }).catch(err => {
+        res.status(500).send(err.message)
+    })
 })
 app.post('/postDeletePantryItemFromPantryID', (req, res, next) => {
     console.log('POST postDeletePantryItemFromPantryID received')
-    try {
-        deletePantryItemFromPantryItemID(req.body.pantry_item_id).then(value => {
-            res.status(200).send('DELETED')
-        })
-    }
-    catch (err) {
-        res.status(500).send(err)
-    }
+    deletePantryItemFromPantryItemID(req.body.pantry_item_id).then(value => {
+        res.status(200).send('DELETED')
+    }).catch(err => {
+        res.status(500).send(err.message)
+    })
 })
 app.post('/postEditPantryItemFromPantryItemID', (req, res, next) => {
     console.log('POST postEditPantryItemFromPantryItemID received')
-    try {
-        editItemInPantry(req.body.pantry_item_id, req.body.pantry_id, req.body.item_name, req.body.extra_info, req.body.quantity, req.body.unit).then(value => {
-            res.status(200).send('EDITED')
-        })
-    }
-    catch (err) {
-        res.status(500).send(err)
-    }
+    editItemInPantry(req.body.pantry_item_id, req.body.pantry_id, req.body.item_name, req.body.extra_info, req.body.quantity, req.body.unit).then(value => {
+        res.status(200).send('EDITED')
+    }).catch(err => {
+        res.status(500).send(err.message)
+    })
 })
 //submit all requests, wait for all of them with Promise.all then send.
 app.post('/postGetPantrySummaryFromPantryID', (req, res, next) => {
     console.log('POST postGetPantrySummaryFromPantryID received')
     let pantry_id = req.body.pantry_id
 
-    try {
-        Promise.all([getPantryInformation(pantry_id), getPantryItemsFromPantryID(pantry_id)]).then((data) => {
-            let info = data[0];
-            let items = data[1];
-            res.status(200).json({info: info, items: items})
-        })
-    } catch (err) {
-        res.status(500).send(err)
-    }
+    Promise.all([getPantryInformation(pantry_id), getPantryItemsFromPantryID(pantry_id)]).then((data) => {
+        let info = data[0];
+        let items = data[1];
+        res.status(200).json({info: info, items: items})
+    }).catch(err => {
+        res.status(500).send(err.message)
+    })
 })
 app.post('/postGetPantryItemFromPantryItemID', (req, res, next) => {
     console.log('POST postGetPantryItemFromPantryItemID received')
-    try {
-        getPantryItemFromPantryItemID(req.body.pantry_item_id).then(value => {
-            res.status(200).send(value)
-        })
-    }
-    catch (err) {res.status(500).send(err)}
+    getPantryItemFromPantryItemID(req.body.pantry_item_id).then(value => {
+        res.status(200).send(value)
+    }).catch(err => {
+        res.status(500).send(err.message)
+    })
 })
 
 /**************************************************/

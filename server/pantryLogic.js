@@ -1,4 +1,5 @@
 import db from './sql/app.js'
+import { addItemDataValidation } from './pantryValidation.js'
 
 /*
     take input from addToPantry:
@@ -13,20 +14,25 @@ import db from './sql/app.js'
 
 function addItemToPantry(pantry_id, item_name, extra_info, quantity, unit) {
     let sql = 'INSERT INTO pantry_items(pantry_id, item_name, extra_info, quantity, unit) VALUES (?, ?, ?, ?, ?)';
+
     return new Promise((resolve, reject) => {
-        db.run(sql, [pantry_id, item_name, extra_info, quantity, unit], async (err) => {
-            if (err) {
-                reject(err)
-            }
-            resolve()
-        })
-        //record item after creation
-        let record_sql = 'INSERT INTO pantry_items_status_record (status, time, pantry_item_id, pantry_id, item_name, extra_info, quantity, unit) SELECT "C" as status, datetime("now", "+11 hours") as time, a.pantry_item_id, a.pantry_id, a.item_name, a.extra_info, a.quantity, a.unit FROM pantry_items a WHERE pantry_item_id = (SELECT max(b.pantry_item_id) FROM pantry_items b)'
-        db.run(record_sql, [], async (err) => {
-            if (err) {
-                console.log(err)
-            }
-        })
+        if (!addItemDataValidation(pantry_id, item_name, extra_info, quantity, unit)) {
+            reject(new Error('ERROR: One or more invalid inputs'))
+        } else {
+            db.run(sql, [pantry_id, item_name, extra_info, quantity, unit], async (err) => {
+                if (err) {
+                    reject(err)
+                }
+                resolve()
+            })
+            //record item after creation
+            let record_sql = 'INSERT INTO pantry_items_status_record (status, time, pantry_item_id, pantry_id, item_name, extra_info, quantity, unit) SELECT "C" as status, datetime("now", "+11 hours") as time, a.pantry_item_id, a.pantry_id, a.item_name, a.extra_info, a.quantity, a.unit FROM pantry_items a WHERE pantry_item_id = (SELECT max(b.pantry_item_id) FROM pantry_items b)'
+            db.run(record_sql, [], async (err) => {
+                if (err) {
+                    console.log(err)
+                }
+            })
+        }
     })
 }
 function editItemInPantry(pantry_item_id, pantry_id, item_name, extra_info, quantity, unit) {
