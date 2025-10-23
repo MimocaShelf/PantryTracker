@@ -217,5 +217,15 @@ function getUserFromUserID(user_id) {
         })
     })
 }
+function getAllUsers() {
+    return new Promise((resolve, reject) => {
+        db.all('SELECT * FROM users', [], async (err, rows) => {
+            if (err) {
+                reject(err)
+            }
+            resolve(rows)
+        })
+    })
+}
 
-export {getUserFromUserID,  addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryName, getPantryItemsFromPantryID, getPantryInformation, getLatestAddedItemHistory, deletePantryItemFromPantryItemID, getLatestAddedItemFromPantryID, editItemInPantry, getPantryItemFromPantryItemID, getPantryHistoryFromPantryID};
+export {getAllUsers, getUserFromUserID,  addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryName, getPantryItemsFromPantryID, getPantryInformation, getLatestAddedItemHistory, deletePantryItemFromPantryItemID, getLatestAddedItemFromPantryID, editItemInPantry, getPantryItemFromPantryItemID, getPantryHistoryFromPantryID};
