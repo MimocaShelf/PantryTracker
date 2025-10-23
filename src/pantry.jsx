@@ -14,7 +14,7 @@ function Pantry() {
 
 
   let getUserID = parseInt(localStorage.getItem('user_id'));
-  let user_id = (getUserID != null) ? getUserID : -1;
+  let user_id = (getUserID != null) ? getUserID : 1;
   
   let getUserFromUserID = getUser(user_id);
   
