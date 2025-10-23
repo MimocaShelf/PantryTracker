@@ -53,7 +53,14 @@ function Pantry() {
         const result = await response.json();
         console.log("Pantry added:", result);
 
-        const updated = await fetch('http://localhost:3001/getAllPantries');
+        const updated = await fetch('http://localhost:3001/postGetPantriesForUser', {
+          method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              user_id: user_id,
+            })
+
+        });
         const data = await updated.json();
         setPantries(data);
 
@@ -71,7 +78,14 @@ function Pantry() {
 
   // Load pantries from backend
   useEffect(() => {
-    fetch('http://localhost:3001/getAllPantries')
+    fetch('http://localhost:3001/postGetPantriesForUser', {
+          method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              user_id: user_id,
+            })
+
+        })
       .then(res => res.json())
       .then(data => setPantries(data))
       .catch(err => console.error("Error fetching pantries:", err));

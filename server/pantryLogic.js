@@ -135,7 +135,7 @@ async function getLatestAddedItemHistory() {
 }
 
 function getPantriesForUser(user_id) {
-    const sql = 'SELECT pantry_id, pantry_name FROM pantry LEFT JOIN users ON pantry.pantry_owner = users.name WHERE user_id = ?'
+    const sql = 'SELECT * FROM pantry LEFT JOIN users ON pantry.pantry_owner = users.name WHERE user_id = ?'
     return new Promise((resolve, reject) => {
         db.all(sql, [user_id], async (err, rows) => {
             if (err) {
