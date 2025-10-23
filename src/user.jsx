@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 
 function User() {
     // State for user information
-    const {userData, setUserData} = useContext(UserContext);
+    const [userData, setUserData] = useContext(UserContext);
     const [isEditing, setIsEditing] = useState(false);
     const [editedUserData, setEditedUserData] = useState({...userData});
     const [deleteConfirm, setDeleteConfirm] = useState(false);
@@ -134,8 +134,8 @@ function User() {
                         <div className="row">
                             <div className="left-container">
                                 <img 
-                                    src={userData.profilePicture ? userData.profilePicture : '../src/images/icon.png'} 
-                                    alt={`${userData.name}'s profile`} 
+                                    src={userProfile} 
+                                    alt="Profile"
                                     style={{ width: '150px', height: '150px', borderRadius: '50%' }}
                                 />
                             </div>
