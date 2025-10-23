@@ -23,6 +23,7 @@ import UserContext from "./context/UserContext.jsx";
 import { useState } from "react";
 import PantrySummary from "./pantry/pantrySummary.jsx";
 import toast, { Toaster } from 'react-hot-toast';
+import EditPantryItem from './pantry/editPantryItem.jsx';
 // import './sql/app.js';
 // import './nutritionLogic.js';
 
@@ -60,6 +61,7 @@ function App() {
                     <Route path="/priceCompare" element={<PriceCompare />} />
                     <Route path="/calendar" element={<CalendarPage />} />
                     <Route path="/pantrySummary" element={<PantrySummary />} />
+                    <Route path="/editPantryItem" element={<EditPantryItem />} />
                 </Routes>
             </BrowserRouter>
 

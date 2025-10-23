@@ -4,7 +4,7 @@ import https from 'https'; // Import https for API requests
 import { promisify } from 'util';
 
 import {readPantryItems, readSpecificPantryItems, insertPantryItemToMealPrep, readBreakfastIngredients, readLunchIngredients, readDinnerIngredients, deleteMealPrepItem, checkIfItemRecordExistInMealPrep, deleteRecipe, insertIntoRecipe, checkIfRecipeIsSaved, readAllRecipe, checkForShoppingList, insertShoppingIngredient} from './crud.js'
-import {addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryItemsFromPantryID, getPantryName, getPantryInformation, getLatestAddedItemHistory, getLatestAddedItemFromPantryID} from './pantryLogic.js'
+import {addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryItemsFromPantryID, getPantryName, getPantryInformation, getLatestAddedItemHistory, getLatestAddedItemFromPantryID, deletePantryItemFromPantryItemID, editItemInPantry, getPantryItemFromPantryItemID} from './pantryLogic.js'
 import { readAllPantries, insertPantry, deletePantry } from './crud.js';
 
 import userRoutes from './routes/userRoutes.js';
@@ -188,7 +188,17 @@ app.get('/getLatestAddedItemHistory', (req,res) => {
     catch (err) {
         res.status(500).send(err)
     }
-    
+})
+app.get('/getLatestAddedItemHistory', (req,res) => {
+    console.log('GET getLatestAddedItemHistory received.')
+    try {
+        getLatestAddedItemHistory().then(value => {
+            res.status(200).send(value)
+        })
+    }
+    catch (err) {
+        res.status(500).send(err)
+    }
 })
 app.post('/postGetLatestAddedItemFromPantryID', (req,res) => {
     console.log('POST postGetLatestAddedItemFromPantryID received.')
@@ -256,6 +266,28 @@ app.post('/postGetPantryItemsFromPantryID', (req, res, next) => {
         res.status(500).send(err)
     }
 })
+app.post('/postDeletePantryItemFromPantryID', (req, res, next) => {
+    console.log('POST postDeletePantryItemFromPantryID received')
+    try {
+        deletePantryItemFromPantryItemID(req.body.pantry_item_id).then(value => {
+            res.status(200).send('DELETED')
+        })
+    }
+    catch (err) {
+        res.status(500).send(err)
+    }
+})
+app.post('/postEditPantryItemFromPantryItemID', (req, res, next) => {
+    console.log('POST postEditPantryItemFromPantryItemID received')
+    try {
+        editItemInPantry(req.body.pantry_item_id, req.body.pantry_id, req.body.item_name, req.body.extra_info, req.body.quantity, req.body.unit).then(value => {
+            res.status(200).send('EDITED')
+        })
+    }
+    catch (err) {
+        res.status(500).send(err)
+    }
+})
 //submit all requests, wait for all of them with Promise.all then send.
 app.post('/postGetPantrySummaryFromPantryID', (req, res, next) => {
     console.log('POST postGetPantrySummaryFromPantryID received')
@@ -270,6 +302,15 @@ app.post('/postGetPantrySummaryFromPantryID', (req, res, next) => {
     } catch (err) {
         res.status(500).send(err)
     }
+})
+app.post('/postGetPantryItemFromPantryItemID', (req, res, next) => {
+    console.log('POST postGetPantryItemFromPantryItemID received')
+    try {
+        getPantryItemFromPantryItemID(req.body.pantry_item_id).then(value => {
+            res.status(200).send(value)
+        })
+    }
+    catch (err) {res.status(500).send(err)}
 })
 
 /**************************************************/

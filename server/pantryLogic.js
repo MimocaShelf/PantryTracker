@@ -29,6 +29,24 @@ function addItemToPantry(pantry_id, item_name, extra_info, quantity, unit) {
         })
     })
 }
+function editItemInPantry(pantry_item_id, pantry_id, item_name, extra_info, quantity, unit) {
+    let sql = 'UPDATE pantry_items SET pantry_id = ?, item_name = ?, extra_info = ?, quantity = ?, unit = ? WHERE pantry_item_id = ?';
+    return new Promise((resolve, reject) => {
+        db.run(sql, [pantry_id, item_name, extra_info, quantity, unit, pantry_item_id], async (err) => {
+            if (err) {
+                reject(err)
+            }
+            resolve()
+        })
+        //record item after creation
+        let record_sql = 'INSERT INTO pantry_items_status_record (status, time, pantry_item_id, pantry_id, item_name, extra_info, quantity, unit) SELECT "U" as status, datetime("now", "+11 hours") as time, a.pantry_item_id, a.pantry_id, a.item_name, a.extra_info, a.quantity, a.unit FROM pantry_items a WHERE a.pantry_item_id = ?'
+        db.run(record_sql, [pantry_item_id], async (err) => {
+            if (err) {
+                console.log(err)
+            }
+        })
+    })
+}
 function deletePantryItemFromPantryItemID(pantry_item_id) {
     let sql = 'DELETE FROM pantry_items WHERE pantry_item_id = ?';
     return new Promise((resolve, reject) => {
@@ -155,6 +173,19 @@ function getPantryItemsFromPantryID(pantry_id) {
 }
 
 
+function getPantryItemFromPantryItemID(pantry_item_id) {
+    const sql = 'SELECT * FROM pantry_items WHERE pantry_item_id = ?'
+    return new Promise((resolve, reject) => {
+        db.get(sql, [pantry_item_id], async (err, rows) => {
+            if (err) {
+                reject(err)
+            }
+            resolve(rows)
+        })
+    })
+}
 
 
-export { addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryName, getPantryItemsFromPantryID, getPantryInformation, getLatestAddedItemHistory, deletePantryItemFromPantryItemID, getLatestAddedItemFromPantryID };
+
+
+export { addItemToPantry, getLatestAddedItem, getPantriesForUser, getPantryName, getPantryItemsFromPantryID, getPantryInformation, getLatestAddedItemHistory, deletePantryItemFromPantryItemID, getLatestAddedItemFromPantryID, editItemInPantry, getPantryItemFromPantryItemID};
