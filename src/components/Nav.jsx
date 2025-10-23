@@ -1,7 +1,15 @@
 import React, {useContext} from 'react';
 import {NavLink, Link} from 'react-router-dom';
 import UserContext from '../context/UserContext';
+import Logout from '../logout.jsx';
+import toast from 'react-hot-toast';
 
+// Function to notify user when they log out
+const notify = (message) => toast.success(message, {
+    duration: 2000,
+    position: "bottom-right",
+    autoClose: true,
+});
 const Nav = () => {
 
     // Get user data from UserContext
@@ -23,7 +31,7 @@ const Nav = () => {
                     (userData) ? 
                         <span>
                             <li id=""><Link to="/user">User</Link></li>
-                            <li id=""><Link to="/logout">Logout</Link></li>
+                            <li id=""><Link to="/logout" onClick={() => Logout().then(notify("Successfully logged out."))}>Logout</Link></li>
                         </span> :
 
                         <span>

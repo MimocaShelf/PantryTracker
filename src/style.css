@@ -319,33 +319,37 @@ button:focus-visible {
   line-height: 200%;
 }
 
-/* Authentication Pages Styling */
-.auth-container {
+/* Authentication Pages Styling & User Profile */
+.auth-container, .user-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  padding: 20px;
+  min-height: 50vh;
+  padding: 40px 20px;
+  color: var(--blue);
 }
 
-.auth-card {
-  background-color: white;
-  border-radius: 8px;
+.auth-card, .user-card {
+  background-color: var(--lavender);
+  border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 40px;
+  padding: 0 40px;
   width: 100%;
-  max-width: 450px;
   text-align: center;
 }
 
-.auth-card h1 {
+.auth-card, .user-card {
+ max-width: 450px;
+}
+
+.auth-card h1, .user-card h1 {
   margin-bottom: 10px;
   color: #333;
 }
 
-.auth-card p {
+.auth-card p, .user-card p {
   color: #666;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 
 .input-field {
@@ -399,7 +403,7 @@ button:focus-visible {
   text-decoration: underline;
 }
 
-.auth-button {
+.auth-button, .user-button {
   width: 100%;
   padding: 12px;
   background-color: #535bf2;
@@ -412,7 +416,7 @@ button:focus-visible {
   transition: background-color 0.3s;
 }
 
-.auth-button:hover {
+.auth-button:hover, .user-button:hover {
   background-color: #4349d8;
 }
 
@@ -463,6 +467,27 @@ button:focus-visible {
 
 .terms-checkbox a:hover {
   text-decoration: underline;
+}
+
+/* User Profile Page Styling */
+.user-info {
+}
+
+.user-info .row .left-container {
+  flex: 0 0 auto;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  
+}
+.user-info .row .right-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.user-info .row .right-container h3, .user-info .row .right-container p {
+  width: 100%;
 }
 
 #homeList{
