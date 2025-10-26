@@ -53,7 +53,7 @@ steps:
   displayName: 'Run Unit Tests'
 
 - script: |
-    echo "sending build status notification to communication platforms"
+    echo "zip build folder into artifact staging directory and default working directory"
     cd dist
     zip -r '$(Build.ArtifactStagingDirectory)'/dist.zip *
     zip -r '$(System.DefaultWorkingDirectory)'/dist.zip *
