@@ -5,6 +5,8 @@ pwd >&2
 touch main.db
 # ls -lR >&2
 cd server 
+echo 'Populating SQL' >&2
+node sql/sql.js
 echo 'Starting Backend Server' >&2
 node server.js & 
 cd .. 
