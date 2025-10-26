@@ -4,4 +4,4 @@ cd server
 npm install
 node server.js & 
 cd .. 
-npm run dev
+npm run
