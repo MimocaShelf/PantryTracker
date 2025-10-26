@@ -51,7 +51,10 @@ steps:
 
 - script: |
     echo "sending build status notification to communication platforms"
-  displayName: 'Build Succeeded'
+    zip -r '$(Build.ArtifactStagingDirectory)'/dist.zip dist
+  displayName: 'Zip Build Folder'
+
+
 
 - task: PublishBuildArtifacts@1
   inputs:
