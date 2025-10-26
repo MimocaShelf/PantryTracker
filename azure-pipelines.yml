@@ -24,8 +24,11 @@ steps:
   displayName: 'Install Backend Dependencies'
 
 - script: |
-    echo "initalising dummy database..."
-    echo "adding dummy data..."
+    echo "create test database file..."
+    touch main.db
+    echo "populating database file from sql..."
+    cd server
+    node sql/sql.js
   displayName: 'Create Test Database'
 
 - script: |
