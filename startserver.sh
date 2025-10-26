@@ -1,5 +1,5 @@
 echo 'Running Server'
-npm install 2>&1 >/tmp/npm_install.out
+npm install --quiet 2>&1 >/tmp/npm_install.out
 echo 'Home Directory'
 pwd >&2
 # ls -lR >&2
@@ -8,4 +8,4 @@ echo 'Starting Backend Server' >&2
 node server.js & 
 cd .. 
 echo 'Starting Frontend Server' >&2
-npm run 
+npm run dev
