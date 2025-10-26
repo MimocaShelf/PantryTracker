@@ -2,6 +2,7 @@ echo 'Running Server'
 npm install --quiet 2>&1 >/tmp/npm_install.out
 echo 'Home Directory'
 pwd >&2
+touch main.db
 # ls -lR >&2
 cd server 
 echo 'Starting Backend Server' >&2
