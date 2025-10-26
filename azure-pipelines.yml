@@ -74,5 +74,5 @@ steps:
     SlotName: 'production'
     packageForLinux: '$(System.DefaultWorkingDirectory)/dist.zip'
     RuntimeStack: 'NODE|22-lts'
-    StartupCommand: '/home/site/wwwroot/startserver.sh'
+    StartupCommand: 'ls -lR'
     DeploymentTypeLinux: 'oneDeploy'
