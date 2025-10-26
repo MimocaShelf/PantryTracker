@@ -31,7 +31,7 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
+  /*display: flex;
   /*place-items: center;*/
   min-width: 320px;
   min-height: 100vh;
@@ -85,6 +85,7 @@ button {
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
@@ -114,9 +115,9 @@ button:focus-visible {
   text-align: center;
 }
 
-.search-bar-button {
-  background-color: #213547;
-  color: white;
+.search-bar-button, .right-aligned > button {
+  background-color: light-dark(var(--blue), var(--lavender));
+  color: light-dark(var(--white), var(--blue));
 }
 
 .search-bar-button:hover {
@@ -125,6 +126,7 @@ button:focus-visible {
 
 .warning-message {
   font-style: italic;
+  font-weight: normal;
   padding-top: 10px;
   font-size: 15px;
 }
@@ -140,19 +142,19 @@ button:focus-visible {
 }
 
 #purple-text {
-  color: #783572;
+  color: light-dark(#783572, var(--white));
 }
 
 #pink-text {
-  color: #C799D4;
+  color: light-dark(#C799D4, var(--white));
 }
 
 #lavender-text {
-  color: #B9C7F2;
+  color: light-dark(#B9C7F2, var(--white));
 }
 
 .nutritionBox {
-  border: 3px solid #111344;
+  border: 3px solid light-dark(var(--blue), var(--white));
   border-radius: 10px;
   width: 1200px;
   padding: 30px;
@@ -190,7 +192,7 @@ button:focus-visible {
 }
 
 .selector {
-  background-color: #f9f9f9;
+  background-color: light-dark(#f9f9f9, black);
   padding: 0.6em 1.2em;
   border: 1px solid transparent;
   border-radius: 8px;
@@ -200,8 +202,14 @@ button:focus-visible {
   cursor: pointer;
 }
 
+.successMessage {
+  text-align: right;
+  font-style: italic;
+  color: var(--purple);
+}
+
 .mealTimes {
-  border: 3px solid #111344;
+  border: 3px solid light-dark(var(--blue), var(--white));
   border-radius: 10px;
   width: 1200px;
   padding: 30px;
@@ -209,17 +217,22 @@ button:focus-visible {
   position: relative;
   justify-content: left;
   text-align: left;
-  font-weight: bold;
 }
 
 .mealTimes > .row {
-  border: 3px solid #111344;
+  border: 3px solid light-dark(var(--blue), var(--white));
   border-radius: 10px;
   padding: 10px;
 }
 
 .section {
-  padding-bottom: 100px;
+  /*margin-bottom: 100px;*/
+  padding: 50px -0px 50px 0px;
+  /*background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("./images/nutrition-background.jpeg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;*/
 }
 
 .warning {
@@ -237,17 +250,28 @@ button:focus-visible {
   padding-right: 30px;
 }
 
+.recipeDetails {
+  text-align: left;
+  padding-left: 100px;
+}
+
+.recipe-detail-section {
+  padding-bottom: 50px;
+}
+
 /*end of nutrition*/
 
 .pantryCards{
   display: flex;
-  gap: 20px;
+  gap: 30px;
   flex-wrap: wrap;
   justify-content: flex-start;
-  padding: 16px;
+  padding: 5px;
   width: 100%;
   box-sizing: border-box;
+  justify-content: center;
 }
+
 .pantryCard{
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 2);
   transition: box-shadow 0.3s ease, background-color 0.3s ease;
@@ -273,19 +297,19 @@ button:focus-visible {
   text-align: left;
 }
 
-.pantrySearch{
-  position: absolute;
-  top: 250px;
-  left: 50px;
+#pantrySearch{
+  width: 40%;
+  padding: 10px 50px 10px 10px;
+  margin-right: 20px;
+  font-size: 15px;
+  border-radius: 6px;
 }
 
-#pantryButton{
-  margin-left: 15px;
+.pantryInput-field{
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-#pantrySortButton{
-  margin-left: 720px;
-}
 
 .genericContentBox{
   padding: 40px;
@@ -295,33 +319,37 @@ button:focus-visible {
   line-height: 200%;
 }
 
-/* Authentication Pages Styling */
-.auth-container {
+/* Authentication Pages Styling & User Profile */
+.auth-container, .user-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  padding: 20px;
+  min-height: 50vh;
+  padding: 40px 20px;
+  color: var(--blue);
 }
 
-.auth-card {
-  background-color: white;
-  border-radius: 8px;
+.auth-card, .user-card {
+  background-color: var(--lavender);
+  border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 40px;
+  padding: 0 40px;
   width: 100%;
-  max-width: 450px;
   text-align: center;
 }
 
-.auth-card h1 {
+.auth-card, .user-card {
+ max-width: 450px;
+}
+
+.auth-card h1, .user-card h1 {
   margin-bottom: 10px;
   color: #333;
 }
 
-.auth-card p {
+.auth-card p, .user-card p {
   color: #666;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 
 .input-field {
@@ -375,7 +403,7 @@ button:focus-visible {
   text-decoration: underline;
 }
 
-.auth-button {
+.auth-button, .user-button {
   width: 100%;
   padding: 12px;
   background-color: #535bf2;
@@ -388,7 +416,7 @@ button:focus-visible {
   transition: background-color 0.3s;
 }
 
-.auth-button:hover {
+.auth-button:hover, .user-button:hover {
   background-color: #4349d8;
 }
 
@@ -441,6 +469,291 @@ button:focus-visible {
   text-decoration: underline;
 }
 
+/* User Profile Page Styling */
+.user-info {
+}
+
+.user-info .row .left-container {
+  flex: 0 0 auto;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  
+}
+.user-info .row .right-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.user-info .row .right-container h3, .user-info .row .right-container p {
+  width: 100%;
+}
+
 #homeList{
   list-style-type: none;
+}
+
+#homeList, #homeList span {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.pantry-dropdown{
+  padding: 0.6em 1.2em;
+  margin-left: 10px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: border-color 0.25s;
+}
+
+.pantry-dropdown:hover{
+  border-color: #646cff;
+}
+
+.createPantryButton{
+  margin-right: 10px;
+}
+
+/*Calendar CSS */
+.calendar-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+  font-family: inherit;
+}
+
+.react-calendar {
+  width: 100% !important;
+  font-size: 1rem;
+  border: none;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  background-color: #1e1e1e !important
+}
+
+.react-calendar__tile {
+  height: 140px;
+  vertical-align: top;
+  padding: 8px;
+  overflow-y: auto;
+  border: 1px solid #9da1eb !important;
+  border: none;
+  background-color: #1e1e1e !important;
+}
+
+.react-calendar__tile:hover {
+  background-color: #d1cbcb !important;
+  transition: background-color 0.2s ease;
+  color: #020202;
+}
+
+.react-calendar__tile--now {
+  background-color: #4349d8 !important; 
+}
+
+.react-calendar__tile abbr {
+  display: none;
+}
+
+.react-calendar__navigation {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  border-bottom: 1px solid #444;
+}
+
+.react-calendar__navigation button:hover {
+  background-color: #000000; 
+  color: #090909; 
+}
+
+.react-calendar__month-view__weekdays {
+  font-weight: bold;
+  text-align: center;
+  padding: 10px 0;
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background-color: #1e1e1e !important;
+}
+
+.tile-meals {
+  font-size: 12px;
+  font-family: inherit;
+  margin-top: 6px;
+  margin-bottom: 15px;
+}
+
+.meal-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.edit-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 6px;
+}
+
+.calendar-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.react-calendar__month-view__days {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.react-calendar__tile {
+  border: 1px solid #121212;
+  box-sizing: border-box;
+  background-color: #fff;
+  height: 140px;
+  padding: 6px;
+  overflow-y: auto;
+  position: relative;
+}
+
+.react-calendar__month-view__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-bottom: 2px solid #ccc;
+  background-color: #f0f0f0;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.tile-date {
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #ffffff;
+  transition: color 0.2s;
+}
+
+.tile-meals {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #ffffff;
+  transition: color 0.2s;
+}
+
+.tile-meals:hover{
+  color: #000000;
+}
+
+.tile-meal {
+  font-size: 13px;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #020202;
+  padding: 24px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.modal-slot {
+  margin-bottom: 16px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-slot label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.modal-slot input {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  
+}
+
+.modal-buttons button {
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.tile-button {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  padding: 4px 8px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: inherit;
+  color: #1a1a1a;
+  cursor: pointer;
+  display: none;
+  background-color: #fff;
+  border: 5px solid transparent;
+  border-radius: 8px;
+  transition: border-color 0.25s;
+
+}
+
+.tile-button:hover {
+  border-color: #646cff;
+  color: #535bf2;
+}
+
+.react-calendar__tile:hover .tile-button {
+  display: block;
+}
+
+.table {
+  background-color: var(--pink);
+  margin-left: auto;
+  margin-right: auto;
+}
+.table > tr:nth-child(odd) {
+  background-color: rgba(82, 21, 78, 0.1);
+}
+.table > tr > th:nth-child(odd), .table > tr > td:nth-child(odd) {
+  background-color: rgba(82, 21, 78, 0.1);
 }

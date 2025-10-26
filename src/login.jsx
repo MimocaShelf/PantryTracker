@@ -1,7 +1,55 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, {useState} from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Login() {
+
+    // State for login form inputs
+    const [form, setForm] = useState({ 
+        email: '',
+        password: '',
+        rememberMe: false
+    });
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+
+    // Base URL for API requests
+    const path = "http://localhost:3001";
+
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setForm(prevForm => ({  ...prevForm, [name]: type === 'checkbox'? checked : value }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        try {
+            const res = await fetch(path + '/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: form.email,
+                    password: form.password
+                }),
+            });
+            if (!res.ok) {
+                throw new Error('Failed to log in');
+            }
+
+            const data = await res.json();
+
+            // Store user ID in local storage for future authentication
+            localStorage.setItem('user_id', JSON.stringify(data.user_id));
+            console.log("User ID stored in localStorage:", data.user_id);
+
+            // Navigate to the user page after successful login
+            navigate('/user');
+
+        } catch (err) {
+            setError('Login failed. Please check your credentials and try again.');
+        }
+    };
+
     return (
         <div>
             <div className="section">
@@ -10,7 +58,7 @@ function Login() {
                         <h1>Welcome Back</h1>
                         <p>Sign in to continue to PantryTracker</p>
                         
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             <div className="input-field">
                                 <label htmlFor="email">Email</label>
                                 <input
@@ -18,6 +66,9 @@ function Login() {
                                     id="email"
                                     name="email"
                                     placeholder="Enter your email"
+                                    value={form.email}
+                                    onChange={handleChange}
+                                    required
                                 />
                             </div>
                             
@@ -28,6 +79,9 @@ function Login() {
                                     id="password"
                                     name="password"
                                     placeholder="Enter your password"
+                                    value={form.password}
+                                    onChange={handleChange}
+                                    required
                                 />
                             </div>
                             
@@ -37,12 +91,15 @@ function Login() {
                                         type="checkbox"
                                         id="rememberMe"
                                         name="rememberMe"
+                                        checked={form.rememberMe}
+                                        onChange={handleChange}
                                     />
                                     <label htmlFor="rememberMe">Remember me</label>
                                 </div>
                                 <Link to="/forgot-password" className="forgot-link">Forgot password?</Link>
                             </div>
                             
+                            {error && <p style={{ color: 'red' }}>{error}</p>}
                             <button type="submit" className="auth-button">Sign In</button>
                         </form>
                         

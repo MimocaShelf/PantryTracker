@@ -1,64 +1,97 @@
 
-import React, { useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import userProfile from '../src/images/icon.png';
+import UserContext from '../src/context/UserContext';
+import toast from 'react-hot-toast';
 
 function User() {
-    // Mock user data
-    const [userData, setUserData] = useState({
-        id: 1,
-        name: "Jane Doe",
-        email: "jane.doe@example.com",
-        profilePicture: "https://via.placeholder.com/150",
-    });
-
-    // Mock pantries data
-    const [userPantries, setUserPantries] = useState([
-        { id: 1, name: "Main Pantry", itemCount: 12 },
-        { id: 2, name: "Fridge", itemCount: 8 },
-        { id: 3, name: "Sink", itemCount: 3 },
-    ]);
-
-    // State for form editing
+    // State for user information
+    const [userData, setUserData] = useContext(UserContext);
     const [isEditing, setIsEditing] = useState(false);
     const [editedUserData, setEditedUserData] = useState({...userData});
-    
-    // State for new pantry form
-    const [isAddingPantry, setIsAddingPantry] = useState(false);
-    const [newPantryName, setNewPantryName] = useState("");
+    const [deleteConfirm, setDeleteConfirm] = useState(false);
 
-    const handleEditSubmit = (e) => {
-        e.preventDefault();
-        setUserData(editedUserData);
-        setIsEditing(false);
+    // Retreive user ID from local storage
+    const userId = localStorage.getItem('user_id');
+
+    // Fetch user data from backend
+    useEffect(() => { 
+
+        const fetchUserData = async () => {
+
+            if (!userId) {
+                setUserData(null);
+                return;
+            }
+
+            try {
+                const res = await fetch("http://localhost:3001/user/" + userId);
+                if (!res.ok) {
+                    throw new Error('Failed to fetch user data');
+                }
+
+                const user = await res.json();
+                setUserData(user);
+                setEditedUserData(user);
+            } catch (err) {
+                setUserData(null);
+            }
+        };
+        fetchUserData();
+    }, []);
+
+    // Handles fomr submission of user data
+    const handleEditSubmit = async (e) => {
+    e.preventDefault();
+
+    const userId = localStorage.getItem('user_id');
+
+    // Fallback to previous data if field is empty
+    const updatedData = {
+        name: editedUserData.name || userData.name,
+        email: editedUserData.email || userData.email,
+        profilePicture: editedUserData.profilePicture || userData.profilePicture,
     };
 
-    const handleAddPantry = (e) => {
-        e.preventDefault();
-        if (newPantryName.trim()) {
-            const newPantry = {
-                id: userPantries.length + 1,
-                name: newPantryName,
-                itemCount: 0
-            };
-            setUserPantries([...userPantries, newPantry]);
-            setNewPantryName("");
-            setIsAddingPantry(false);
+    try {
+        // Sends PUT request to update user data
+        const res = await fetch(("http://localhost:3001/user/" + userId), {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedData),
+        });
+        if (!res.ok) {
+            throw new Error('Failed to update user data');
+            toast.error("User profile updated successfully");
         }
-    };
 
-    const handleDeletePantry = (pantryId) => {
-        setUserPantries(userPantries.filter(pantry => pantry.id !== pantryId));
-    };
+        const updatedUser = await res.json();
+        
 
+        // Reload the page after successful update
+        window.location.reload();
+        console.log('User updated successfully:', updatedUser);
+        toast.success("User profile updated successfully");
+        
+
+    } catch (err) {
+        alert('Error updating user profile.');
+    }
+};
+    
     return (
         <div>
-            <div className="section">
+            <div className="user-container">
+                <div className="user-card">
                 <h1>User Profile</h1>
                 <p>Manage your profile information and pantries</p>
-            </div>
+            
 
-            <Link to="/household">Manage Household</Link>
-
+            {/*Conditional rendering based on whether user is logged in*/}
+            {userData === null ? (
+                <p>Loading user data...</p>
+            ) : (
             <div className="section">
                 <h2>Profile Information</h2>
                 {isEditing ? (
@@ -68,7 +101,7 @@ function User() {
                             <input 
                                 type="text" 
                                 id="name" 
-                                value={editedUserData.name}
+                                value={editedUserData.name || ''}
                                 onChange={(e) => setEditedUserData({...editedUserData, name: e.target.value})}
                                 required
                             />
@@ -78,9 +111,8 @@ function User() {
                             <input 
                                 type="email" 
                                 id="email" 
-                                value={editedUserData.email}
+                                value={editedUserData.email || ''}
                                 onChange={(e) => setEditedUserData({...editedUserData, email: e.target.value})}
-                                required
                             />
                         </div>
                         <div className="input-field">
@@ -88,7 +120,7 @@ function User() {
                             <input 
                                 type="url" 
                                 id="profilePicture" 
-                                value={editedUserData.profilePicture}
+                                value={editedUserData.profilePicture || ''}
                                 onChange={(e) => setEditedUserData({...editedUserData, profilePicture: e.target.value})}
                             />
                         </div>
@@ -102,60 +134,27 @@ function User() {
                         <div className="row">
                             <div className="left-container">
                                 <img 
-                                    src={userData.profilePicture} 
-                                    alt={`${userData.name}'s profile`} 
+                                    src={userProfile} 
+                                    alt="Profile"
                                     style={{ width: '150px', height: '150px', borderRadius: '50%' }}
                                 />
                             </div>
                             <div className="right-container">
                                 <h3>{userData.name}</h3>
                                 <p>{userData.email}</p>
-                                <button onClick={() => setIsEditing(true)}>Edit Profile</button>
+                                <button className='user-button' onClick={() => setIsEditing(true)}>Edit Profile</button>
                             </div>
                         </div>
                     </div>
                 )}
             </div>
-            
-            <div className="section">
-                <h2>Your Pantries</h2>
-                <button onClick={() => setIsAddingPantry(true)}>+ Create New Pantry</button>
-                
-                {isAddingPantry && (
-                    <form onSubmit={handleAddPantry} className="input-field">
-                        <input 
-                            type="text" 
-                            placeholder="Pantry Name" 
-                            value={newPantryName}
-                            onChange={(e) => setNewPantryName(e.target.value)}
-                            required
-                        />
-                        <button type="submit">Create</button>
-                        <button type="button" onClick={() => setIsAddingPantry(false)}>Cancel</button>
-                    </form>
-                )}
+            )}
 
-                <div className="pantryCards">
-                    {userPantries.map(pantry => (
-                        <div className="pantryCard" key={pantry.id}>
-                            <div className="container">
-                                <h2><b>{pantry.name}</b></h2>
-                                <p>Items: {pantry.itemCount}</p>
-                                <div className="pantry-actions">
-                                    <Link to={`/pantry/${pantry.id}`}>
-                                        <button>View Items</button>
-                                    </Link>
-                                    <button onClick={() => handleDeletePantry(pantry.id)}>Delete</button>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
                 </div>
             </div>
-
-
         </div>
     );
 }
 
 export default User;
+// <Link to="/household">Manage Household</Link>

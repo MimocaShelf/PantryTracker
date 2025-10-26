@@ -14,9 +14,11 @@ const sql_array = [
     'DROP TABLE IF EXISTS meal_slots',
     'DROP TABLE IF EXISTS meal_prep',
     'DROP TABLE IF EXISTS shopping_list',
+    'DROP TABLE IF EXISTS recipe',
+    'DROP TABLE IF EXISTS pantry_items_status_record',
 
     //CREATE TABLES
-    `CREATE TABLE pantry_items (
+    `CREATE TABLE IF NOT EXISTS pantry_items (
         pantry_item_id INTEGER PRIMARY KEY AUTOINCREMENT,
         pantry_id INTEGER,
         item_name VARCHAR(100),
@@ -24,10 +26,23 @@ const sql_array = [
         quantity DECIMAL(20, 5),
         unit VARCHAR(50)
     )`,
+    `CREATE TABLE IF NOT EXISTS pantry_items_status_record (
+        history_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        status CHAR(1), 
+        time DATETIME,
+        pantry_item_id INTEGER,
+        pantry_id INTEGER,
+        item_name VARCHAR(100),
+        extra_info VARCHAR(65535),
+        quantity DECIMAL(20, 5),
+        unit VARCHAR(50)
+    )`, //statuses: C – Create, R – Read, U – Updated, D – Deleted
+
 
     `CREATE TABLE IF NOT EXISTS nutrition(nutrition_id INTEGER PRIMARY KEY, pantry_item_id INTEGER, calories , protein , carbs , fats , FOREIGN KEY(pantry_item_id) REFERENCES pantry_items(pantry_item_id))`,
+    `CREATE TABLE IF NOT EXISTS recipe(recipe_id INTEGER PRIMARY KEY AUTOINCREMENT, recipe_name)`,
 
-    `CREATE TABLE IF NOT EXISTS meal_slots(meal_slots_id INTEGER PRIMARY KEY AUTOINCREMENT, time)`,
+    `CREATE TABLE IF NOT EXISTS meal_slots(meal_slots_id INTEGER PRIMARY KEY AUTOINCREMENT, time TEXT)`,
     `CREATE TABLE IF NOT EXISTS meal_prep(
         meal_prep_id INTEGER PRIMARY KEY AUTOINCREMENT, 
         meal_slots_id INTEGER, 
@@ -36,12 +51,13 @@ const sql_array = [
         FOREIGN KEY(pantry_item_id) REFERENCES pantry_items(pantry_item_id)
     )`,
 
-    `CREATE TABLE pantry (
-        pantry_id INTEGER PRIMARY KEY,
-        pantry_ownder VARCHAR(100),
-        pantry_name VARCHAR(100),
+    `CREATE TABLE IF NOT EXISTS pantry (
+        pantry_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        pantry_owner TEXT,
+        pantry_name TEXT,
         pantry_itemAmount INTEGER
     )`,
+
 
      `CREATE TABLE users (
         user_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -76,6 +92,15 @@ const sql_array = [
     'INSERT INTO pantry_items(pantry_id, item_name, quantity, unit) VALUES (2, "Chicken Breast", 500, "grams")',
     'INSERT INTO pantry_items(pantry_id, item_name, quantity, unit) VALUES (2, "Rib Eye Steak", 200, "grams")',
     'INSERT INTO pantry_items(pantry_id, item_name, quantity, unit) VALUES (1, "Carrots", 5, "grams")',
+    'INSERT INTO pantry_items_status_record(status, time, pantry_item_id, pantry_id, item_name, quantity, unit) VALUES ("C",datetime("now", "+11 hours"), 1, 1, "Apple", 4, "units")',
+    'INSERT INTO pantry_items_status_record(status, time, pantry_item_id, pantry_id, item_name, quantity, unit) VALUES ("C",datetime("now", "+11 hours"), 2, 1, "Flour", 2.5, "kilograms")',
+    'INSERT INTO pantry_items_status_record(status, time, pantry_item_id, pantry_id, item_name, quantity, unit) VALUES ("C",datetime("now", "+11 hours"), 3, 1, "Milk", 1, "litres")',
+    'INSERT INTO pantry_items_status_record(status, time, pantry_item_id, pantry_id, item_name, quantity, unit) VALUES ("C",datetime("now", "+11 hours"), 4, 3, "Oats", 500, "grams")',
+    'INSERT INTO pantry_items_status_record(status, time, pantry_item_id, pantry_id, item_name, quantity, unit) VALUES ("C",datetime("now", "+11 hours"), 5, 3, "Yogurt", 170, "grams")',
+    'INSERT INTO pantry_items_status_record(status, time, pantry_item_id, pantry_id, item_name, quantity, unit) VALUES ("C",datetime("now", "+11 hours"), 6, 2, "Bananas", 5, "kilograms")',
+    'INSERT INTO pantry_items_status_record(status, time, pantry_item_id, pantry_id, item_name, quantity, unit) VALUES ("C",datetime("now", "+11 hours"), 7, 2, "Chicken Breast", 500, "grams")',
+    'INSERT INTO pantry_items_status_record(status, time, pantry_item_id, pantry_id, item_name, quantity, unit) VALUES ("C",datetime("now", "+11 hours"), 8, 2, "Rib Eye Steak", 200, "grams")',
+    'INSERT INTO pantry_items_status_record(status, time, pantry_item_id, pantry_id, item_name, quantity, unit) VALUES ("C",datetime("now", "+11 hours"), 9, 1, "Carrots", 5, "grams")',
 
     'INSERT INTO nutrition(pantry_item_id, calories, protein, carbs, fats) VALUES (3, 155, 8.5, 11.0, 8.5)',
     'INSERT INTO nutrition(pantry_item_id, calories, protein, carbs, fats) VALUES (4, 231, 6.2, 31.8, 1.4)',
@@ -89,9 +114,12 @@ const sql_array = [
     'INSERT INTO meal_slots(time) VALUES ("Dinner")',
 
     'INSERT INTO meal_prep(meal_slots_id, pantry_item_id) VALUES (1, 3)',
-    'SELECT * FROM meal_prep',
+    'INSERT INTO recipe(recipe_name) VALUES ("Elegant Apple Dumpling")',
 
-    'SELECT * FROM nutrition JOIN pantry_items ON nutrition.pantry_item_id = pantry_items.pantry_item_id',
+    //'SELECT * FROM meal_prep',
+    'SELECT * FROM recipe',
+
+    //'SELECT * FROM nutrition JOIN pantry_items ON nutrition.pantry_item_id = pantry_items.pantry_item_id',
 
 
     //INSERT PANTRY DATA
@@ -107,8 +135,9 @@ const sql_array = [
     'INSERT INTO pantry VALUES (10, "Matthew Roberts","Spice Cabinet", 21)',
     'INSERT INTO pantry VALUES (11, "Wednesday Adams", "Party Items", 18)',
     'INSERT INTO pantry VALUES (12, "Miguel Xavier","Cleaning Products", 7)',
+    'INSERT INTO pantry VALUES (13, "Jane Doe","Fridge", 7)',
 
-    'SELECT * FROM pantry',
+    //'SELECT * FROM pantry',
 
 
     // INSERT USER DATA
@@ -122,6 +151,8 @@ const sql_array = [
      VALUES ('Michael Wazowski', 'mike@monsters.inc', 'hashed_password_here')`,
     `INSERT INTO users (name, email, password_hash) 
      VALUES ('Sam Smith', 'sam.smith@example.com', 'hashed_password_here')`,
+    `INSERT INTO users (name, email, password_hash) 
+     VALUES ('Admin Admin', 'admin@gmail.com', 'Password1234!')`,
 
     // INSERT HOUSEHOLD DATA
     `INSERT INTO households (household_name, created_by) 

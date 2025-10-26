@@ -4,13 +4,13 @@ import { MemoryRouter } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import NutritionLogic from './nutrition management/nutritionLogic.jsx';
-import { getAllPantryItems, getRecipe } from '../server/server.js';
+import NutritionLogic from '../nutrition management/nutritionLogic.jsx';
+import { getAllPantryItems, getRecipe } from '../../server/server.js';
 
 describe('Testing Nutrition Management Feature', () => {
 
     //Unit test to determine if the view provideds suitable feedback to users when there are no pantry items
-    it('Correctly show message when no pantry items', async () => {
+    it('Show valid confirmation message when there is no pantry items', async () => {
         global.fetch = vi.fn(() => 
             Promise.resolve({
                 json: () => Promise.resolve([]),
@@ -51,7 +51,7 @@ describe('Testing Nutrition Management Feature', () => {
         const encodedQuery = encodeURIComponent('tomato onion');
 
         global.fetch = vi.fn( () => 
-            Promise.resolved({
+            Promise.resolve({
                 ok: true,
                 json: () => Promise.resolve([])
             })
@@ -105,7 +105,7 @@ describe('Testing Nutrition Management Feature', () => {
         const encodedQuery = encodeURIComponent('tomato onion');
 
         global.fetch = vi.fn( () => 
-            Promise.resolved({
+            Promise.resolve({
                 ok: true,
                 json: () => Promise.resolve([])
             })
