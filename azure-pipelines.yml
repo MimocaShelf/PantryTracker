@@ -37,6 +37,8 @@ steps:
     npm run build
     cp -r server dist
     cp startserver.sh dist
+    cp package.json dist
+    cp package-lock.json dist
     chmod 755 dist/startserver.sh
   displayName: 'Build Webapp'
 
