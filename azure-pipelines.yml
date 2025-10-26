@@ -51,8 +51,9 @@ steps:
 
 - script: |
     echo "sending build status notification to communication platforms"
-    zip -r '$(Build.ArtifactStagingDirectory)'/dist.zip dist
-    zip -r '$(System.DefaultWorkingDirectory)'/dist.zip dist
+    cd dist
+    zip -r '$(Build.ArtifactStagingDirectory)'/dist.zip *
+    zip -r '$(System.DefaultWorkingDirectory)'/dist.zip *
   displayName: 'Zip Build Folder'
 
 
@@ -74,5 +75,5 @@ steps:
     SlotName: 'production'
     packageForLinux: '$(System.DefaultWorkingDirectory)/dist.zip'
     RuntimeStack: 'NODE|22-lts'
-    StartupCommand: './dist/startserver.sh'
+    StartupCommand: './startserver.sh'
     DeploymentTypeLinux: 'oneDeploy'
