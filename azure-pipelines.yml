@@ -33,6 +33,7 @@ steps:
 
 - script: |
     echo "building webapp..."
+    npm install
     npm run build
     cp -r server dist
     cp startserver.sh dist
