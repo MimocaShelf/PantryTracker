@@ -8,4 +8,4 @@ echo 'Starting Backend Server' >&2
 node server.js & 
 cd .. 
 echo 'Starting Frontend Server' >&2
-npm run dev
+npm run dev -- --port 8000
