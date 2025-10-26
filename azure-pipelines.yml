@@ -1,4 +1,5 @@
 # Starter pipeline
+
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
@@ -23,31 +24,59 @@ steps:
   displayName: 'Install Backend Dependencies'
 
 - script: |
-    echo "initalising dummy database..."
-    echo "adding dummy data..."
+    echo "create test database file..."
+    touch main.db
+    echo "populating database file from sql..."
+    cd server
+    node sql/sql.js
   displayName: 'Create Test Database'
+
+- script: |
+    echo "building webapp..."
+    npm install
+    npm run build
+    cp -r server dist
+    cp startserver.sh dist
+    cp package.json dist
+    cp package-lock.json dist
+    chmod 755 dist/startserver.sh
+  displayName: 'Build Webapp'
 
 - script: |
     echo "starting backend server..."
     cd server
     node server.js &
     sleep 5
-  displayName: 'Start Backend server'
-
-- script: |
-    echo "starting website..."
-    npm run build
-  displayName: 'Start Vite'
-
-- script: |
+    cd ..
     echo "commencing unit testing..."
     npm run test
   displayName: 'Run Unit Tests'
 
 - script: |
-    echo "clearing dummy database..."
-  displayName: 'Remove Test Database'
-
-- script: |
     echo "sending build status notification to communication platforms"
-  displayName: 'Build Succeeded'
+    cd dist
+    zip -r '$(Build.ArtifactStagingDirectory)'/dist.zip *
+    zip -r '$(System.DefaultWorkingDirectory)'/dist.zip *
+  displayName: 'Zip Build Folder'
+
+
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
+- task: AzureRmWebAppDeployment@5
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Azure subscription 1(cdef35dd-a2e4-477b-9bb5-aa674344c828)'
+    appType: 'webAppLinux'
+    WebAppName: 'PantryTracker'
+    deployToSlotOrASE: true
+    ResourceGroupName: 'PantryTracker_group'
+    SlotName: 'production'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/dist.zip'
+    RuntimeStack: 'NODE|22-lts'
+    StartupCommand: './startserver.sh'
+    DeploymentTypeLinux: 'oneDeploy'
