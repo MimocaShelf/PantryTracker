@@ -32,25 +32,19 @@ steps:
   displayName: 'Create Test Database'
 
 - script: |
+    echo "building webapp..."
+    npm run build
+  displayName: 'Build Webapp'
+
+- script: |
     echo "starting backend server..."
     cd server
     node server.js &
     sleep 5
-  displayName: 'Start Backend server'
-
-- script: |
-    echo "starting website..."
-    npm run build
-  displayName: 'Start Vite'
-
-- script: |
+    cd ..
     echo "commencing unit testing..."
     npm run test
   displayName: 'Run Unit Tests'
-
-- script: |
-    echo "clearing dummy database..."
-  displayName: 'Remove Test Database'
 
 - script: |
     echo "sending build status notification to communication platforms"
