@@ -34,6 +34,9 @@ steps:
 - script: |
     echo "building webapp..."
     npm run build
+    cp -r server dist
+    cp startserver.sh dist
+    chmod 755 dist/startserver.sh
   displayName: 'Build Webapp'
 
 - script: |
@@ -71,5 +74,5 @@ steps:
     SlotName: 'production'
     packageForLinux: '$(System.DefaultWorkingDirectory)/dist.zip'
     RuntimeStack: 'NODE|22-lts'
-    StartupCommand: 'npm run dev'
+    StartupCommand: './dist/startserver.sh'
     DeploymentTypeLinux: 'oneDeploy'
