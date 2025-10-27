@@ -102,7 +102,16 @@ vitest.config.js
 
 
 ### Resources Used    
-    
+
+APIs used:
+* [Calorie Ninjas](https://calorieninjas.com/) - Restricted to 10,000 API calls
+* [API Ninja](https://api-ninjas.com/) - Restricted to 10,000 API calls 
+* [Woolies API](https://apiportal.woolworths.com.au/) - Restricted to 2,000 API calls
+*
+
+Other:
+* [React Hot Toast](https://react-hot-toast.com/)
+
         
 <!--
 TO DO
