@@ -6,7 +6,7 @@
 
 ### Project Description 
 
-PantryTracker, a web app created to track and manage your pantry. Created with React, Sqlite, Node.js and Express.js
+PantryTracker, a web app created to track and manage your pantry. Created with Vite, React, Sqlite, Node.js and Express.js
 
 ### Folder Setup
 ```
@@ -69,14 +69,14 @@ vitest.config.js
 ```
 ---    
 
-### How to run
+### How to run locally
 
-1. Download the project folder
-2. Open.....
-3. Install all dependencies using `npm install`
-4. Run the server using `npm ....`
-5. Run the project using `npm run dev..`
-6. Click on the provided link in terminal or use `http://localhost:5173/`      
+1. Download the project folder and extract it.
+2. Open the root project in terminal.
+3. Install all dependencies using `npm install`.
+4. Run the server using `node server/server.js`.
+5. Run the project using `npm run dev`.
+6. Click on the provided link in terminal or use `http://localhost:5173/`.      
 <br>
   
 >***Admin Details***
