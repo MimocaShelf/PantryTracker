@@ -63,7 +63,8 @@ function CalendarMealPlanner() {
           </div>
         )}
 
-        <button
+        <div
+          data-testid={`plan-button-${formatKey(date)}`}
           className="tile-button"
           onClick={(e) => {
             e.stopPropagation(); 
@@ -71,7 +72,7 @@ function CalendarMealPlanner() {
           }}
         >
           Plan Meal(s)
-        </button>
+        </div>
       </div>
     );
   };
