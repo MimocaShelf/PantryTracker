@@ -6,18 +6,20 @@ import { render, screen, waitFor, fireEvent, within} from '@testing-library/reac
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Recipe from '../recipe management/recipe.jsx'
 import RecipeDetail from '../recipe management/recipeDetail.jsx';
-import { getAllPantryItems, getRecipe } from '../../server/server.js';
 
+//Mocks the eact-router-dom which is useful when testing the recipe detail page which acquire the key value pair at the URL
 vi.mock('react-router-dom', async () => {
     const actual = await vi.importActual('react-router-dom');
     return {
         ...actual,
-        useParams: () => ({ name: 'chocolate-flourless-cake'}),
+        useParams: () => ({ name: 'chocolate-flourless-cake'}), //Ensure the key-value pair always return chocolate-flourless-cake. Hence whenever Recipe Detail page renders, should provide information such as servings, intructions etc. related to the aforementioned recipe
         useNavigate: () => vi.fn(),
     }
 })
 
 describe('Testing Recipe Management Feature', () => {
+    
+    //Mocks the response of the external API call (API Ninja) by returning this array of recipe objects
     const mockRecipes = [
         { title: 'Elegant Apple Dumpling',
             servings: '4 servings',
@@ -31,6 +33,7 @@ describe('Testing Recipe Management Feature', () => {
         }
     ];
 
+    //Mocks the backend server to simulate the interactions between the external APIs and queries to the database. Make sure the 'backend server' returns the mock recopes
     beforeEach(() => {
         global.fetch = vi.fn(() => 
             Promise.resolve({
@@ -42,12 +45,14 @@ describe('Testing Recipe Management Feature', () => {
     //Checks to see whether there are a few recipes that are shown on the page
     it('Correctly show recipes on the webpage', async () => {
         
+        //Renders the 'Recipe' page
         render(
             <MemoryRouter>
                 <Recipe />
             </MemoryRouter>
         )
 
+        //Checks whether 'Elegant Apple Dumpling' appears in the rendered document, indicating the application is capable of acquiring data from backend and rendering on screen
         await waitFor(() => {
             expect(screen.getByText('Elegant Apple Dumpling')).toBeInTheDocument();
         })
@@ -55,12 +60,15 @@ describe('Testing Recipe Management Feature', () => {
 
     //Checks if a warning message is present when recipes are provided
     it('Display warning message if no recipes are provided', async () => {
+        
+        //Mocks the backend database by returning an empty array, indicating that it failed to fetch data from the API servers
         global.fetch = vi.fn(() => 
             Promise.resolve({
                 json: () => Promise.resolve([]),
             })
         );
 
+        //Renders the 'Recipe' page
         render(
             <MemoryRouter>
                 <Recipe />
@@ -68,53 +76,69 @@ describe('Testing Recipe Management Feature', () => {
         );
 
         const warningMessage = await screen.findByText(/No recipes found/i);
-        expect(warningMessage).toBeInTheDocument();
+        expect(warningMessage).toBeInTheDocument(); //Checks whether the warning message renders on screen, indicating that it failed to fetch the recipes and provide suitable error responses
     })
 
     //Checks whether the page is able to filter the list of recipes based on a user prompt
     it('Filters recipe based on search input', async () => {
+        
+        //Renders the 'Recipe' page
         render(
             <MemoryRouter>
                 <Recipe />
             </MemoryRouter>
         );
 
+        //Check whether all recipes are rendered on the screen
         await waitFor(() => {
             expect(screen.getByText('Chocolate Flourless Cake')).toBeInTheDocument();
+            expect(screen.getByText('Elegant Apple Dumpling')).toBeInTheDocument();
         });
 
+        //Attempts to write the keyword 'chocolate' on the search bar
         const input = screen.getByPlaceholderText('Search...');
         fireEvent.change(input, {target: {value: 'chocolate'} });
 
+        //Clicks the submit button
         const submitButton = screen.getByText('Submit');
         fireEvent.click(submitButton);
 
+        //Check whether the document changes by only depicting the chocolate cake recipe, indicating the search bar filter functions 
         await waitFor(() => {
             expect(screen.getByText('Chocolate Flourless Cake')).toBeInTheDocument();
+            expect(screen.queryByText('Elegant Apple Dumpling')).not.toBeInTheDocument();
         });
     })
 
     //Checks whether users are able to successfully save recipes by checking for the success message
     it('Shows success message when recipe is saved', async () => {
+        
+        //Attempts to mock the backender server
         global.fetch = vi.fn()
+            //Mocks the response of the first backend server fetch request which attempts to acquire the list of recipes
             .mockResolvedValueOnce({
                 json: () => Promise.resolve(mockRecipes),
             })
+            //Mocks the response of the second backend server fetch request which attempts to save a specific recipe on database
+            //Returns a response as succesful
             .mockResolvedValueOnce({
                 json: () => Promise.resolve({ success: true}),
             });
 
+            //Renders the 'Recipe' Page
             render(
                 <MemoryRouter>
                     <Recipe />
                 </MemoryRouter>
             );
 
+            //Attempts to find the 'Save Recipe' button that is within the same container as the recipe title 'Chocolate Flourless Cake'
             await screen.findByText('Chocolate Flourless Cake');
             const specificRecipe = screen.getByText('Chocolate Flourless Cake').closest('.mealTimes');
             const saveButton = within(specificRecipe).getByText('Save Recipe');
             fireEvent.click(saveButton);
 
+            //Checks whether the success message that emphasis the recipe has been saved appears on the rendered document, indicating the recipe is able to 'successfully' save
             await waitFor(() => {
                 expect(screen.getByText(/has been successfully added to saved recipes/i)).toBeInTheDocument();
             })
@@ -122,18 +146,23 @@ describe('Testing Recipe Management Feature', () => {
 
     //Checks whether the webpage is able to successfully render the the details of the recipe such as ingredients and the instructions
     it('Viewing all the ingredients and instructions of a specific recipe', async () => {
+        
+        //Renders the 'Recipe Detail' page
         render(
             <MemoryRouter>
                 <RecipeDetail />
             </MemoryRouter>
         );
 
+        //Check whether the recipe title appears on the page
         await screen.findByText('Elegant Apple Dumpling');
-
+        
+        //Check whether some of the ingredients for the recipe appears on the page
         expect(screen.getByText('1 cup All purpose flour'));
         expect(screen.getAllByText('1 teaspoon Cinnamon'));
         expect(screen.getByText('1/4 teaspoon Salt'));
 
+         //Check whether some of the the instructions for the recipe appears on the page
         expect(screen.getByText('Mix flour, cinnamon, salt, butter and shortening until a crumbly mixture forms'));
         expect(screen.getByText('Add in the juice slowly, until a smooth dough forms'));
         expect(screen.getByText('Melt butter, and mix the rest of the ingredients into it'));
@@ -143,16 +172,18 @@ describe('Testing Recipe Management Feature', () => {
     //Checks whether users are able to automatically add the ingredients to their shopping list by checking for a successfully added message
     it('Shows success message when Add To Shopping List is selected', async () => {
 
+        //Renders the 'Recipe Detail' page
         render(
             <MemoryRouter>
                 <RecipeDetail />
             </MemoryRouter>
         );
 
-        await screen.findByText('Elegant Apple Dumpling');
-        const button = await screen.getByText('Add To Shopping List');
-        fireEvent.click(button);
+        await screen.findByText('Elegant Apple Dumpling'); //Check whether the recipe renders on the document
+        const button = await screen.getByText('Add To Shopping List'); //Attempts to find the 'Add To Shopping List' button
+        fireEvent.click(button); //Clicks the aforementioned button
 
+        //Check whether the success message that alludes to the ingredients being added to the shopping list database is achieved, indicating the application is capable of saving ingredients from a recipe on the user's shopping list
         await waitFor(() => {
             expect(screen.getByText(/Ingredients been successfully added to shopping list/i)).toBeInTheDocument();
         })
